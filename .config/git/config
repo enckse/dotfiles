@@ -1,0 +1,48 @@
+[core]
+    autocrlf = input
+[include]
+    path = ~/.config/git/delta.config
+[diff]
+    colorMoved = default
+[grep]
+    lineNumber = true
+[log]
+    date = iso-strict
+[pull]
+    rebase = false
+[push]
+    default = simple
+[status]
+    short = true
+    branch = true
+    showStash = true
+    showUntrackedFiles = all
+[user]
+    useConfigOnly = true
+    name = Sean Enck
+[diff "lb"]
+    textconv = lb conv
+[help]
+    format = man
+[merge]
+    conflictstyle = diff3
+[url "git.ttypty.com:~/Git/private/"]
+    insteadOf = private:
+[url "git.ttypty.com:~/Git/upstream/"]
+    insteadOf = upstream:
+[includeIf "hasconfig:remote.*.url:private:**"]
+    path = ~/.config/git/dev.config
+[includeIf "hasconfig:remote.*.url:upstream:**"]
+    path = ~/.config/git/dev.config
+[alias]
+    diffwd = diff --word-diff
+    showwd = show --word-diff
+[motd]
+    enable = uncommitted
+[uncommitted]
+    scan = true
+    prompt = true
+    matchPrompt = "^(private|upstream):*"
+    matchScan = "^(private|upstream):*"
+    paths = ~/Workspace ~/.local/ttypty
+    home = false

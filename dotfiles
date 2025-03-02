@@ -1,0 +1,60 @@
+#!/bin/bash
+_install() {
+  case "$(basename "$SHELL")" in
+    "bash")
+      echo ".bash_aliases"
+      echo ".bashrc"
+      echo ".bash_profile"
+      ;;
+    "zsh")
+      echo ".zshrc"
+      ;;
+  esac
+
+  case $(uname) in
+    "Linux")
+      echo ".config/pkgversions/"
+      echo ".config/nvim/"
+      echo ".config/user-dirs.dirs"
+      echo ".config/git/"
+      echo ".ssh/"
+      ;;
+    "Darwin")
+      echo ".local/libexec/"
+      echo ".gitconfig"
+      echo ".config/kitty/"
+      VMDIR="$HOME/Library/com.ttypty/vms"
+      if [ -d "$VMDIR" ]; then
+        echo ".config/vfu/"
+      fi
+      ;;
+  esac
+}
+
+DRYRUN=0
+if [ -n "$1" ]; then
+  case "$1" in
+    "--dry-run")
+      DRYRUN=1
+      ;;
+    *)
+      echo "unknown command: $1"
+      exit 1
+      ;;
+  esac
+fi
+
+DIR=""
+SET=""
+FILE=""
+for SET in $(_install | sort -u); do
+  for FILE in $(find "$SET" -type f); do
+    [ "$DRYRUN" -eq 1 ] && echo "$FILE" | sed "s#HOME/##g"
+    DIR=$(dirname "$FILE")
+    [ "$DIR" != "." ] && mkdir -p "$HOME/$DIR"
+    CMD="ln -sf"
+    $CMD "$PWD/$FILE" "$HOME/$FILE"
+  done
+done
+
+unset SET DIR FILE DRYRUN

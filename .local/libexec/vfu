@@ -1,0 +1,111 @@
+#!/usr/bin/env zsh
+vfu() {
+  local ext configs startcmd screenbase deploycmd statuscmd file matched name screen
+  ext="\.json"
+  screenbase="vfu-vm-"
+  configs="$HOME/.config/vfu/"
+  startcmd="start"
+  statuscmd="status"
+  deploycmd="deploy"
+  [ -z "$1" ] && echo "command required" && return
+  if [ "$1" = "completions" ]; then    
+    cat << EOF
+#compdef _vfu vfu
+
+_vfu() {
+  local curcontext="\$curcontext" state len chosen found args
+  typeset -A opt_args
+
+  _arguments \
+    '1: :->main'\
+    '*: :->args'
+
+  len=\${#words[@]}
+  case \$state in
+    main)
+      args="$startcmd $statuscmd $deploycmd"
+      _arguments "1:main:(\$args)"
+      ;;
+    *)
+      chosen=\$words[2]
+      if [ "\$chosen" = "$deploycmd" ]; then
+        _files
+      fi
+      if [ "\$len" -ne 3 ]; then
+        return
+      fi
+      if [ "\$chosen" = "$startcmd" ]; then
+        compadd \$@ \$(ls "$configs" | grep "$ext" | cut -d "." -f 1)
+      fi
+      ;;
+  esac
+}
+
+compdef _vfu vfu
+EOF
+    return
+  else
+    if [ "$1" = "$deploycmd" ]; then
+      if [ -z "$2" ] || [ ! -d "$2" ]; then
+        echo "source directory required"
+        exit 1
+      fi
+      if [ -z "$3" ] || [ ! -d "$3" ]; then
+        echo "destination directory required"
+        exit 1
+      fi
+      if screen -list | grep -q "$screenbase"; then
+        echo "unable to deploy while VMs are running"
+        exit 1
+      fi
+      for TYPE in iso img; do
+        for FILE in $(find "$2" -type f -name "*.$TYPE" | grep "$(date +%Y)" | sort -r | head -n 1); do
+          NAME=$(basename "$FILE")
+          OBJECT=$(echo "$NAME" | cut -d "." -f 3-)
+          [ ! -e "$3/$OBJECT" ] && echo "$OBJECT skipped, not deployed" && continue
+          cp "$FILE" "$3"
+          echo "deploying: $NAME (as $OBJECT)"
+          (cd "$3" && ln -sf "$NAME" "$OBJECT")
+        done
+      done
+      echo "deployed"
+      exit 0
+    fi
+  fi
+      
+  matched=0
+  for file in $(ls "$configs" | grep "$ext"); do
+    name="$(basename "$file" | cut -d "." -f 1)"
+    screen="$screenbase$name"
+    case "$1" in
+      "$statuscmd")
+        if [ "$matched" -eq 0 ]; then
+          printf "%-10s %s\n------------------\n" "vm" "status"
+        fi
+        matched=1
+        printf "%-10s " "$name"
+        if screen -list 2>/dev/null | grep -q "$screen"; then
+          printf "running"
+        else
+          printf "stopped"
+        fi
+        echo
+        ;;
+      "$startcmd")
+        if [ -n "$2" ] && [ "$2" = "$name" ]; then
+          screen -d -m -S "$screen" /Applications/vfu.app/Contents/MacOS/vfu-cli --config "$configs/$file"
+          matched=1
+          break
+        fi
+        ;;
+    esac
+  done
+  
+  [ "$matched" -eq 1 ] && return
+  
+  echo "invalid command"
+  echo
+  echo "vfu [$startcmd|$statuscmd|$deploycmd] <vm?>"
+}
+
+vfu $@
