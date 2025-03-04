@@ -1,3 +1,3 @@
-check_version "FilenCloudDienste/filen-cli"
-check_version "kovidgoyal/kitty"
-check_version "rxhanson/Rectangle"
+check_version "https://github.com/FilenCloudDienste/filen-cli/releases.atom"
+check_version "https://github.com/kovidgoyal/kitty/releases.atom"
+check_version "https://github.com/rxhanson/Rectangle/releases.atom"
