@@ -14,7 +14,7 @@ _install() {
   case $(uname) in
     "Linux")
       echo ".config/pkgversions/"
-      echo ".config/nvim/"
+      echo ".config/vim/"
       echo ".config/user-dirs.dirs"
       echo ".config/git/"
       echo ".ssh/"

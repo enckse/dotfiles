@@ -21,7 +21,7 @@ stty -ixon
 mkdir -p "$HOME/.local/bin" "$HOME/.local/state" "$HOME/.local/ttypty"
 export PATH="$HOME/.local/bin:$PATH"
 
-export EDITOR=nvim
+export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 export COMP_KNOWN_HOSTS_WITH_HOSTFILE=""
@@ -29,7 +29,7 @@ export COMP_KNOWN_HOSTS_WITH_HOSTFILE=""
 export GOPATH="$HOME/.cache/go"
 cleanup-caches() {
   local dir
-  for dir in ".cache/staticcheck" ".cache/gopls" ".cache/go-build" ".local/state/nvim"; do
+  for dir in ".cache/staticcheck" ".cache/gopls" ".cache/go-build" ".cache/vim"; do
     dir="$HOME/$dir"
     [ -d "$dir" ] && find "$dir" -type f -mtime +1 -delete
   done
