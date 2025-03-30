@@ -1,32 +1,19 @@
 #!/bin/bash
 _install() {
   case "$(basename "$SHELL")" in
-    "bash")
-      echo ".bash_aliases"
-      echo ".bashrc"
-      echo ".bash_profile"
-      ;;
     "zsh")
       echo ".zshrc"
       ;;
   esac
 
   case $(uname) in
-    "Linux")
+    "Darwin")
       echo ".config/pkgversions/"
       echo ".config/vim/"
-      echo ".config/user-dirs.dirs"
       echo ".config/git/"
       echo ".ssh/"
-      ;;
-    "Darwin")
       echo ".local/libexec/"
-      echo ".gitconfig"
       echo ".config/kitty/"
-      VMDIR="$HOME/Library/com.ttypty/vms"
-      if [ -d "$VMDIR" ]; then
-        echo ".config/vfu/"
-      fi
       ;;
   esac
 }
