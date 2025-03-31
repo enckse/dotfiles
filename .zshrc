@@ -11,7 +11,7 @@ export PKGS_STORE="$HOME/.cache/pkgversions"
 VOLS="$PKGS_STORE/disks/"
 if [ -d "$VOLS" ] && [ ! -d "$PKGS_MOUNT" ]; then
   VOLS="$VOLS"$(ls "$VOLS" | sort -r | head -n 1)
-  hdiutil attach -readonly "$VOLS"
+  [ -n "$VOLS" ] && tool-mount "$VOLS"
 fi
 [ -d "$PKGS_MOUNT" ] && path=("$PKGS_MOUNT/bin" $path)
 
