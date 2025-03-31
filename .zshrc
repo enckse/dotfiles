@@ -5,13 +5,15 @@ export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
 # =========
-TOOLS="/Volumes/Tools"
-VOLS="$HOME/Library/com.ttypty/pkgversions/disks/"
-if [ -d "$VOLS" ] && [ ! -d "$TOOLS" ]; then
+export PKGS_MOUNT="/Volumes/Tools"
+export PKGS_SHARE="PKGS_MOUNT/share/"
+export PKGS_STORE="$HOME/.cache/pkgversions"
+VOLS="$PKGS_STORE/disks/"
+if [ -d "$VOLS" ] && [ ! -d "$PKGS_MOUNT" ]; then
   VOLS="$VOLS"$(ls "$VOLS" | sort -r | head -n 1)
   hdiutil attach -readonly "$VOLS"
 fi
-[ -d "$TOOLS" ] && path=("$TOOLS/bin" $path)
+[ -d "$PKGS_MOUNT" ] && path=("$PKGS_MOUNT/bin" $path)
 
 # =========
 autoload -Uz compinit && compinit
@@ -71,7 +73,6 @@ unset -f setup-sshagent
 # =========
 export SECRET_ROOT="$HOME/Library/com.ttypty/secrets"
 export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/configs/darwin.toml"
-export PKGS_ROOT="/Volumes/Tools/share/"
 
 # =========
 transcode-media() {
