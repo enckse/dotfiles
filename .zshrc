@@ -6,7 +6,7 @@ export GIT_EDITOR=$EDITOR
 
 # =========
 export PKGS_MOUNT="/Volumes/Tools"
-export PKGS_SHARE="PKGS_MOUNT/share/"
+export PKGS_SHARE="$PKGS_MOUNT/share/"
 export PKGS_STORE="$HOME/.cache/pkgversions"
 VOLS="$PKGS_STORE/disks/"
 if [ -d "$VOLS" ] && [ ! -d "$PKGS_MOUNT" ]; then
