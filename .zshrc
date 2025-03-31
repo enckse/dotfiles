@@ -17,7 +17,7 @@ fi
 
 # =========
 autoload -Uz compinit && compinit
-COMPS="$TOOLS/share/zsh-completion/completions"
+COMPS="${PKGS_SHARE}zsh-completion/completions"
 if [ -d "$COMPS" ]; then
   for FILE in "$COMPS/"*; do
     source "$FILE"
