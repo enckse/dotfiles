@@ -87,5 +87,5 @@ precmd() {
   if command -v git-uncommitted >/dev/null; then
       GIT_UNCOMMIT=$(git uncommitted pwd 2>/dev/null)
   fi
-  PS1="$GIT_UNCOMMIT%{$(tput setaf 226)%}%n%{$(tput setaf 15)%}@%{$(tput setaf 10)%}%m %{$(tput setaf 33)%}%1~ %{$(tput sgr0)%}$ "
+  PS1="$GIT_UNCOMMIT%{$(tput setaf 226)%}%n%{$(tput setaf 15)%}@%{$(tput setaf 200)%}%m %{$(tput setaf 45)%}%1~ %{$(tput sgr0)%}$ "
 }
