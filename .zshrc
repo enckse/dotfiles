@@ -8,7 +8,6 @@ export GIT_EDITOR=$EDITOR
 export PKGS_MOUNT="/Volumes/Tools"
 export PKGS_SHARE="$PKGS_MOUNT/share/"
 export PKGS_STORE="$HOME/.cache/pkgversions"
-export VIM="$PKGS_SHARE/vim"
 VOLS="$PKGS_STORE/disks/"
 if [ -d "$VOLS" ] && [ ! -d "$PKGS_MOUNT" ]; then
   VOLS="$VOLS"$(ls "$VOLS" | sort -r | head -n 1)
@@ -29,7 +28,9 @@ fi
 command -v bat > /dev/null && alias cat=bat
 command -v rg > /dev/null && alias grep="rg"
 alias vi="$EDITOR"
+alias vim="$EDITOR"
 alias less="less -R"
+alias vim="/Applications/MacVim.app/Contents/bin/vim"
 
 # =========
 if command -v delta > /dev/null; then
