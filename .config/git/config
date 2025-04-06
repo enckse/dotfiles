@@ -44,5 +44,5 @@
     prompt = true
     matchPrompt = "^(private|upstream):*"
     matchScan = "^(private|upstream):*"
-    paths = ~/Workspace ~/Library/com.ttypty
+    paths = ~/Workspace ~/.local/com.ttypty
     home = false

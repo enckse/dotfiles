@@ -52,7 +52,7 @@ setup-sshagent
 unset -f setup-sshagent
 
 # =========
-export SECRET_ROOT="$HOME/Library/com.ttypty/secrets"
+export SECRET_ROOT="$HOME/.local/com.ttypty/secrets"
 export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/configs/darwin.toml"
 
 # =========
