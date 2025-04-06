@@ -15,8 +15,7 @@ tab = "goto_next_buffer"
 S-tab = "goto_previous_buffer"
 C-w = "wclose"
 C-e = "diagnostics_picker"
-C-d = ["extend_line_below", "delete_selection"]
-C-v = "copy_selection_on_next_line"
+d = { d = ["extend_line_below", "delete_selection"] }
 [keys.select]
 C-c = "yank_main_selection_to_clipboard"
 esc = "exit_select_mode"
