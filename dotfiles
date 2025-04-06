@@ -9,8 +9,9 @@ _install() {
   case $(uname) in
     "Darwin")
       echo ".config/pkgversions/"
-      echo ".config/vim/"
+      echo ".config/helix/"
       echo ".config/git/"
+      echo ".config/efm-langserver/"
       echo ".ssh/"
       echo ".local/libexec/"
       echo ".config/kitty/"
