@@ -4,26 +4,7 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
-# =========
-export PKGS_MOUNT="/Volumes/Tools"
-export PKGS_SHARE="$PKGS_MOUNT/share/"
-export PKGS_STORE="$HOME/.cache/pkgversions"
-export VIM="${PKGS_SHARE}vim"
-VOLS="$PKGS_STORE/disks/"
-if [ -d "$VOLS" ] && [ ! -d "$PKGS_MOUNT" ]; then
-  VOLS="$VOLS"$(ls "$VOLS" | sort -r | head -n 1)
-  [ -n "$VOLS" ] && hdiutil attach -readonly -nobrowse "$VOLS"
-fi
-[ -d "$PKGS_MOUNT" ] && path=("$PKGS_MOUNT/bin" $path)
-
-# =========
-autoload -Uz compinit && compinit
-COMPS="${PKGS_SHARE}zsh-completion/completions"
-if [ -d "$COMPS" ]; then
-  for FILE in "$COMPS/"*; do
-    source "$FILE"
-  done
-fi
+[ -e "$HOME/.usrbin" ] && source "$HOME/.usrbin"
 
 # =========
 command -v bat > /dev/null && alias cat=bat
