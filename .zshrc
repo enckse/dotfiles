@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # =========
-export EDITOR=hx
+export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
@@ -11,7 +11,7 @@ export PKGS_STORE="$HOME/.cache/pkgversions"
 VOLS="$PKGS_STORE/disks/"
 if [ -d "$VOLS" ] && [ ! -d "$PKGS_MOUNT" ]; then
   VOLS="$VOLS"$(ls "$VOLS" | sort -r | head -n 1)
-  [ -n "$VOLS" ] && hdiutil attach -readonly -nobrowse "$VOLS"
+  [ -n "$VOLS" ] && tool-mount "$VOLS"
 fi
 [ -d "$PKGS_MOUNT" ] && path=("$PKGS_MOUNT/bin" $path)
 
@@ -28,8 +28,9 @@ fi
 command -v bat > /dev/null && alias cat=bat
 command -v rg > /dev/null && alias grep="rg"
 alias vi="$EDITOR"
-[ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
+alias vim="$EDITOR"
 alias less="less -R"
+alias vim="/Applications/MacVim.app/Contents/bin/vim"
 
 # =========
 if command -v delta > /dev/null; then
@@ -43,7 +44,7 @@ zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted chang
 # =========
 cleanup-caches() {
   local dir
-  for dir in ".cache/staticcheck" ".cache/gopls" ".cache/go-build"; do
+  for dir in ".cache/staticcheck" ".cache/gopls" ".cache/go-build" ".cache/vim"; do
     dir="$HOME/$dir"
     [ -d "$dir" ] && find "$dir" -type f -mtime +1 -delete
   done
