@@ -9,7 +9,7 @@ export GIT_EDITOR=$EDITOR
 export PKGS_STORE="$HOME/.local"
 export PKGS_CACHE="$HOME/.cache/pkgversions"
 autoload -Uz compinit && compinit
-COMPS="${PKGS_SHARE}/zsh-completion/completions"
+COMPS="${USRBIN_SHARE}/zsh-completion/completions"
 if [ -d "$COMPS" ]; then
   for FILE in "$COMPS/"*; do
     . "$FILE"
