@@ -6,6 +6,16 @@ export GIT_EDITOR=$EDITOR
 
 [ -e "$HOME/.usrbin" ] && source "$HOME/.usrbin"
 
+export PKGS_STORE="$HOME/.local"
+export PKGS_CACHE="$HOME/.cache/pkgversions"
+autoload -Uz compinit && compinit
+COMPS="${PKGS_ROOT}/share/zsh-completion/completions"
+if [ -d "$COMPS" ]; then
+  for FILE in "$COMPS/"*; do
+    . "$FILE"
+  done
+fi
+
 # =========
 command -v bat > /dev/null && alias cat=bat
 command -v rg > /dev/null && alias grep="rg"
