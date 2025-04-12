@@ -1,3 +1,2 @@
-check_version "filen" "https://github.com/FilenCloudDienste/filen-cli/releases.atom"
 check_version "kitty" "https://github.com/kovidgoyal/kitty/releases.atom"
 check_version "rectangle" "https://github.com/rxhanson/Rectangle/releases.atom"

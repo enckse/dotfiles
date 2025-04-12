@@ -17,6 +17,14 @@ if [ -d "$COMPS" ]; then
 fi
 
 # =========
+WAC_DIR="$HOME/.local/com.ttypty/wac"
+if [ -d "$WAC_DIR" ]; then
+    export WAC_DIR
+    path=("$WAC_DIR/bin" $path)
+    source "$WAC_DIR/env"
+fi
+
+# =========
 command -v bat > /dev/null && alias cat=bat
 command -v rg > /dev/null && alias grep="rg"
 alias vi="$EDITOR"
