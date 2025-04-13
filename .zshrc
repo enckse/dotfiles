@@ -85,9 +85,9 @@ precmd() {
   GIT_UNCOMMIT=""
   if command -v git-uncommitted >/dev/null; then
       GIT_UNCOMMIT=$(NO_COLOR=1 git uncommitted pwd 2>/dev/null)
-      COLORING="%{$(tput setaf 2)%}"
+      COLORING="%{$(tput setaf 1)%}"
       if [ "$GIT_UNCOMMIT" = "(clean)" ]; then
-        COLORING="%{$(tput setaf 1)%}"
+        COLORING="%{$(tput setaf 2)%}"
       fi
       GIT_UNCOMMIT="$COLORING$GIT_UNCOMMIT"
   fi
