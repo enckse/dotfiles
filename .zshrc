@@ -25,6 +25,7 @@ if [ -d "$WAC_DIR" ]; then
 fi
 
 # =========
+[ -x "/Applications/MacVim.app/Contents/bin/vim" ] && alias vim="/Applications/MacVim.app/Contents/bin/vim"
 command -v bat > /dev/null && alias cat=bat
 command -v rg > /dev/null && alias grep="rg"
 alias vi="$EDITOR"
