@@ -1,0 +1,17 @@
+#!/bin/sh -e
+VIM_PLUG="$PKGS_SHARE/vim/pack/plugins/start"
+mkdir -p "$VIM_PLUG"
+_vim_plugin() {
+  DIR="$PKGS_WD/$(basename "$1").git"
+  [ ! -d "$DIR" ] && git clone --quiet "https://github.com/$1" "$DIR"
+  git -C "$DIR" pull --quiet
+  BASE="$(basename "$1")"
+  TO="$VIM_PLUG/$BASE"
+  cp -r "$DIR" "$TO"
+  rm -rf "$TO/.git"
+  git -C "$DIR" log -n 1 --format=oneline > "$TO/.githash"
+}
+
+_vim_plugin "vim-airline/vim-airline"
+_vim_plugin "dense-analysis/ale"
+_vim_plugin "NoahTheDuke/vim-just"

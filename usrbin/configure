@@ -1,0 +1,35 @@
+#!/bin/sh -e
+OS=$(uname | tr '[:upper:]' '[:lower:]')
+BUILD="build"
+rm -rf "$BUILD"
+mkdir -p "$BUILD"
+[ -z "$PKGS_CACHE" ] && echo "PKGS_CACHE must be set" && exit 1 
+[ -z "$PKGS_STORE" ] && echo "PKGS_STORE must be set" && exit 1 
+CACHE="$PKGS_CACHE/builds/"
+USRBIN="$PKGS_STORE/usrbin"
+IMG="$USRBIN/$(date +%Y%m%d.%H%M)"
+mkdir -p "$CACHE" "$IMG"
+export PATH="../.local/libexec:$PATH"
+genusrbin -c "$CACHE" -s "$PWD/src" -t "$PWD/$BUILD" -w "$CACHE" -o "$BUILD" -a aarch64 -f "$IMG" -p "$OS"
+
+find "$USRBIN" -mindepth 1 -maxdepth 1 -type d -mmin +60 | sort -r | tail -n +3 | xargs rm -rf
+
+ENV_FILE="$IMG/.env"
+{
+  echo "#!/bin/sh"
+  echo "#================="
+  echo "# do NOT edit, auto-generated file"
+  echo "#================="
+  echo "export USRBIN_ROOT=\"$IMG\""
+  echo "export USRBIN_SHARE=\"\$USRBIN_ROOT/share\""
+  echo "export PATH=\"\$USRBIN_ROOT/bin:\$PATH\""
+  echo "VIM=\"\$USRBIN_SHARE/vim\""
+  echo "VIM_PLUG=\"\$HOME/.config/vim/pack\""
+  echo "VIM_PACK=\"\$VIM/pack\""
+  echo "VIM_LINK=\"\""
+  echo "[ -e \"\$VIM_PLUG\" ] && VIM_LINK=\"\$(readlink \"\$VIM_PLUG\")\""
+  echo "[ \"\$VIM_PACK\" != \"\$VIM_LINK\" ] && rm -f \"\$VIM_PLUG\" && ln -sf \"\$VIM_PACK\" \"\$VIM_PLUG\""
+} > "$ENV_FILE"
+
+ln -sf "$ENV_FILE" "$HOME/.usrbin"
+echo "success"
