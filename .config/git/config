@@ -28,11 +28,11 @@
     conflictstyle = diff3
 [url "~/Store/git/private/"]
     insteadOf = private:
-[url "~/Store/git/upstream/"]
-    insteadOf = upstream:
+[url "~/Store/git/sr.ht/"]
+    insteadOf = sr.ht:
 [includeIf "hasconfig:remote.*.url:private:**"]
     path = ~/.config/git/dev.config
-[includeIf "hasconfig:remote.*.url:upstream:**"]
+[includeIf "hasconfig:remote.*.url:sr.ht:**"]
     path = ~/.config/git/dev.config
 [alias]
     diffwd = diff --word-diff
@@ -42,7 +42,7 @@
 [uncommitted]
     scan = true
     prompt = true
-    matchPrompt = "^(private|upstream):*"
-    matchScan = "^(private|upstream):*"
+    matchPrompt = "^(private|sr.ht):*"
+    matchScan = "^(private|sr.ht):*"
     paths = ~/Workspace ~/.local/com.ttypty
     home = false
