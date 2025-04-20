@@ -23,6 +23,19 @@ _pkgv() {
   echo "check_version 'https://$1'" >> "$PKGS_LIST"
 }
 
+GOLINT="$PKGS_BIN/go-lint"
+_golint() {
+  NAMED="$(basename "$1")"
+  ARGS="$2"
+  FILES="$3"
+  [ -z "$FILES" ] && FILES="./..."
+  echo "$NAMED $ARGS $FILES" >> "$GOLINT"
+}
+
+{
+  echo "#!/bin/sh -e"
+  echo "go vet ./..."
+} > "$GOLINT"
 for f in $GOTOOLS; do
   versioning=""
   case "$f" in
@@ -37,6 +50,7 @@ for f in $GOTOOLS; do
           ;;
         *mgechev/revive*)
           versioning="v1.9.0"
+          _golint "$f"
           ;;
         *restic/restic*)
           versioning="v0.18.0"
@@ -45,6 +59,7 @@ for f in $GOTOOLS; do
       ;; 
     */fieldalignment)
       versioning=latest
+      _golint "$f"
       ;;
     */age/cmd*)
       _pkgv "github.com/FiloSottile/age"
@@ -53,13 +68,20 @@ for f in $GOTOOLS; do
     */cmd/staticcheck)
       _pkgv "github.com/dominikh/go-tools"
       versioning="v0.6.1"
+      _golint "$f" "-checks all -debug.run-quickfix-analyzers"
       ;;
     */modernize | */tools/gopls)
-      _pkgv "github.com/golang/tools" 
+      _pkgv "github.com/golang/tools"
       versioning="v0.18.1"
+      case "$f" in
+        */modernize)
+          _golint "$f" "-test"
+          ;;
+      esac
       ;;
     */gofumpt)
       _pkgv "github.com/mvdan/gofumpt"
+      _golint "$f" "-d -extra" '$(find . -type f -name "*.go" | tr "\\n" " ")'
       versioning="v0.8.0"
       ;;
     *)
@@ -71,33 +93,4 @@ for f in $GOTOOLS; do
   (cd "$PKGS_BIN" && GOBIN="$PWD" ./go install "$f@$versioning")
 done
 (cd "$PKGS_BIN" && SHELL="$USE_SHELL" ./lb completions > "$PKGS_COMP/lb")
-
-GOLINT="$PKGS_BIN/go-lint"
-{
-  echo "#!/bin/sh -e"
-  for f in $GOTOOLS; do
-    FILES="./..."
-    ARGS=""
-    NAMED=$(basename "$f")
-    case "$NAMED" in
-      "gofumpt")
-        ARGS="-d -extra"
-        FILES='$(find . -type f -name "*.go" | tr "\\n" " ")'
-        ;;
-      "staticcheck")
-        ARGS="-checks all -debug.run-quickfix-analyzers"
-        ;;
-      "modernize")
-        ARGS="-test"
-        ;;
-      "revive" | "fieldalignment")
-        ;;
-      *)
-        continue
-        ;;
-    esac
-    echo "$NAMED $ARGS $FILES"
-  done
-  echo "go vet ./..."
-} > "$GOLINT"
 chmod 755 "$GOLINT"
