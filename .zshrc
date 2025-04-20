@@ -78,6 +78,9 @@ export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/configs/darwin.toml"
 transcode-media() {
   "$HOME/.local/libexec/transcode-media"
 }
+pkgv() {
+  "$HOME/.local/libexec/pkgv" $@
+}
 
 # =========
 autoload -U promptinit && promptinit
