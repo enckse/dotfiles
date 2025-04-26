@@ -10,6 +10,8 @@ mvdan.cc/gofumpt
 golang.org/x/tools/gopls
 github.com/restic/restic/cmd/restic
 filippo.io/age/cmd/...
+github.com/kisielk/errcheck
+github.com/gordonklaus/ineffassign
 "
 GOMODS="$PKGS_BIN/go-mod-updates"
 {
@@ -54,6 +56,14 @@ for f in $GOTOOLS; do
           ;;
         *restic/restic*)
           versioning="v0.18.0"
+          ;;
+        *gordonklaus/ineffassign)
+          versioning="v0.1.0"
+          _golint "$f"
+          ;;
+        *kisielk/errcheck)
+          versioning="v1.9.0"
+          _golint "$f"
           ;;
       esac
       ;; 
