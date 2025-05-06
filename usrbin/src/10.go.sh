@@ -1,6 +1,6 @@
 #!/bin/sh -e
-VERSION=1.24.2
-[ "$OS" = "darwin" ] && HASH="b70f8b3"
+VERSION=1.24.3
+[ "$OS" = "darwin" ] && HASH="64a3fa2"
 [ "$OS" = "linux" ] && HASH="8df5750"
 FILE="$PKGS_WD/$VERSION.go.tar.gz"
 
