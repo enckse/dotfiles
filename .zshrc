@@ -17,6 +17,10 @@ if [ -d "$COMPS" ]; then
 fi
 
 # =========
+export SECRET_ROOT="$HOME/.local/com.ttypty/secrets"
+export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/configs/darwin.toml"
+
+# =========
 WAC_DIR="$HOME/.local/com.ttypty/wac"
 if [ -d "$WAC_DIR" ]; then
     export WAC_DIR
@@ -69,10 +73,6 @@ setup-sshagent() {
 
 setup-sshagent
 unset -f setup-sshagent
-
-# =========
-export SECRET_ROOT="$HOME/.local/com.ttypty/secrets"
-export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/configs/darwin.toml"
 
 # =========
 transcode-media() {
