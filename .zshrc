@@ -24,7 +24,6 @@ export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/db/config.toml"
 WAC_DIR="$HOME/.local/com.ttypty/wac"
 if [ -d "$WAC_DIR" ]; then
     export WAC_DIR
-    path=("$WAC_DIR/bin" $path)
     source "$WAC_DIR/env"
 fi
 
