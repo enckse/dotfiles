@@ -3,7 +3,7 @@ HASH=""
 FILE=""
 URL=""
 PROJECTS=""
-PAYLOAD="compressed data"
+PAYLOAD=""
 LOCAL_PROJECT=0
 while getopts "d:f:u:h:t:p:n:l" opt ; do
   case $opt in
@@ -23,7 +23,18 @@ done
 [ -z "$URL" ] && echo "url required" && exit 1
 [ -z "$FILE" ] && echo "file required" && exit 1
 [ -z "$HASH" ] && echo "hash required" && exit 1
-[ -z "$PAYLOAD" ] && echo "data payload type required" && exit 1
+
+if [ -z "$PAYLOAD" ]; then
+  case "$FILE" in
+    *.tar*)
+        PAYLOAD="compressed data"
+        ;;
+      *.zip)
+        PAYLOAD="Zip archive data"
+        ;;
+  esac
+  [ -z "$PAYLOAD" ] && echo "data payload type required" && exit 1
+fi
 
 NEEDS=1
 if [ -e "$FILE" ]; then
