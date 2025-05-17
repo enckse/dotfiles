@@ -10,6 +10,9 @@ mvdan.cc/gofumpt
 golang.org/x/tools/gopls
 github.com/restic/restic/cmd/restic
 "
+
+command -v go > /dev/null
+
 GOMODS="$PKGS_BIN/go-mod-updates"
 {
   echo "#!/bin/sh -e"
