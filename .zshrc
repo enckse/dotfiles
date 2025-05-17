@@ -18,7 +18,7 @@ fi
 
 # =========
 export SECRET_ROOT="$HOME/.local/com.ttypty/secrets"
-export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/configs/darwin.toml"
+export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/db/config.toml"
 
 # =========
 WAC_DIR="$HOME/.local/com.ttypty/wac"
