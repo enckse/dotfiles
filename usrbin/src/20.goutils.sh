@@ -9,7 +9,6 @@ honnef.co/go/tools/cmd/staticcheck
 mvdan.cc/gofumpt
 golang.org/x/tools/gopls
 github.com/restic/restic/cmd/restic
-filippo.io/age/cmd/...
 "
 GOMODS="$PKGS_BIN/go-mod-updates"
 {
@@ -60,10 +59,6 @@ for f in $GOTOOLS; do
     */fieldalignment)
       versioning=latest
       _golint "$f"
-      ;;
-    */age/cmd*)
-      _pkgv "github.com/FiloSottile/age"
-      versioning="v1.2.1"
       ;;
     */cmd/staticcheck)
       _pkgv "github.com/dominikh/go-tools"
