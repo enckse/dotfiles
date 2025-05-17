@@ -1,0 +1,30 @@
+#!/bin/sh -e
+VERSION=3.14.0
+FILE="$PKGS_WD/$VERSION.luals.tar.gz"
+[ "$OS" = "darwin" ] && HASH="85d67a1"
+
+download-and-check \
+  -u "https://github.com/LuaLS/lua-language-server/releases/download/$VERSION/lua-language-server-$VERSION-$OS-$PKGS_ALTARCH.tar.gz" \
+  -f "$FILE" \
+  -h "$HASH"
+
+TO="$PKGS_LIB/luals"
+mkdir -p "$TO"
+tar xf "$FILE" -C "$TO"
+TARGET="$PKGS_BIN/lua-language-server"
+{
+  cat << EOF
+#!/usr/bin/env sh
+TMPPATH="/tmp/lua-language-server-\$(id -u)"
+mkdir -p "\$TMPPATH"
+INSTANCEPATH=\$(mktemp -d "\$TMPPATH/instance.XXXX")
+DEFAULT_LOGPATH="\$INSTANCEPATH/log"
+DEFAULT_METAPATH="\$INSTANCEPATH/meta"
+LUALS="\$USRBIN_ROOT/lib/luals"
+
+exec \$LUALS/bin/lua-language-server \$LUALS/main.lua \
+  --logpath="\$DEFAULT_LOGPATH" --metapath="\$DEFAULT_METAPATH" \
+  "\$@"
+EOF
+} > "$TARGET"
+chmod 755 "$TARGET"

@@ -1,0 +1,18 @@
+#!/bin/sh -e
+VERSION=5.4.7
+[ "$OS" = "darwin" ] && HASH="9fbf5e2"
+FILE="$PKGS_WD/$VERSION.lua.tar.gz"
+
+download-and-check \
+  -u "https://www.lua.org/ftp/lua-$VERSION.tar.gz" \
+  -f "$FILE" \
+  -h "$HASH" \
+  -p "https://github.com/lua/lua"
+
+TO="$PKGS_LIB/lua"
+mkdir -p "$TO"
+tar xf "$FILE" --strip-components=1 -C "$TO"
+(cd "$TO" && make > /dev/null)
+install -Dm755 "$TO/src/lua" "$PKGS_BIN/lua"
+install -Dm755 "$TO/src/luac" "$PKGS_BIN/luac"
+rm -rf "$TO"

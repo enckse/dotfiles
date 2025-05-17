@@ -6,8 +6,17 @@ let g:ale_detail_to_floating_preview = 1
 let g:ale_hover_to_floating_preview = 1
 let g:ale_hover_to_preview = 1
 let g:ale_linters = {}
-let g:ale_linters.go = ['gopls']
+if executable("gopls")
+  let g:ale_linters.go = ['gopls']
+endif
+  if executable("shellcheck")
 let g:ale_linters.sh = ['shellcheck']
+endif
+if executable("lua_language_server")
+  let g:ale_linters.lua = ["lua_language_server"]
+endif
 let g:ale_fixers = {}
-let g:ale_fixers.go = ["gofumpt"]
+if executable("gofumpt")
+  let g:ale_fixers.go = ["gofumpt"]
+endif
 let g:ale_completion_delay = 500
