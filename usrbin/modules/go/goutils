@@ -11,7 +11,7 @@ golang.org/x/tools/gopls
 github.com/restic/restic/cmd/restic
 "
 
-command -v go > /dev/null
+[ ! -x "$PKGS_BIN/go" ] && echo "no go package found" && exit 1
 
 GOMODS="$PKGS_BIN/go-mod-updates"
 {
