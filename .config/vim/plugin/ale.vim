@@ -22,7 +22,7 @@ let g:ale_fixers = {}
 if executable("gofumpt")
   let g:ale_fixers.go = ["gofumpt"]
 endif
-if executabe("zig")
+if executable("zig")
   let g:ale_fixers.zig = ["zigfmt"]
 endif
 let g:ale_completion_delay = 500

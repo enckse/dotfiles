@@ -14,4 +14,3 @@ _vim_plugin() {
 
 _vim_plugin "vim-airline/vim-airline"
 _vim_plugin "dense-analysis/ale"
-_vim_plugin "NoahTheDuke/vim-just"
