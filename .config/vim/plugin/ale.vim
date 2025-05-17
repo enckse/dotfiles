@@ -12,11 +12,17 @@ endif
   if executable("shellcheck")
 let g:ale_linters.sh = ['shellcheck']
 endif
-if executable("lua_language_server")
+if executable("lua-language-server")
   let g:ale_linters.lua = ["lua_language_server"]
+endif
+if executable("zls")
+  let g:ale_linters.zig = ["zls"]
 endif
 let g:ale_fixers = {}
 if executable("gofumpt")
   let g:ale_fixers.go = ["gofumpt"]
+endif
+if executabe("zig")
+  let g:ale_fixers.zig = ["zigfmt"]
 endif
 let g:ale_completion_delay = 500
