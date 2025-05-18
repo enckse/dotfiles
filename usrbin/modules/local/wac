@@ -1,0 +1,9 @@
+#!/bin/sh -e
+[ ! -x "$PKGS_BIN/go" ] && echo "no go package found" && exit 1
+[ ! -x "$PKGS_BIN/just" ] && echo "no just package found" && exit 1
+
+TO="$PKGS_LIB/wac"
+git clone --quiet private:wac "$TO"
+(cd "$TO" && PATH="$PKGS_BIN:$PATH" "$PKGS_BIN/just" >/dev/null 2>&1)
+install -Dm755 "$TO/target/wac" "$PKGS_BIN/wac"
+rm -rf "$TO"

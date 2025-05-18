@@ -21,11 +21,7 @@ export SECRET_ROOT="$HOME/.local/com.ttypty/secrets"
 export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/db/config.toml"
 
 # =========
-WAC_DIR="$HOME/.local/com.ttypty/wac"
-if [ -d "$WAC_DIR" ]; then
-    export WAC_DIR
-    source "$WAC_DIR/env"
-fi
+command -v wac > /dev/null && wac manage
 
 # =========
 [ -x "/Applications/MacVim.app/Contents/bin/vim" ] && alias vim="/Applications/MacVim.app/Contents/bin/vim"
