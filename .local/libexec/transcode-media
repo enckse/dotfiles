@@ -8,6 +8,7 @@ transcode-media() {
     tmpl="$dt.$hashed."
     case "$ext" in
       "jpeg" | "jpg" | "mov")
+        [ "$ext" != "mov" ] && [ -z "$TRANSCODE_JPEG" ] && continue
         to="$tmpl$ext"
         echo "renaming: $file"
         echo "  -> $to"
