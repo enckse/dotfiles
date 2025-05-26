@@ -12,7 +12,7 @@ mkdir -p "$CACHE" "$IMG"
 export PATH="../.local/libexec:$PATH"
 genusrbin -s "$PWD/enabled" -t "$PWD/$BUILD" -w "$CACHE" -o "$BUILD" -a aarch64 -f "$IMG" -p "$OS"
 
-find "$USRBIN" -mindepth 1 -maxdepth 1 -type d -mmin +60 | sort -r | tail -n +3 | xargs rm -rf
+find "$USRBIN" -mindepth 1 -maxdepth 1 -type d -mmin +15 | sort -r | tail -n +3 | xargs rm -rf
 
 ENV_FILE="$IMG/.usrbin.env"
 {
