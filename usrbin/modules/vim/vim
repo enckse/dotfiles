@@ -1,0 +1,25 @@
+#!/bin/sh -e
+VERSION="v9.1.1301"
+FILE="$PKGS_WD/$VERSION.vim.tar.gz"
+HASH="5eb982b"
+
+download-and-check \
+  -u "https://github.com/vim/vim/archive/refs/tags/$VERSION.tar.gz" \
+  -f "$FILE" \
+  -h "$HASH"
+
+{
+  TO="$PKGS_WD/vim-$VERSION"
+  if [ ! -d "$TO" ]; then
+    mkdir -p "$TO"
+    tar xf "$FILE" --strip-components=1 -C "$TO"
+    (cd "$TO" && ./configure \
+                        --enable-multibyte \
+                        --with-tlib=ncurses \
+                        --enable-terminal \
+                        --disable-gui \
+                        --without-x)
+    (cd "$TO" && make)
+  fi
+  (cd "$TO" && make DESTDIR="$PKGS_TARGET" install)
+} 2>&1 > /dev/null | { grep -v 'help tags updated' || true; } 

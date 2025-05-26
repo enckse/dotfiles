@@ -1,15 +1,13 @@
 #!/bin/sh -e
 SOURCES=""
-CACHE=""
 TARGET=""
 WORKDIR=""
 OUT=""
 DEST=""
 ARCH=""
 OS=""
-while getopts "c:s:t:w:o:f:a:p:" opt ; do
+while getopts "s:t:w:o:f:a:p:" opt ; do
   case $opt in
-    c) CACHE="$OPTARG";;
     s) SOURCES="$OPTARG";;
     t) TARGET="$OPTARG";;
     w) WORKDIR="$OPTARG";;
@@ -28,11 +26,9 @@ done
 [ -z "$OUT" ] && echo "no output dir set" && exit 1
 [ -z "$WORKDIR" ] && echo "no workdir set" && exit 1
 [ -z "$TARGET" ] && echo "no target set" && exit 1
-[ -z "$CACHE" ] && echo "cache not set" && exit 1
 [ -z "$SOURCES" ] && echo "sources not set" && exit 1
 [ -z "$ARCH" ] && echo "arch not set" && exit 1
 [ -z "$OS" ] && echo "os (platform) not set" && exit 1
-[ ! -d "$CACHE" ] && echo "no $CACHE dir found" && exit 1
 [ ! -d "$SOURCES" ] && echo "no $SOURCES dir found" && exit 1
 
 USE_SHELL=$(basename "$SHELL")

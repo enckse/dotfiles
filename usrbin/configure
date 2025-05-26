@@ -10,7 +10,7 @@ USRBIN="$PKGS_STORE/usrbin"
 IMG="$USRBIN/$(date +%Y%m%d.%H%M)"
 mkdir -p "$CACHE" "$IMG"
 export PATH="../.local/libexec:$PATH"
-genusrbin -c "$CACHE" -s "$PWD/enabled" -t "$PWD/$BUILD" -w "$CACHE" -o "$BUILD" -a aarch64 -f "$IMG" -p "$OS"
+genusrbin -s "$PWD/enabled" -t "$PWD/$BUILD" -w "$CACHE" -o "$BUILD" -a aarch64 -f "$IMG" -p "$OS"
 
 find "$USRBIN" -mindepth 1 -maxdepth 1 -type d -mmin +60 | sort -r | tail -n +3 | xargs rm -rf
 
@@ -23,7 +23,7 @@ ENV_FILE="$IMG/.usrbin.env"
   echo "export USRBIN_ROOT=\"$IMG\""
   echo "export USRBIN_SHARE=\"\$USRBIN_ROOT/share\""
   echo "export PATH=\"\$USRBIN_ROOT/bin:\$PATH\""
-  echo "VIM=\"\$USRBIN_SHARE/vim\""
+  echo "export VIM=\"\$USRBIN_SHARE/vim\""
   echo "VIM_PLUG=\"\$HOME/.config/vim/pack\""
   echo "VIM_PACK=\"\$VIM/pack\""
   echo "VIM_LINK=\"\""

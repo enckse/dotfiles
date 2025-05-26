@@ -1,4 +1,3 @@
 check_version "https://github.com/kovidgoyal/kitty"
-check_version "https://github.com/macvim-dev/macvim"
 check_version "https://github.com/rxhanson/Rectangle"
 check_version "https://gitlab.alpinelinux.org/alpine/aports"
