@@ -4,7 +4,8 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
-[ -e "$HOME/.usrbin" ] && source "$HOME/.usrbin"
+USRBIN_ENV=$(find "$HOME/.local/usrbin" -maxdepth 3 -type f -name ".usrbin.env" | sort -r | head -n 1)
+[ -n "$USRBIN_ENV" ] && source "$USRBIN_ENV"
 
 export PKGS_STORE="$HOME/.local"
 export PKGS_CACHE="$HOME/.cache/pkgversions"
