@@ -9,19 +9,20 @@ download-and-check \
   -f "$FILE" \
   -h "$HASH"
 
+TO="$PKGS_WD/$SUB$VERSION"
+if [ ! -d "$TO" ]; then
+  echo "building: $TO"
+  rm -rf "${PKGS_WD:?}/$SUB"*
+  mkdir -p "$TO"
+  tar xf "$FILE" --strip-components=1 -C "$TO"
+  (cd "$TO" && ./configure \
+                      --enable-multibyte \
+                      --with-tlib=ncurses \
+                      --enable-terminal \
+                      --disable-gui \
+                      --without-x)
+  (cd "$TO" && make)
+fi
 {
-  TO="$PKGS_WD/$SUB$VERSION"
-  if [ ! -d "$TO" ]; then
-    rm -rf "${PKGS_WD:?}/$SUB"*
-    mkdir -p "$TO"
-    tar xf "$FILE" --strip-components=1 -C "$TO"
-    (cd "$TO" && ./configure \
-                        --enable-multibyte \
-                        --with-tlib=ncurses \
-                        --enable-terminal \
-                        --disable-gui \
-                        --without-x)
-    (cd "$TO" && make)
-  fi
   (cd "$TO" && make DESTDIR="$PKGS_TARGET" install)
 } 2>&1 > /dev/null | { grep -v 'help tags updated' || true; } 

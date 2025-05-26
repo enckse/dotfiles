@@ -1,0 +1,24 @@
+#!/bin/sh -e
+VERSION="4.9"
+FILE="$PKGS_WD/$VERSION.sed.tar.gz"
+HASH="6e226b7"
+SUB="sed-"
+
+download-and-check \
+  -u "https://ftp.gnu.org/pub/gnu/sed/sed-$VERSION.tar.xz" \
+  -f "$FILE" \
+  -h "$HASH" \
+  -p "https://github.com/mirror/sed"
+
+TO="$PKGS_WD/$SUB$VERSION"
+if [ ! -d "$TO" ]; then
+  echo "building: $TO"
+  rm -rf "${PKGS_WD:?}/$SUB"*
+  mkdir -p "$TO"
+  tar xf "$FILE" --strip-components=1 -C "$TO"
+  (cd "$TO" && ./configure \
+                      --disable-i18n \
+                      --disable-nls)
+  (cd "$TO" && make)
+fi
+install "$TO/sed/sed" "$PKGS_BIN/sed"
