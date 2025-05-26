@@ -24,6 +24,10 @@ export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/db/config.toml"
 command -v wac > /dev/null && wac motd && wac manage
 
 # =========
+bindkey '\e[H' beginning-of-line
+bindkey '\e[F' end-of-line
+
+# =========
 [ -x "/Applications/MacVim.app/Contents/bin/vim" ] && alias vim="/Applications/MacVim.app/Contents/bin/vim"
 command -v bat > /dev/null && alias cat=bat
 command -v rg > /dev/null && alias grep="rg"
