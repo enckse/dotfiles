@@ -1,16 +1,37 @@
 #!/bin/sh -e
-VIM_PLUG="$PKGS_SHARE/vim/pack/plugins/start"
-mkdir -p "$VIM_PLUG"
-_vim_plugin() {
-  DIR="$PKGS_WD/$(basename "$1").git"
-  [ ! -d "$DIR" ] && git clone --quiet "https://github.com/$1" "$DIR"
-  git -C "$DIR" pull --quiet
-  BASE="$(basename "$1")"
-  TO="$VIM_PLUG/$BASE"
-  cp -r "$DIR" "$TO"
-  rm -rf "$TO/.git"
-  git -C "$DIR" log -n 1 --format=oneline > "$TO/.githash"
-}
 
-_vim_plugin "vim-airline/vim-airline"
-_vim_plugin "dense-analysis/ale"
+TO="$PKGS_ROOT/vim-plugins"
+PLUGS="vim-airline/vim-airline dense-analysis/ale"
+
+DEST=""
+for PLUG in $PLUGS; do
+  DIR="$PKGS_WORKDIR/$(basename "$PLUG").git"
+  [ ! -d "$DIR" ] && git clone --quiet "https://github.com/$PLUG" "$DIR"
+  git -C "$DIR" pull --quiet
+  HASH=$(git -C "$DIR" log -n 1 --pretty=format:"%h")
+  DEST="$DEST$HASH"
+done
+
+TO="$PKGS_ROOT/vim-plugins/$DEST"
+ENV="$TO/.usrbin"
+[ -e "$ENV" ] && exit 0
+
+mkdir -p "$TO"
+for PLUG in $PLUGS; do
+  NAME="$(basename "$PLUG")"
+  DIR="$PKGS_WORKDIR/$NAME.git"
+  TARGET="$TO/$NAME"
+  [ -d "$TARGET" ] && continue
+  cp -r "$DIR" "$TARGET"
+  rm -rf "$TARGET/.git"
+done
+
+VIM_PACK="$HOME/.config/vim/pack"
+{
+  echo "_vimlink() {"
+  echo "  [ -e \"$VIM_PACK\" ] && [ \$(readlink \"$VIM_PACK\") = \"$TO\" ] && return"
+  echo "  rm -f \"$VIM_PACK\""
+  echo "  ln -sf \"$TO\" \"$VIM_PACK\""
+  echo "}"
+  echo "_vimlink"
+} > "$ENV"

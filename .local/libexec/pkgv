@@ -1,6 +1,5 @@
 #!/bin/sh -e
-[ -z "$PKGS_CACHE" ] && echo "PKGS_CACHE not set" && exit 1
-CACHE="$PKGS_CACHE/vers"
+CACHE="$HOME/.cache/pkgversions"
 mkdir -p "$CACHE"
 RUN="$CACHE/run"
 FORCE=0
@@ -65,7 +64,7 @@ check_version() {
   fi
 }
 
-for FILE in "$USRBIN_SHARE/" "$HOME/.config/pkgversions/"; do
+for FILE in "$PKGS_STORE/pkgs/" "$HOME/.config/pkgversions/"; do
   FILE="${FILE}pkglist"
   [ ! -e "$FILE" ] && echo "$FILE does not exist" && continue
   echo "config: $FILE" >&2

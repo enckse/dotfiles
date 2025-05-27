@@ -1,6 +1,6 @@
 #!/bin/sh -e
 VERSION=0.18.2
-FILE="$PKGS_WD/$VERSION.delta.tar.gz"
+FILE="$PKGS_WORKDIR/$VERSION.delta.tar.gz"
 [ "$OS" = "darwin" ] && HASH="6ba38dc"
 [ "$OS" = "linux" ] && HASH="adf7674"
 
@@ -9,8 +9,10 @@ download-and-check \
   -f "$FILE" \
   -h "$HASH"
 
-TO="$PKGS_LIB/delta"
+TO="$PKGS_ROOT/delta/$VERSION"
+ENV="$TO/.usrbin"
+[ -e "$ENV" ] && exit 0
+
 mkdir -p "$TO"
 tar xf "$FILE" --strip-components=1 -C "$TO"
-install -Dm755 "$TO/delta" "$PKGS_BIN/delta"
-rm -rf "$TO"
+echo "export PATH=\"$TO/:\$PATH\"" > "$ENV"

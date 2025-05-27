@@ -1,6 +1,6 @@
 #!/bin/sh -e
 VERSION=14.1.1
-FILE="$PKGS_WD/$VERSION.rg.tar.gz"
+FILE="$PKGS_WORKDIR/$VERSION.rg.tar.gz"
 [ "$OS" = "darwin" ] && HASH="24ad767"
 [ "$OS" = "linux" ] && HASH="c827481"
 
@@ -9,8 +9,10 @@ download-and-check \
   -f "$FILE" \
   -h "$HASH"
 
-TO="$PKGS_LIB/rg"
+TO="$PKGS_ROOT/rg/$VERSION"
+ENV="$TO/.usrbin"
+[ -e "$ENV" ] && exit 0
+
 mkdir -p "$TO"
 tar xf "$FILE" --strip-components=1 -C "$TO"
-install -Dm755 "$TO/rg" "$PKGS_BIN/rg"
-rm -rf "$TO"
+echo "export PATH=\"$TO/:\$PATH\"" > "$ENV"

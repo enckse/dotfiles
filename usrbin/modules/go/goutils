@@ -11,22 +11,32 @@ golang.org/x/tools/gopls
 github.com/restic/restic/cmd/restic
 "
 
-[ ! -x "$PKGS_BIN/go" ] && echo "no go package found" && exit 1
+! command -v go >/dev/null && echo "no go package found" && exit 1
 
-GOMODS="$PKGS_BIN/go-mod-updates"
-{
-  echo "#!/bin/sh -e"
-  echo "go get -u ./..."
-  echo "go mod tidy"
-} > "$GOMODS"
-chmod 755 "$GOMODS"
+VERSION=0.1.0
+TO="$PKGS_ROOT/go-utils/$VERSION"
+[ ! -d "$TO" ] && mkdir -p "$TO"
+UTIL_ENV="$TO/.usrbin"
+[ ! -e "$UTIL_ENV" ] && (echo "export PATH=\"$TO/:\$PATH\"" > "$UTIL_ENV")
+
+GOMODS="$TO/go-mod-updates"
+if [ ! -x "$GOMODS" ]; then
+  {
+    echo "#!/bin/sh -e"
+    echo "[ ! -e 'go.mod' ] && echo 'cowardly failing to run go mod commands' && exit 1"
+    echo "go get -u ./..."
+    echo "go mod tidy"
+  } > "$GOMODS"
+  chmod 755 "$GOMODS"
+fi
 
 _pkgv() {
   echo "check_version 'https://$1'" >> "$PKGS_LIST"
 }
 
-GOLINT="$PKGS_BIN/go-lint"
+GOLINT="$TO/go-lint"
 _golint() {
+  [ -x "$GOLINT" ] && return
   NAMED="$(basename "$1")"
   ARGS="$2"
   FILES="$3"
@@ -34,18 +44,24 @@ _golint() {
   echo "$NAMED $ARGS $FILES" >> "$GOLINT"
 }
 
-{
-  echo "#!/bin/sh -e"
-  echo "go vet ./..."
-} > "$GOLINT"
+if [ ! -x "$GOLINT" ]; then
+  {
+    echo "#!/bin/sh -e"
+    echo "[ ! -e 'go.mod' ] && echo 'cowardly failing to run go lint commands' && exit 1"
+    echo "go vet ./..."
+  } > "$GOLINT"
+fi
+
 for f in $GOTOOLS; do
   versioning=""
+  name=$(echo "$f" | rev | cut -d '/' -f 1 | rev)
   case "$f" in
     git.sr.ht/* | github.com/*)
       _pkgv "$(echo "$f" | cut -d "/" -f 1,2,3)"
       case "$f" in
         *enckse/git-tools*)
           versioning="v0.3.1"
+          name="git-tools"
           ;;
         *enckse/lockbox*)
           versioning="v1.4.5"
@@ -60,7 +76,7 @@ for f in $GOTOOLS; do
       esac
       ;; 
     */fieldalignment)
-      versioning=latest
+      versioning=v0.33.0
       _golint "$f"
       ;;
     */cmd/staticcheck)
@@ -88,7 +104,15 @@ for f in $GOTOOLS; do
       ;;
   esac
   [ -z "$versioning" ] && echo "no version set: $f" && exit 1
-  (cd "$PKGS_BIN" && GOBIN="$PWD" ./go install "$f@$versioning")
+  TO="$PKGS_ROOT/$name/$versioning"
+  ENV="$TO/.usrbin"
+  [ -e "$ENV" ] && continue
+  mkdir -p "$TO"
+  (cd "$TO" && GOBIN="$PWD" go install "$f@$versioning")
+  (cd "$TO" && echo "export PATH=\"$TO/:\$PATH\"" > "$ENV")
+  [ "$name" = "lb" ] && \
+    (cd "$TO" && SHELL="$USE_SHELL" ./lb completions > "lb.$USE_SHELL") && \
+    (cd "$TO" && echo "export USRBIN_COMP=\"$TO/lb.$USE_SHELL:\$USRBIN_COMP\"" >> "$ENV")
 done
-(cd "$PKGS_BIN" && SHELL="$USE_SHELL" ./lb completions > "$PKGS_COMP/lb")
-chmod 755 "$GOLINT"
+[ ! -x "$GOLINT" ] && chmod 755 "$GOLINT"
+exit 0

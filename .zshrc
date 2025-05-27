@@ -4,15 +4,12 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
-USRBIN_ENV=$(find "$HOME/.local/usrbin" -maxdepth 3 -type f -name ".usrbin.env" | sort -r | head -n 1)
-[ -n "$USRBIN_ENV" ] && source "$USRBIN_ENV"
+export PKGS_STORE="$HOME/.usrbin"
+[ -e "$PKGS_STORE/env" ] && source "$PKGS_STORE/env"
 
-export PKGS_STORE="$HOME/.local"
-export PKGS_CACHE="$HOME/.cache/pkgversions"
 autoload -Uz compinit && compinit
-COMPS="${USRBIN_SHARE}/zsh-completion/completions"
-if [ -d "$COMPS" ]; then
-  for FILE in "$COMPS/"*; do
+if [ -n "$USRBIN_COMP" ]; then
+  for FILE in $(echo "$USRBIN_COMP" | tr ':' '\n'); do
     . "$FILE"
   done
 fi

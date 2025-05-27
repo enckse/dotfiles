@@ -1,18 +1,14 @@
 #!/bin/sh -e
 SOURCES=""
-TARGET=""
 WORKDIR=""
-OUT=""
-DEST=""
 ARCH=""
 OS=""
-while getopts "s:t:w:o:f:a:p:" opt ; do
+OUT=""
+while getopts "s:w:a:b:p:" opt ; do
   case $opt in
     s) SOURCES="$OPTARG";;
-    t) TARGET="$OPTARG";;
     w) WORKDIR="$OPTARG";;
-    o) OUT="$OPTARG";;
-    f) DEST="$OPTARG";;
+    b) OUT="$OPTARG";;
     a) ARCH="$OPTARG";;
     p) OS="$OPTARG";;
     *)
@@ -22,35 +18,27 @@ while getopts "s:t:w:o:f:a:p:" opt ; do
   esac
 done
 
-[ -z "$DEST" ] && DEST="usrbin.img"
 [ -z "$OUT" ] && echo "no output dir set" && exit 1
 [ -z "$WORKDIR" ] && echo "no workdir set" && exit 1
-[ -z "$TARGET" ] && echo "no target set" && exit 1
 [ -z "$SOURCES" ] && echo "sources not set" && exit 1
 [ -z "$ARCH" ] && echo "arch not set" && exit 1
 [ -z "$OS" ] && echo "os (platform) not set" && exit 1
 [ ! -d "$SOURCES" ] && echo "no $SOURCES dir found" && exit 1
 
+mkdir -p "$OUT" "$WORKDIR"
+export PKGS_WORKDIR="$WORKDIR"
+export PKGS_ROOT="$OUT"
+
 USE_SHELL=$(basename "$SHELL")
 [ "$OS" = "darwin" ] && OS_ALT="macos"
 export OS USE_SHELL OS_ALT
-PKGS_USR_OFFSET="usr/local"
-export PKGS_TARGET="$TARGET"
-export PKGS_BIN_DIR="bin"
-export PKGS_LIB_DIR="lib"
-export PKGS_BIN_OFFSET="$PKGS_USR_OFFSET/$PKGS_BIN_DIR"
-export PKGS_LIB_OFFSET="$PKGS_USR_OFFSET/$PKGS_LIB_DIR"
-export PKGS_BIN="$TARGET/$PKGS_BIN_OFFSET"
-export PKGS_LIB="$TARGET/$PKGS_LIB_OFFSET"
-export PKGS_SHARE="$TARGET/$PKGS_USR_OFFSET/share"
-export PKGS_LIST="$PKGS_SHARE/pkglist"
-export PKGS_COMP="$PKGS_SHARE/${USE_SHELL}-completion/completions/"
-export PKGS_WD="$WORKDIR"
-mkdir -p "$PKGS_BIN" "$PKGS_LIB" "$PKGS_WD" "$PKGS_COMP" "$OUT"
+
+export PKGS_LIST="$OUT/pkglist"
 rm -f "$PKGS_LIST"
 
 export PKGS_ARCH="$ARCH"
 [ "$PKGS_ARCH" = "aarch64" ] && export PKGS_ALTARCH=arm64
+
 case "$OS" in
   "darwin")
     OS_DOUBLE="apple-darwin" && export OS_DOUBLE
@@ -62,13 +50,11 @@ case "$OS" in
     export OS_DOUBLE OS_TRIPLE
     ;; 
 esac
+
 OS_IDENTIFIER="$OS_DOUBLE"
 [ -n "$OS_TRIPLE" ] && OS_IDENTIFIER="$OS_TRIPLE"
 export OS_IDENTIFIER
 
-export GOOS="$OS"
-export GOARCH=arm64
-export PATH="$PKGS_BIN:$PATH"
 for SRC in "$SOURCES/"*.sh; do
   echo "processing: $SRC"
   [ ! -x "$SRC" ] && echo "$SRC is not executable" && exit 1
@@ -92,5 +78,3 @@ EOF
     mv "$PKGS_LIST.tmp" "$PKGS_LIST"
     ;;
 esac
-
-rsync -ac "$TARGET/$PKGS_USR_OFFSET/" "$DEST"

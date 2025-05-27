@@ -1,6 +1,6 @@
 #!/bin/sh -e
 VERSION=0.10.0
-FILE="$PKGS_WD/$VERSION.shellcheck.tar.xz"
+FILE="$PKGS_WORKDIR/$VERSION.shellcheck.tar.xz"
 [ "$OS" = "darwin" ] && HASH="bbd2f14"
 [ "$OS" = "linux" ] && HASH="324a7e8"
 
@@ -9,7 +9,10 @@ download-and-check \
   -f "$FILE" \
   -h "$HASH"
 
-tar xf "$FILE" -C "$PKGS_LIB"
-TO="$PKGS_LIB/shellcheck-v$VERSION"
-install -Dm755 "$TO/shellcheck" "$PKGS_BIN/shellcheck"
-rm -rf "$TO"
+TO="$PKGS_ROOT/shellcheck/$VERSION"
+ENV="$TO/.usrbin"
+[ -e "$ENV" ] && exit 0
+
+mkdir -p "$TO"
+tar xf "$FILE" --strip-component=1 -C "$TO"
+echo "export PATH=\"$TO/:\$PATH\"" > "$ENV"

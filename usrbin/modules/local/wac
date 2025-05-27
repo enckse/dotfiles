@@ -1,9 +1,13 @@
 #!/bin/sh -e
-[ ! -x "$PKGS_BIN/go" ] && echo "no go package found" && exit 1
-[ ! -x "$PKGS_BIN/just" ] && echo "no just package found" && exit 1
+! command -v go >/dev/null && echo "no go package found" && exit 1
+! command -v just >/dev/null && echo "no just package found" && exit 1
 
-TO="$PKGS_LIB/wac"
+REPO="private:wac"
+HASH=$(git ls-remote "$REPO" | grep "HEAD" | cut -c 1-7)
+TO="$PKGS_ROOT/wac/$HASH"
+ENV="$TO/.usrbin"
+[ -e "$ENV" ] && exit 0
+
 git clone --quiet private:wac "$TO"
-(cd "$TO" && PATH="$PKGS_BIN:$PATH" "$PKGS_BIN/just" >/dev/null 2>&1)
-install -Dm755 "$TO/target/wac" "$PKGS_BIN/wac"
-rm -rf "$TO"
+(cd "$TO" && just)
+echo "export PATH=\"$TO/target/:\$PATH\"" > "$ENV"

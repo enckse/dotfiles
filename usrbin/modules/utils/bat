@@ -1,6 +1,6 @@
 #!/bin/sh -e
 VERSION=0.25.0
-FILE="$PKGS_WD/$VERSION.bat.tar.gz"
+FILE="$PKGS_WORKDIR/$VERSION.bat.tar.gz"
 [ "$OS" = "darwin" ] && HASH="b3ed5a7"
 [ "$OS" = "linux" ] && HASH="ee0f12c"
 
@@ -9,8 +9,10 @@ download-and-check \
   -f "$FILE" \
   -h "$HASH"
 
-TO="$PKGS_LIB/bat"
+TO="$PKGS_ROOT/bat/$VERSION"
+ENV="$TO/.usrbin"
+[ -e "$ENV" ] && exit 0
+
 mkdir -p "$TO"
 tar xf "$FILE" --strip-components=1 -C "$TO"
-install -Dm755 "$TO/bat" "$PKGS_BIN/bat"
-rm -rf "$TO"
+echo "export PATH=\"$TO/:\$PATH\"" > "$ENV"
