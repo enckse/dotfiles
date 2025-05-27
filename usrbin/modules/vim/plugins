@@ -26,7 +26,8 @@ for PLUG in $PLUGS; do
   rm -rf "$TARGET/.git"
 done
 
-VIM_PACK="$HOME/.config/vim/pack"
+VIM_PACK="$HOME/.config/vim/pack/plugins/start"
+mkdir -p "$(dirname "$VIM_PACK")"
 {
   echo "_vimlink() {"
   echo "  [ -e \"$VIM_PACK\" ] && [ \$(readlink \"$VIM_PACK\") = \"$TO\" ] && return"
