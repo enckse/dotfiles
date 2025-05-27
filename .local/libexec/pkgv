@@ -48,19 +48,21 @@ _header() {
 
 _version() {
   _header "$1"
-  git-feed -url "$1"
+  git-feed -url "$1" | grep "$2"
 }
 
 check_version() {
   FOUND=0
   BASE=$(basename "$1")
-  for vers in $(_version "$1"); do
+  for vers in $(_version "$1" "$2"); do
     FOUND=1
     _store "$BASE" "$vers"
   done
   if [ "$FOUND" -eq 0 ]; then
-    echo "no versions found"
-    exit 1
+    if [ -z "$2" ]; then
+      echo "no versions found"
+      exit 1
+    fi
   fi
 }
 

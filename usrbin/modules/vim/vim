@@ -6,7 +6,8 @@ HASH="48db5a9"
 download-and-check \
   -u "https://github.com/vim/vim/archive/refs/tags/$VERSION.tar.gz" \
   -f "$FILE" \
-  -h "$HASH"
+  -h "$HASH" \
+  -s '00$'
 
 TO="$PKGS_ROOT/vim/$VERSION"
 ENV="$TO/.usrbin"

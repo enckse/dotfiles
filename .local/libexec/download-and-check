@@ -5,7 +5,8 @@ URL=""
 PROJECTS=""
 PAYLOAD=""
 LOCAL_PROJECT=0
-while getopts "d:f:u:h:t:p:n:l" opt ; do
+SEARCH=""
+while getopts "s:d:f:u:h:t:p:n:l" opt ; do
   case $opt in
     f) FILE="$OPTARG";;
     u) URL="$OPTARG";;
@@ -13,6 +14,7 @@ while getopts "d:f:u:h:t:p:n:l" opt ; do
     p) PROJECTS="$OPTARG $PROJECTS";;
     l) LOCAL_PROJECT=1;;
     d) PAYLOAD="$OPTARG";;
+    s) SEARCH="$OPTARG";;
     *)
       echo "unknown arg $opt"
       exit 1
@@ -62,7 +64,7 @@ if [ -n "$PKGS_LIST" ] && [ $LOCAL_PROJECT -eq 0 ]; then
   fi
   for PROJECT in $PROJECTS; do
     [ -z "$PROJECT" ] && echo "unable to read project/unset?" && exit 1
-    echo "'$PROJECT'" | sed 's/^/check_version /g' >> "$PKGS_LIST"
+    echo "'$PROJECT' '$SEARCH'" | sed 's/^/check_version /g' >> "$PKGS_LIST"
   done
 fi
 
