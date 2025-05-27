@@ -48,7 +48,7 @@ _header() {
 
 _version() {
   _header "$1"
-  git-feed -url "$1" | grep "$2"
+  git-feed -url "$1" | grep -E "$2"
 }
 
 check_version() {
