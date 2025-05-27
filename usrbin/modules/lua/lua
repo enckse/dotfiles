@@ -1,7 +1,7 @@
 #!/bin/sh -e
 VERSION=5.4.7
 [ "$OS" = "darwin" ] && HASH="9fbf5e2"
-FILE="$PKGS_WD/$VERSION.lua.tar.gz"
+FILE="$PKGS_WORKDIR/$VERSION.lua.tar.gz"
 
 download-and-check \
   -u "https://www.lua.org/ftp/lua-$VERSION.tar.gz" \
@@ -9,10 +9,11 @@ download-and-check \
   -h "$HASH" \
   -p "https://github.com/lua/lua"
 
-TO="$PKGS_LIB/lua"
+TO="$PKGS_ROOT/lua/$VERSION"
+ENV="$TO/.usrbin"
+[ -e "$ENV" ] && exit 0
+
 mkdir -p "$TO"
 tar xf "$FILE" --strip-components=1 -C "$TO"
-(cd "$TO" && make > /dev/null)
-install -Dm755 "$TO/src/lua" "$PKGS_BIN/lua"
-install -Dm755 "$TO/src/luac" "$PKGS_BIN/luac"
-rm -rf "$TO"
+(cd "$TO" && make)
+echo "export PATH=\"$TO/src/:\$PATH\"" > "$ENV"
