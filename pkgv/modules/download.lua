@@ -21,7 +21,7 @@ return {
             local hash_command = string.format("sha256sum '%s' | cut -c 1-7", file)
             local use_hash = args.module.hash["source"]
             if use_hash == nil then
-                use_hash = args.module.hash[args.system.os]
+                use_hash = args.module.hash[args.system.os_identifier]
             end
             if not args.system.execute(string.format("%s | grep -q '^%s$'", hash_command, use_hash)) then
                 os.execute(string.format("%s | sed 's/^/  -> have hash: /g'", hash_command))

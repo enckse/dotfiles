@@ -18,6 +18,7 @@ local system = {
 
 system.name = system.os
 if system.name == "darwin" then
+    system.os_identifier = system.os
     system.name = "apple"
 end
 if system.arch.main == "arm64" then
