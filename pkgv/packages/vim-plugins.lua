@@ -37,7 +37,7 @@ module.build = function(system, dest, env_file)
     if not system.execute(string.format("mkdir -p '%s'", archive)) then
         error(string.format("unable to make archive dir: %s", archive))
     end
-    system.prepare_directory(dest)
+    utils.prepare_directory(dest)
     for _, r in pairs(repos) do
         local base = utils.read_stdout(string.format("basename '%s'", r))
         local clone = string.format("%s/%s", archive, base)

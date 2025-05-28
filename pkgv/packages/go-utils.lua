@@ -9,7 +9,8 @@ module.get = function()
 end
 
 module.build = function(system, dest, env_file)
-    system.prepare_directory(dest)
+    local utils = require("modules.utils")
+    utils.prepare_directory(dest)
     for _, script in pairs({"go-lint", "go-mod-updates"}) do
         local contents = system.read_file(string.format("src/%s.sh", script))
         system.create_script(dest .. "/" .. script, contents)

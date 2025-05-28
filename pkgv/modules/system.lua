@@ -1,3 +1,4 @@
+local utils = require("modules.utils")
 local root = os.getenv("PKGV_STORE")
 if root == nil then
     error("PKGV_STORE not set?")
@@ -45,9 +46,6 @@ system.read_file = function(path)
     return content
 end
 
-system.prepare_directory = function(dest)
-    os.execute(string.format("rm -rf '%s' && mkdir -p '%s'", dest, dest))
-end
 
 system.git_clone = function(repository, dest)
     if not system.execute(string.format("test -d '%s' || git clone --quiet '%s' '%s'", dest, repository, dest)) then
@@ -60,7 +58,7 @@ end
 
 system.untar = function(module, tar_args, dest)
     local archive = system.file_archive(module)
-    system.prepare_directory(dest)
+    utils.prepare_directory(dest)
     if not system.execute(string.format("tar xf '%s' %s -C '%s'", archive, tar_args, dest)) then
         error(string.format("unable to unpack: %s", archive))
     end
@@ -97,7 +95,7 @@ system.make_completion = function(dest)
 end
 
 system.go_install = function(url, version, dest, env_file)
-    system.prepare_directory(dest)
+    utils.prepare_directory(dest)
     if not system.execute(string.format("cd \"%s\" && GOBIN=\"$PWD\" '%s' install %s@%s", dest, system.binaries["go"], url, version)) then
         error("failed to go install")
     end

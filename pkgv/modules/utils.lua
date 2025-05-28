@@ -1,4 +1,4 @@
-return {
+module = {
     create_rust_get = function(module)
         return function(system)
             system.download(string.format("%s/releases/download/%s/%s-%s-%s-%s-%s%s",
@@ -34,5 +34,10 @@ return {
     end,
     log = function(msg)
         print(string.format("-> %s", msg))
+    end,
+    prepare_directory = function(dest)
+        os.execute(string.format("rm -rf '%s' && mkdir -p '%s'", dest, dest))
     end
 }
+
+return module
