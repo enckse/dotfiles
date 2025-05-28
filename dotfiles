@@ -6,12 +6,12 @@ _install() {
       ;;
   esac
 
+  echo ".config/vim/"
+  echo ".config/git/"
+  echo ".ssh/"
   case $(uname) in
     "Darwin")
       echo ".config/pkgversions/"
-      echo ".config/vim/"
-      echo ".config/git/"
-      echo ".ssh/"
       echo ".config/kitty/"
       ;;
   esac
