@@ -27,4 +27,19 @@ return {
     log = function(msg)
         print(string.format("-> %s", msg))
     end,
+    create_github_source_get = function(module)
+        return function(system)
+            local url = require("modules.utils").get_url(module.upstream)
+            system.download(string.format("%s/archive/refs/tags/%s%s", url, module.version, module.extension))
+        end
+    end,
+    get_url = function(object)
+        local url = object
+        local filter = ""
+        if type(url) ~= "string" then
+            url = object.url
+            filter = string.format(" '%s'", object.filter)
+        end
+        return url, filter
+    end
 }

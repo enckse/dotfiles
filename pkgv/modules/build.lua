@@ -59,12 +59,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
             system.binaries[mod.name] = mod.binary(dest)
         end
         if mod.upstream ~= "none" then
-            local url = mod.upstream
-            local filter = ""
-            if type(url) ~= "string" then
-                url = mod.upstream.url
-                filter = string.format(" '%s'", mod.upstream.filter)
-            end
+            local url, filter = utils.get_url(mod.upstream)
             pkglist = concat(pkglist, string.format("check_version '%s'%s", url, filter))
         end
     end

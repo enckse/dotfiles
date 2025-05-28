@@ -12,10 +12,7 @@ local module = {
     }
 }
 
-module.get = function(system)
-    system.download(string.format("%s/archive/refs/tags/%s%s", module.upstream.url, module.version, module.extension))
-end
-
+module.get = require("modules.utils").create_github_source_get(module)
 module.build = function(system, dest, env_file)
     system:untar(module, "--strip-components=1", dest)
     local ioutils = require("modules.ioutils")
