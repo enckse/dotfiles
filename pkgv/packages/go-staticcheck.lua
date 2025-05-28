@@ -1,5 +1,6 @@
 local module = {
     version = "v0.6.1",
+    release = 1,
     name = "staticcheck",
     upstream = "https://github.com/dominikh/go-tools"
 }

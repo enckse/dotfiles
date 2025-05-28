@@ -1,6 +1,7 @@
 local module = {
     version = "v0.8.0",
     name = "gofumpt",
+    release = 1,
     upstream = "https://github.com/mvdan/gofumpt"
 }
 

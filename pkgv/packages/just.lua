@@ -1,6 +1,7 @@
 local module = {
     version = "1.40.0",
     name = "just",
+    release = 1,
     extension = ".tar.gz",
     hash = {
         darwin = "0fb2401"

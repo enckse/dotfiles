@@ -1,6 +1,7 @@
 local module = {
     version = "3.14.0",
     name = "luals",
+    release = 1,
     extension = ".tar.gz",
     hash = {
         darwin = "85d67a1"

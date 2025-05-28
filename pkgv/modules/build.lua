@@ -17,8 +17,8 @@ local envs = ""
 for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' | sort"):lines() do
     local req = string.gsub(path, "/", ".")
     local mod = require(req)
-    if mod.version == nil or mod.name == nil or mod.upstream == nil then
-        error(string.format("%s no version/name/upstream? -> %s", req, path))
+    if mod.version == nil or mod.name == nil or mod.upstream == nil or mod.release == nil then
+        error(string.format("%s no version/name/upstream/release? -> %s", req, path))
     end
     local enabled = true
     if mod.status ~= nil then
@@ -36,13 +36,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
             downloader.request({system = system, module = mod, url = url})
         end
         mod.get(system)
-        local release = (function()
-            if mod.release ~= nil then
-                return string.format("-%d", mod.release)
-            end
-            return ""
-        end)()
-        local dest = string.format("%s/%s/%s%s", system.builds, mod.name, mod.version, release)
+        local dest = string.format("%s/%s/%s-%d", system.builds, mod.name, mod.version, mod.release)
         local env_file = string.format("%s/.pkgv_env.sh", dest)
         if not system.execute(string.format("test -s '%s'", env_file)) then
             system.log("building: " .. path)

@@ -1,6 +1,7 @@
 local module = {
     version = "v0.10.0",
     name = "shellcheck",
+    release = 1,
     extension = ".tar.xz",
     hash = {
         darwin = "bbd2f14"

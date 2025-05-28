@@ -11,6 +11,7 @@ end
 
 local module = {
     version = hash,
+    release = 1,
     name = "vim-plugins",
     upstream = "none",
 }

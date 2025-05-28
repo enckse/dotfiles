@@ -1,5 +1,6 @@
 local module = {
     version = "v1.4.5",
+    release = 1,
     name = "lb",
     upstream = "https://git.sr.ht/~enckse/lockbox"
 }

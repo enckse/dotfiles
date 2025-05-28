@@ -4,6 +4,7 @@ local hash = utils.read_stdout(string.format("git ls-remote '%s' | grep 'HEAD' |
 
 local module = {
     version = hash,
+    release = 1,
     name = "wac",
     upstream = "none",
 }

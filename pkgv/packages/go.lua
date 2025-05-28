@@ -1,6 +1,7 @@
 local module = {
     version = "1.24.3",
     name = "go",
+    release = 1,
     extension = ".tar.gz",
     hash = {
         darwin = "64a3fa2"

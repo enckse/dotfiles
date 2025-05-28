@@ -1,6 +1,7 @@
 local module = {
     version = "v0.25.0",
     name = "bat",
+    release = 1,
     extension = ".tar.gz",
     hash = {
         darwin = "b3ed5a7"

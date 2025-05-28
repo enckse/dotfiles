@@ -2,6 +2,7 @@ local module = {
     version = "v9.1.1415",
     name = "vim",
     extension = ".tar.gz",
+    release = 1,
     hash = {
         source = "8543373"
     },

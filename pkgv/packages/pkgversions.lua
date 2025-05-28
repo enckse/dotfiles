@@ -1,6 +1,7 @@
 local module = {
     version = "0.0.1",
     name = "pkgversions",
+    release = 1,
     upstream = "none",
 }
 

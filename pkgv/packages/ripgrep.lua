@@ -1,6 +1,7 @@
 local module = {
     version = "14.1.1",
     name = "ripgrep",
+    release = 1,
     extension = ".tar.gz",
     hash = {
         darwin = "24ad767"

@@ -1,6 +1,7 @@
 local module = {
     version = "v0.3.1",
     name = "git-tools",
+    release = 1,
     upstream = "https://git.sr.ht/~enckse/git-tools"
 }
 

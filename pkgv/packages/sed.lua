@@ -1,6 +1,7 @@
 local module = {
     version = "4.9",
     name = "sed",
+    release = 1,
     extension = ".tar.xz",
     hash = {
         source = "6e226b7"

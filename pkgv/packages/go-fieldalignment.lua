@@ -1,6 +1,7 @@
 local module = {
     version = "v0.33.0",
     name = "fieldassignment",
+    release = 1,
     upstream = "https://github.com/golang/tools"
 }
 

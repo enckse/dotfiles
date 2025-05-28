@@ -1,5 +1,6 @@
 local module = {
     version = "v0.18.1",
+    release = 1,
     name = "modernize",
     upstream = "https://github.com/golang/tools"
 }

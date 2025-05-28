@@ -1,6 +1,7 @@
 local module = {
     version = os.getenv("LUA_VERSION"),
     name = "lua",
+    release = 1,
     extension = ".tar.gz",
     hash = {
         source = os.getenv("LUA_HASH")
