@@ -36,7 +36,13 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
             downloader.request({system = system, module = mod, url = url})
         end
         mod.get(system)
-        local dest = string.format("%s/%s/%s", system.builds, mod.name, mod.version)
+        local release = (function()
+            if mod.release ~= nil then
+                return string.format("-%d", mod.release)
+            end
+            return ""
+        end)()
+        local dest = string.format("%s/%s/%s%s", system.builds, mod.name, mod.version, release)
         local env_file = string.format("%s/.pkgv_env.sh", dest)
         if not system.execute(string.format("test -s '%s'", env_file)) then
             system.log("building: " .. path)
