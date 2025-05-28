@@ -1,13 +1,13 @@
-local ioutils = require("modules.ioutils")
-local repo = "private:wac"
-local hash = ioutils.read_stdout(string.format("git ls-remote '%s' | grep 'HEAD' | cut -c 1-7", repo))
-
 local module = {
-    version = hash,
     release = 1,
     name = "wac",
     upstream = "none",
+    version = ""
 }
+
+local ioutils = require("modules.ioutils")
+local repo = "private:wac"
+module.version = ioutils:git_remote_head_hash(repo)
 
 module.build = function(system, dest, env_file)
     ioutils:git_clone(repo, dest)

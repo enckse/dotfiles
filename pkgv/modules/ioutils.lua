@@ -69,4 +69,7 @@ return {
         end
         self:write_env(env_file, self:make_path_export(dest))
     end,
+    git_remote_head_hash = function(self, repository)
+        return self.read_stdout(string.format("git ls-remote '%s' | grep 'HEAD' | cut -c 1-7", repository))
+    end
 }

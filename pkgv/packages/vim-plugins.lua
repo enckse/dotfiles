@@ -1,3 +1,10 @@
+local module = {
+    release = 1,
+    name = "vim-plugins",
+    upstream = "none",
+    version = "",
+}
+
 local ioutils = require("modules.ioutils")
 local repos = {
     "https://github.com/vim-airline/vim-airline",
@@ -6,15 +13,10 @@ local repos = {
 
 local hash = ""
 for _, r in pairs(repos) do
-    hash = hash .. ioutils.read_stdout(string.format("git ls-remote '%s' | grep 'HEAD' | cut -c 1-7", r))
+    hash = hash .. ioutils:git_remote_head_hash(r)
 end
+module.version = hash
 
-local module = {
-    version = hash,
-    release = 1,
-    name = "vim-plugins",
-    upstream = "none",
-}
 
 local script = [[
 #!/bin/sh

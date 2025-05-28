@@ -23,14 +23,8 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
         error(string.format("%s no version/name/upstream/release? -> %s", req, path))
     end
     local enabled = true
-    if mod.status ~= nil then
-        if mod.status ~= "enabled" then
-            if mod.status == "disabled" then
-                enabled = false
-            else
-                error(string.format("unknown status for %s (%s)", req, mod.status))
-            end
-        end
+    if mod.enabled ~= nil then
+        enabled = mod.enabled
     end
     if enabled then
         utils.log("processing: " .. path)
