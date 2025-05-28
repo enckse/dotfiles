@@ -54,7 +54,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
             utils.log("building: " .. path)
             mod.build(system, dest, env_file)
         end
-        envs = concat(envs, string.format("source '%s'", env_file))
+        envs = concat(envs, string.format("[ -e '%s' ] && source '%s'", env_file, env_file))
         if mod.binary ~= nil then
             system.binaries[mod.name] = mod.binary(dest)
         end
