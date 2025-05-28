@@ -1,0 +1,28 @@
+#!/bin/sh -e
+export LUA_VERSION="5.4.7"
+export LUA_URL="https://www.lua.org/ftp/lua-$LUA_VERSION.tar.gz"
+export LUA_HASH="9fbf5e2"
+TARGET="target"
+if ! command -v lua > /dev/null; then
+  echo "-> using local lua"
+  LUA="$TARGET/lua-$LUA_VERSION"
+  LUA_BIN="$LUA/src"
+  if [ ! -x "${LUA_BIN}/lua" ]; then
+    echo "building lua ($LUA_VERSION)"
+    rm -rf "$TARGET"
+    mkdir -p "$TARGET"
+    TARGZ="lua.tar.gz"
+    (cd "$TARGET" && curl --fail --silent -L "$LUA_URL" > "$TARGZ")
+    HASH="$(sha256sum "$TARGET/$TARGZ" | cut -c 1-7)"
+    [ "$HASH" != "$LUA_HASH" ] && echo "lua hash mismatch ($HASH != $LUA_HASH)" && exit 1
+    (cd "$TARGET" && tar xf "$TARGZ")
+    (cd "$LUA" && make) 
+  fi
+  export PATH="$PWD/$LUA_BIN:$PATH"
+fi
+
+PKGV_OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+PKGV_ARCH="$(uname -m)"
+PKGV_SHELL="$(basename "$SHELL")"
+export PKGV_OS PKGV_ARCH PKGV_SHELL
+lua modules/build.lua

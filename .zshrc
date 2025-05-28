@@ -4,15 +4,9 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
+autoload -Uz compinit && compinit
 export PKGV_STORE="$HOME/.local/pkgv"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
-
-autoload -Uz compinit && compinit
-if [ -n "$PKGV_COMP" ]; then
-  for FILE in $(echo "$PKGV_COMP" | tr ':' '\n'); do
-    . "$FILE"
-  done
-fi
 
 # =========
 export SECRET_ROOT="$HOME/.local/com.ttypty/secrets"
