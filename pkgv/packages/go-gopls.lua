@@ -7,7 +7,6 @@ local module = {
 }
 
 local utils = require("modules.utils")
-module.get = function() end
 module.build = utils.create_go_build(module, "golang.org/x/tools/gopls")
 
 return module

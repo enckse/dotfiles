@@ -5,7 +5,6 @@ local module = {
     upstream = "https://git.sr.ht/~enckse/lockbox"
 }
 
-module.get = function() end
 module.build = function(system, dest, env_file)
     local ioutils = require("modules.ioutils")
     system:go_install("git.sr.ht/~enckse/lockbox/cmd/lb", module.version, dest, nil)

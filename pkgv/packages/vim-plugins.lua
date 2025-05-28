@@ -30,8 +30,6 @@ _vimlink() {
 _vimlink
 ]]
 
-module.get = function() end
-
 module.build = function(system, dest, env_file)
     local archive = string.format("%s/%s", system.cache, module.name)
     if not ioutils.execute(string.format("mkdir -p '%s'", archive)) then

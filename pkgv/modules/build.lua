@@ -37,7 +37,9 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
         system.download = function(url)
             downloader.request({system = system, module = mod, url = url})
         end
-        mod.get(system)
+        if mod.get ~= nil then
+            mod.get(system)
+        end
         local subdir = string.format("%s/%s", system.builds, mod.name)
         if not ioutils.execute(string.format("mkdir -p '%s'", subdir)) then
             error(string.format("unable to create subdirectory %s", subdir))

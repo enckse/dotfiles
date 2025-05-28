@@ -9,9 +9,6 @@ local module = {
     upstream = "none",
 }
 
-module.get = function()
-end
-
 module.build = function(system, dest, env_file)
     ioutils:git_clone(repo, dest)
     local path = ""

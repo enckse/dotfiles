@@ -6,7 +6,6 @@ local module = {
 }
 
 local utils = require("modules.utils")
-module.get = function() end
 module.build = utils.create_go_build(module, "honnef.co/go/tools/cmd/staticcheck")
 
 return module

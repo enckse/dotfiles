@@ -5,8 +5,6 @@ local module = {
     upstream = "none",
 }
 
-module.get = function() end
-
 module.build = function(_, dest, env_file)
     require("modules.ioutils"):copy_source_scripts(dest, env_file, {"go-lint", "go-mod-updates"}, "sh")
 end
