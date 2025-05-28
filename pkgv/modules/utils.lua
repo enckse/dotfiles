@@ -1,4 +1,4 @@
-module = {
+return {
     create_rust_get = function(module)
         return function(system)
             system.download(string.format("%s/releases/download/%s/%s-%s-%s-%s-%s%s",
@@ -28,5 +28,3 @@ module = {
         print(string.format("-> %s", msg))
     end,
 }
-
-return module
