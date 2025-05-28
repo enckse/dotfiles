@@ -7,7 +7,7 @@
   "identifier": "$CONFIG/machine",
   "resources": {
     "cpus": 4,
-    "memory": 8192
+    "memory": 4096
   },
   "serial": "none",
   "disks": [
