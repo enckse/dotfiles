@@ -26,10 +26,6 @@ if system.arch.main == "arm64" then
     system.arch.alternate = "arm64"
 end
 
-system.log = function(msg)
-    print(string.format("-> %s", msg))
-end
-
 system.execute = function(cmd)
     local _, _, code = os.execute(cmd)
     return code == 0

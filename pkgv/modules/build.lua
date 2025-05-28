@@ -32,7 +32,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
         end
     end
     if enabled then
-        system.log("processing: " .. path)
+        utils.log("processing: " .. path)
         system.download = function(url)
             downloader.request({system = system, module = mod, url = url})
         end
@@ -47,14 +47,14 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
             if full ~= dest then
                 local outdated = utils.read_stdout(string.format("find '%s' -maxdepth 0 -type d -mtime +30", full))
                 if outdated ~= nil and outdated ~= "" then
-                    system.log("clearing old version: " .. outdated)
+                    utils.log("clearing old version: " .. outdated)
                     os.execute(string.format("find '%s' -delete", full))
                 end
             end
         end
         local env_file = string.format("%s/.pkgv_env.sh", dest)
         if not system.execute(string.format("test -s '%s'", env_file)) then
-            system.log("building: " .. path)
+            utils.log("building: " .. path)
             mod.build(system, dest, env_file)
         end
         envs = concat(envs, string.format("source '%s'", env_file))

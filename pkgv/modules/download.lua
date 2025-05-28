@@ -1,3 +1,4 @@
+local utils = require("modules.utils")
 return {
     request = function(args)
         if args == nil or args.url == nil or args.module.hash == nil or args.module == nil or args.system == nil then
@@ -15,7 +16,7 @@ return {
         end
         local check_file = function()
             if not args.system.execute(string.format("file '%s' | grep -q '%s'", file, file_type)) then
-                args.system.log(string.format("invalid file type: %s", file))
+                utils.log(string.format("invalid file type: %s", file))
                 return false
             end
             local hash_command = string.format("sha256sum '%s' | cut -c 1-7", file)
@@ -26,7 +27,7 @@ return {
             if not args.system.execute(string.format("%s | grep -q '^%s$'", hash_command, use_hash)) then
                 os.execute(string.format("%s | sed 's/^/  -> have hash: /g'", hash_command))
                 os.execute(string.format("echo '  -> want hash: %s'", use_hash))
-                args.system.log(string.format("invalid hash: %s", file))
+                utils.log(string.format("invalid hash: %s", file))
                 return false
             end
             return true
@@ -36,7 +37,7 @@ return {
                 return
             end
         end
-        args.system.log(string.format("downloading: %s", args.url))
+        utils.log(string.format("downloading: %s", args.url))
         if not args.system.execute(string.format("curl --silent -L '%s' > '%s'", args.url, file)) then
             error(string.format("failed to download: %s", args.url))
         end

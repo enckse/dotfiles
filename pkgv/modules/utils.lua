@@ -31,5 +31,8 @@ return {
         local text = file:read("*all")
         file:close()
         return string.gsub(text, "%s+", "")
+    end,
+    log = function(msg)
+        print(string.format("-> %s", msg))
     end
 }
