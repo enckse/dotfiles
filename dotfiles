@@ -13,6 +13,7 @@ _install() {
     "Darwin")
       echo ".config/pkgversions/"
       echo ".config/kitty/"
+      echo ".config/vfu/"
       ;;
   esac
 }
