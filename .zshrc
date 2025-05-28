@@ -34,7 +34,7 @@ if command -v delta > /dev/null; then
 fi
 command -v bat > /dev/null && export BAT_OPTS="-pp --theme 'Monokai Extended'"
 export GOPATH="$HOME/.cache/go"
-zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
+command -v git-uncommitted > /dev/null && zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
 
 # =========
 cleanup-caches() {
