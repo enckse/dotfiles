@@ -9,8 +9,8 @@ local module = {
     upstream = "https://github.com/sharkdp/bat"
 }
 
-local package = require("modules.utils")
-module.get = package.create_rust_get(module)
-module.build = package.create_untar_build(module, "1")
+local utils = require("modules.utils")
+module.get = utils.create_rust_get(module)
+module.build = utils.create_untar_build(module, "1")
 
 return module

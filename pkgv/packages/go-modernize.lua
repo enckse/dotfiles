@@ -5,8 +5,8 @@ local module = {
     upstream = "https://github.com/golang/tools"
 }
 
-local package = require("modules.utils")
+local utils = require("modules.utils")
 module.get = function() end
-module.build = package.create_go_build(module, "golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize")
+module.build = utils.create_go_build(module, "golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize")
 
 return module

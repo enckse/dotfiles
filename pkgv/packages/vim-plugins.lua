@@ -1,4 +1,4 @@
-local utils = require("modules.utils")
+local ioutils = require("modules.ioutils")
 local repos = {
     "https://github.com/vim-airline/vim-airline",
     "https://github.com/dense-analysis/ale"
@@ -6,7 +6,7 @@ local repos = {
 
 local hash = ""
 for _, r in pairs(repos) do
-    hash = hash .. utils.read_stdout(string.format("git ls-remote '%s' | grep 'HEAD' | cut -c 1-7", r))
+    hash = hash .. ioutils.read_stdout(string.format("git ls-remote '%s' | grep 'HEAD' | cut -c 1-7", r))
 end
 
 local module = {
@@ -34,26 +34,26 @@ module.get = function() end
 
 module.build = function(system, dest, env_file)
     local archive = string.format("%s/%s", system.cache, module.name)
-    if not system.execute(string.format("mkdir -p '%s'", archive)) then
+    if not ioutils.execute(string.format("mkdir -p '%s'", archive)) then
         error(string.format("unable to make archive dir: %s", archive))
     end
-    utils.prepare_directory(dest)
+    ioutils.prepare_directory(dest)
     for _, r in pairs(repos) do
-        local base = utils.read_stdout(string.format("basename '%s'", r))
+        local base = ioutils.read_stdout(string.format("basename '%s'", r))
         local clone = string.format("%s/%s", archive, base)
-        system.git_clone(r, clone)
+        ioutils.git_clone(r, clone)
         local target = string.format("%s/%s", dest, base)
-        if not system.execute(string.format("cp -r '%s' '%s'", clone, target)) then
+        if not ioutils.execute(string.format("cp -r '%s' '%s'", clone, target)) then
             error(string.format("unable to setup %s", r))
         end
-        if not system.execute(string.format("git -C '%s' log -n 1 > '%s/.githash'", target, target)) then
+        if not ioutils.execute(string.format("git -C '%s' log -n 1 > '%s/.githash'", target, target)) then
             error(string.format("unable to version %s", r))
         end
-        if not system.execute(string.format("rm -rf '%s/.git'", target)) then
+        if not ioutils.execute(string.format("rm -rf '%s/.git'", target)) then
             error(string.format("unable to clean %s", r))
         end
     end
-    system.write_env(env_file, string.format(script, dest, dest))
+    ioutils.write_env(env_file, string.format(script, dest, dest))
 end
 
 return module

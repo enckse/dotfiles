@@ -8,12 +8,12 @@ local module = {
 module.get = function()
 end
 
-module.build = function(system, dest, env_file)
-    local utils = require("modules.utils")
-    utils.prepare_directory(dest)
-    local contents = system.read_file("src/pkgversions.sh")
-    system.create_script(dest .. "/pkgversions", contents)
-    system.write_env(env_file, system.make_path_export(dest))
+module.build = function(_, dest, env_file)
+    local ioutils = require("modules.ioutils")
+    ioutils.prepare_directory(dest)
+    local contents = ioutils.read_file("src/pkgversions.sh")
+    ioutils.create_script(dest .. "/pkgversions", contents)
+    ioutils.write_env(env_file, ioutils.make_path_export(dest))
 end
 
 return module

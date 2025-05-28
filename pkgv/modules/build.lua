@@ -13,6 +13,7 @@ local concat = function(input, add)
 end
 
 local utils = require("modules.utils")
+local ioutils = require("modules.ioutils")
 local pkglist = ""
 local envs = ""
 for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' | sort"):lines() do
@@ -38,7 +39,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
         end
         mod.get(system)
         local subdir = string.format("%s/%s", system.builds, mod.name)
-        if not system.execute(string.format("mkdir -p '%s'", subdir)) then
+        if not ioutils.execute(string.format("mkdir -p '%s'", subdir)) then
             error(string.format("unable to create subdirectory %s", subdir))
         end
         local dest = string.format("%s/%s/%s-%d", system.builds, mod.name, mod.version, mod.release)
@@ -53,7 +54,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
             end
         end
         local env_file = string.format("%s/.pkgv_env.sh", dest)
-        if not system.execute(string.format("test -s '%s'", env_file)) then
+        if not ioutils.execute(string.format("test -s '%s'", env_file)) then
             utils.log("building: " .. path)
             mod.build(system, dest, env_file)
         end
@@ -72,6 +73,6 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
         end
     end
 end
-system.write_file(system.env, envs, "644")
-system.write_file(system.pkglist, pkglist, "644")
+ioutils.write_file(system.env, envs, "644")
+ioutils.write_file(system.pkglist, pkglist, "644")
 os.execute(string.format("sort -o '%s' -u '%s'", system.pkglist, system.pkglist))

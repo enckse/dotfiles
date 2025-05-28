@@ -6,8 +6,8 @@ local module = {
     upstream = "none"
 }
 
-local package = require("modules.utils")
+local utils = require("modules.utils")
 module.get = function() end
-module.build = package.create_go_build(module, "golang.org/x/tools/gopls")
+module.build = utils.create_go_build(module, "golang.org/x/tools/gopls")
 
 return module

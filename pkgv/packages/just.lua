@@ -9,14 +9,12 @@ local module = {
     upstream = "https://github.com/casey/just"
 }
 
-local package = require("modules.utils")
-module.get = package.create_rust_get(module)
+local utils = require("modules.utils")
+module.get = utils.create_rust_get(module)
 
 module.build = function(system, dest, env_file)
     system.untar(module, "", dest)
-    local contents = system.make_path_export(dest)
-    contents = contents .. "\n" .. system.make_completion(dest .. "/completions/just." .. system.shell)
-    system.write_env(env_file, contents)
+    require("modules.ioutils").make_path_and_completion(env_file, dest, dest .."/completions/just." .. system.shell)
 end
 
 module.binary = function(dest)

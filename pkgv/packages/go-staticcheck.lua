@@ -5,8 +5,8 @@ local module = {
     upstream = "https://github.com/dominikh/go-tools"
 }
 
-local package = require("modules.utils")
+local utils = require("modules.utils")
 module.get = function() end
-module.build = package.create_go_build(module, "honnef.co/go/tools/cmd/staticcheck")
+module.build = utils.create_go_build(module, "honnef.co/go/tools/cmd/staticcheck")
 
 return module

@@ -5,8 +5,8 @@ local module = {
     upstream = "https://github.com/golang/tools"
 }
 
-local package = require("modules.utils")
+local utils = require("modules.utils")
 module.get = function() end
-module.build = package.create_go_build(module, "golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment")
+module.build = utils.create_go_build(module, "golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment")
 
 return module

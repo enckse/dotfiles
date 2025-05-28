@@ -21,7 +21,8 @@ end
 
 module.build = function(system, dest, env_file)
     system.untar(module, "", dest)
-    system.write_env(env_file, system.make_path_export(dest .. "/bin"))
+    local ioutils = require("modules.ioutils")
+    ioutils.write_env(env_file, ioutils.make_path_export(dest .. "/bin"))
 end
 
 return module

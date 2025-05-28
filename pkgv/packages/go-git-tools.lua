@@ -5,8 +5,8 @@ local module = {
     upstream = "https://git.sr.ht/~enckse/git-tools"
 }
 
-local package = require("modules.utils")
+local utils = require("modules.utils")
 module.get = function() end
-module.build = package.create_go_build(module, "git.sr.ht/~enckse/git-tools/cmd/...")
+module.build = utils.create_go_build(module, "git.sr.ht/~enckse/git-tools/cmd/...")
 
 return module

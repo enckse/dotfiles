@@ -20,7 +20,7 @@ module.get = function(system)
                                   module.extension))
 end
 
-local package = require("modules.utils")
-module.build = package.create_untar_build(module, "1")
+local utils = require("modules.utils")
+module.build = utils.create_untar_build(module, "1")
 
 return module

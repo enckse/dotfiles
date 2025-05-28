@@ -14,8 +14,9 @@ module = {
     end,
     create_untar_build = function(module, offset)
         return function(system, dest, env_file)
+            local ioutils = require("modules.ioutils")
             system.untar(module, string.format("--strip-components=%s", offset), dest)
-            system.write_env(env_file, system.make_path_export(dest))
+            ioutils.write_env(env_file, ioutils.make_path_export(dest))
         end
     end,
     create_go_build = function(module, url)
@@ -23,21 +24,9 @@ module = {
             system.go_install(url, module.version, dest, env_file)
         end
     end,
-    read_stdout = function(cmd)
-        local file = io.popen(cmd, 'r')
-        if file == nil then
-            error(string.format("command failed: %s", cmd))
-        end
-        local text = file:read("*all")
-        file:close()
-        return string.gsub(text, "%s+", "")
-    end,
     log = function(msg)
         print(string.format("-> %s", msg))
     end,
-    prepare_directory = function(dest)
-        os.execute(string.format("rm -rf '%s' && mkdir -p '%s'", dest, dest))
-    end
 }
 
 return module

@@ -5,8 +5,8 @@ local module = {
     upstream = "https://github.com/restic/restic"
 }
 
-local package = require("modules.utils")
+local utils = require("modules.utils")
 module.get = function() end
-module.build = package.create_go_build(module, "github.com/restic/restic/cmd/restic")
+module.build = utils.create_go_build(module, "github.com/restic/restic/cmd/restic")
 
 return module
