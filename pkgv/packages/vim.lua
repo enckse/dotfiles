@@ -17,7 +17,7 @@ module.get = function(system)
 end
 
 module.build = function(system, dest, env_file)
-    system.untar(module, "--strip-components=1", dest)
+    system:untar(module, "--strip-components=1", dest)
     local ioutils = require("modules.ioutils")
     if not ioutils.execute(string.format("cd '%s' && ./configure --enable-multibyte --with-tlib=ncurses --enable-terminal --disable-gui --without-x", dest)) then
         error("configure failed")
@@ -25,9 +25,9 @@ module.build = function(system, dest, env_file)
     if not ioutils.execute(string.format("cd '%s' && make", dest)) then
         error("build failed")
     end
-    local content = ioutils.make_path_export(dest .. "/src")
+    local content = ioutils:make_path_export(dest .. "/src")
     content = content .. string.format("\nexport VIM=\"%s\"", dest)
-    ioutils.write_env(env_file, content)
+    ioutils:write_env(env_file, content)
 end
 
 return module

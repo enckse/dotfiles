@@ -5,7 +5,7 @@ return {
         if args == nil or args.url == nil or args.module.hash == nil or args.module == nil or args.system == nil then
             error("invalid request arguments")
         end
-        local file = args.system.file_archive(args.module)
+        local file = args.system:file_archive(args.module)
         local file_type = (function()
             if args.module.extension == ".tar.gz" or args.module.extension == ".tar.xz" then
                 return "compressed data"

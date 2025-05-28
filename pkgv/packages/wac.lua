@@ -13,7 +13,7 @@ module.get = function()
 end
 
 module.build = function(system, dest, env_file)
-    ioutils.git_clone(repo, dest)
+    ioutils:git_clone(repo, dest)
     local path = ""
     for _, k in pairs({"just", "go", "lb"}) do
         if path ~= "" then
@@ -25,7 +25,7 @@ module.build = function(system, dest, env_file)
     if not ioutils.execute(string.format("cd '%s' && PATH=\"%s\" just", dest, path)) then
         error("failed to build")
     end
-    ioutils.write_env(env_file, ioutils.make_path_export(dest .. "/target"))
+    ioutils:write_env(env_file, ioutils:make_path_export(dest .. "/target"))
 end
 
 return module

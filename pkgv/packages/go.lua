@@ -18,9 +18,9 @@ local binary = function(dest)
 end
 
 module.build = function(system, dest, env_file)
-    system.untar(module, "--strip-components=1", dest)
+    system:untar(module, "--strip-components=1", dest)
     local ioutils = require("modules.ioutils")
-    ioutils.write_env(env_file, ioutils.make_path_export(binary(dest)))
+    ioutils:write_env(env_file, ioutils:make_path_export(binary(dest)))
 end
 
 module.binary = function(dest)

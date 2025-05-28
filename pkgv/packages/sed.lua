@@ -15,14 +15,14 @@ end
 
 module.build = function(system, dest, env_file)
     local ioutils = require("modules.ioutils")
-    system.untar(module, "--strip-components=1", dest)
+    system:untar(module, "--strip-components=1", dest)
     if not ioutils.execute(string.format("cd '%s' && ./configure --disable-i18n --disable-nls", dest)) then
         error("configure failed")
     end
     if not ioutils.execute(string.format("cd '%s' && make", dest)) then
         error("build failed")
     end
-    ioutils.write_env(env_file, ioutils.make_path_export(dest .. "/sed"))
+    ioutils:write_env(env_file, ioutils:make_path_export(dest .. "/sed"))
 end
 
 return module

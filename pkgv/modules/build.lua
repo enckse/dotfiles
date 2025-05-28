@@ -42,7 +42,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
         if not ioutils.execute(string.format("mkdir -p '%s'", subdir)) then
             error(string.format("unable to create subdirectory %s", subdir))
         end
-        local dest = string.format("%s/%s/%s-%d", system.builds, mod.name, mod.version, mod.release)
+        local dest = string.format("%s/%s/%s-r%d", system.builds, mod.name, mod.version, mod.release)
         for sub in io.popen(string.format("ls '%s'", subdir)):lines() do
             local full = string.format("%s/%s", subdir, sub)
             if full ~= dest then

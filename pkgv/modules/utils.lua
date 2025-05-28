@@ -15,13 +15,13 @@ module = {
     create_untar_build = function(module, offset)
         return function(system, dest, env_file)
             local ioutils = require("modules.ioutils")
-            system.untar(module, string.format("--strip-components=%s", offset), dest)
-            ioutils.write_env(env_file, ioutils.make_path_export(dest))
+            system:untar(module, string.format("--strip-components=%s", offset), dest)
+            ioutils:write_env(env_file, ioutils:make_path_export(dest))
         end
     end,
     create_go_build = function(module, url)
         return function(system, dest, env_file)
-            system.go_install(url, module.version, dest, env_file)
+            system:go_install(url, module.version, dest, env_file)
         end
     end,
     log = function(msg)

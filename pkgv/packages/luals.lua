@@ -20,9 +20,9 @@ module.get = function(system)
 end
 
 module.build = function(system, dest, env_file)
-    system.untar(module, "", dest)
+    system:untar(module, "", dest)
     local ioutils = require("modules.ioutils")
-    ioutils.write_env(env_file, ioutils.make_path_export(dest .. "/bin"))
+    ioutils:write_env(env_file, ioutils:make_path_export(dest .. "/bin"))
 end
 
 return module

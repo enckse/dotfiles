@@ -41,7 +41,7 @@ module.build = function(system, dest, env_file)
     for _, r in pairs(repos) do
         local base = ioutils.read_stdout(string.format("basename '%s'", r))
         local clone = string.format("%s/%s", archive, base)
-        ioutils.git_clone(r, clone)
+        ioutils:git_clone(r, clone)
         local target = string.format("%s/%s", dest, base)
         if not ioutils.execute(string.format("cp -r '%s' '%s'", clone, target)) then
             error(string.format("unable to setup %s", r))
@@ -53,7 +53,7 @@ module.build = function(system, dest, env_file)
             error(string.format("unable to clean %s", r))
         end
     end
-    ioutils.write_env(env_file, string.format(script, dest, dest))
+    ioutils:write_env(env_file, string.format(script, dest, dest))
 end
 
 return module
