@@ -4,12 +4,12 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
-export PKGS_STORE="$HOME/.usrbin"
-[ -e "$PKGS_STORE/env" ] && source "$PKGS_STORE/env"
+export PKGV_STORE="$HOME/.local/pkgv"
+[ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 autoload -Uz compinit && compinit
-if [ -n "$USRBIN_COMP" ]; then
-  for FILE in $(echo "$USRBIN_COMP" | tr ':' '\n'); do
+if [ -n "$PKGV_COMP" ]; then
+  for FILE in $(echo "$PKGV_COMP" | tr ':' '\n'); do
     . "$FILE"
   done
 fi
@@ -74,9 +74,6 @@ unset -f setup-sshagent
 # =========
 transcode-media() {
   "$HOME/.local/libexec/transcode-media"
-}
-pkgv() {
-  "$HOME/.local/libexec/pkgv" $@
 }
 
 # =========
