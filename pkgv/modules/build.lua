@@ -12,6 +12,7 @@ local concat = function(input, add)
     return str .. add
 end
 
+local utils = require("modules.utils")
 local pkglist = ""
 local envs = ""
 for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' | sort"):lines() do
@@ -36,7 +37,21 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
             downloader.request({system = system, module = mod, url = url})
         end
         mod.get(system)
+        local subdir = string.format("%s/%s", system.builds, mod.name)
+        if not system.execute(string.format("mkdir -p '%s'", subdir)) then
+            error(string.format("unable to create subdirectory %s", subdir))
+        end
         local dest = string.format("%s/%s/%s-%d", system.builds, mod.name, mod.version, mod.release)
+        for sub in io.popen(string.format("ls '%s'", subdir)):lines() do
+            local full = string.format("%s/%s", subdir, sub)
+            if full ~= dest then
+                local outdated = utils.read_stdout(string.format("find '%s' -maxdepth 0 -type d -mtime +30", full))
+                if outdated ~= nil and outdated ~= "" then
+                    system.log("clearing old version: " .. outdated)
+                    os.execute(string.format("find '%s' -delete", full))
+                end
+            end
+        end
         local env_file = string.format("%s/.pkgv_env.sh", dest)
         if not system.execute(string.format("test -s '%s'", env_file)) then
             system.log("building: " .. path)
