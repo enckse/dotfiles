@@ -46,7 +46,7 @@ for path in io.popen("find packages/ -type f -name '*.lua' | sed 's/\\.lua$//g' 
         for sub in io.popen(string.format("ls '%s'", subdir)):lines() do
             local full = string.format("%s/%s", subdir, sub)
             if full ~= dest then
-                local outdated = utils.read_stdout(string.format("find '%s' -maxdepth 0 -type d -mtime +30", full))
+                local outdated = ioutils.read_stdout(string.format("find '%s' -maxdepth 0 -type d -mtime +30", full))
                 if outdated ~= nil and outdated ~= "" then
                     utils.log("clearing old version: " .. outdated)
                     os.execute(string.format("find '%s' -delete", full))

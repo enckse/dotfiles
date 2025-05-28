@@ -67,4 +67,13 @@ module.make_path_and_completion = function(env_file, dest, completions)
     module.write_env(env_file, contents)
 end
 
+module.copy_source_scripts = function(dest, env_file, scripts, ext)
+    module.prepare_directory(dest)
+    for _, script in pairs(scripts) do
+        local contents = module.read_file(string.format("src/%s.%s", script, ext))
+        module.create_script(dest .. "/" .. script, contents)
+    end
+    module.write_env(env_file, module.make_path_export(dest))
+end
+
 return module

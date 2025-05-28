@@ -12,7 +12,6 @@ _install() {
       echo ".config/vim/"
       echo ".config/git/"
       echo ".ssh/"
-      echo ".local/libexec/"
       echo ".config/kitty/"
       ;;
   esac

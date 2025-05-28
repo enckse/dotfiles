@@ -66,11 +66,6 @@ setup-sshagent
 unset -f setup-sshagent
 
 # =========
-transcode-media() {
-  "$HOME/.local/libexec/transcode-media"
-}
-
-# =========
 autoload -U promptinit && promptinit
 command -v git-motd >/dev/null && git motd
 precmd() {
