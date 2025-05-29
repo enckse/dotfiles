@@ -2,6 +2,7 @@
     autocrlf = input
 [include]
     path = ~/.config/git/delta.config
+    path = ~/.config/git/personal.config
 [diff]
     colorMoved = default
 [grep]
@@ -20,29 +21,7 @@
 [user]
     useConfigOnly = true
     name = Sean Enck
-[diff "lb"]
-    textconv = lb conv
 [help]
     format = man
 [merge]
     conflictstyle = diff3
-[url "~/Store/git/private/"]
-    insteadOf = private:
-[url "~/Store/git/sr.ht/"]
-    insteadOf = sr.ht:
-[includeIf "hasconfig:remote.*.url:private:**"]
-    path = ~/.config/git/dev.config
-[includeIf "hasconfig:remote.*.url:sr.ht:**"]
-    path = ~/.config/git/dev.config
-[alias]
-    diffwd = diff --word-diff
-    showwd = show --word-diff
-[motd]
-    enable = uncommitted
-[uncommitted]
-    scan = true
-    prompt = true
-    matchPrompt = "^(private|sr.ht):*"
-    matchScan = "^(private|sr.ht):*"
-    paths = ~/Workspace ~/.local/com.ttypty
-    home = false
