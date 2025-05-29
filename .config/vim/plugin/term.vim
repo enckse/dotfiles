@@ -1,5 +1,5 @@
 set termwinkey=<C-t>
-set termwinsize=20x0
+set termwinsize=15x0
 func NewTerminal()
     let bufs=filter(range(1, bufnr('$')), 'bufexists(v:val) && '.
                                       \'getbufvar(v:val, "&buftype") == "terminal"')
