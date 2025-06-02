@@ -5,7 +5,7 @@ export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
 autoload -Uz compinit && compinit
-export PKGV_STORE="$HOME/.ttypty/pkgv"
+export PKGV_STORE="$HOME/.local/pkgv"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 # =========
