@@ -5,11 +5,11 @@ export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
 autoload -Uz compinit && compinit
-export PKGV_STORE="$HOME/.local/pkgv"
+export PKGV_STORE="$HOME/.ttypty/pkgv"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 # =========
-export SECRET_ROOT="$HOME/.local/com.ttypty/secrets"
+export SECRET_ROOT="$HOME/.ttypty/secrets"
 export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/db/config.toml"
 
 # =========
