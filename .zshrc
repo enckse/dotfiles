@@ -1,16 +1,14 @@
 #!/usr/bin/env zsh
 # =========
-export EDITOR=vim
-export VISUAL=$EDITOR
-export GIT_EDITOR=$EDITOR
-
-# =========
 autoload -Uz compinit && compinit
 export PKGV_STORE="$HOME/.local/pkgv"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 # =========
+export EDITOR=vim
 command -v hx > /dev/null && export EDITOR=hx
+export VISUAL=$EDITOR
+export GIT_EDITOR=$EDITOR
 
 # =========
 export SECRET_ROOT="$HOME/.ttypty/secrets"
