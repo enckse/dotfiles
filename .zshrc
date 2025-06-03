@@ -4,9 +4,13 @@ export EDITOR=vim
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
 
+# =========
 autoload -Uz compinit && compinit
 export PKGV_STORE="$HOME/.local/pkgv"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
+
+# =========
+command -v hx > /dev/null && export EDITOR=hx
 
 # =========
 export SECRET_ROOT="$HOME/.ttypty/secrets"

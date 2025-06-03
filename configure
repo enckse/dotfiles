@@ -6,11 +6,12 @@ _install() {
       ;;
   esac
 
-  echo ".config/vim/"
   echo ".config/git/"
   echo ".ssh/"
   case $(uname) in
     "Darwin")
+      echo ".config/helix/"
+      echo ".config/efm-langserver/"
       echo ".config/pkgversions/"
       echo ".config/kitty/"
       echo ".config/vfu/"

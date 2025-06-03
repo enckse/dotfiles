@@ -1,0 +1,20 @@
+theme = "monokai"
+ 
+[editor]
+middle-click-paste = false
+auto-pairs = false
+bufferline = "always"
+[editor.inline-diagnostics]
+cursor-line = "hint"
+other-lines = "hint"
+
+[keys.normal]
+C-c = "yank_main_selection_to_clipboard"
+tab = "goto_next_buffer"
+S-tab = "goto_previous_buffer"
+C-w = "wclose"
+C-e = "diagnostics_picker"
+C-v = "copy_selection_on_next_line"
+
+[keys.select]
+C-c = "yank_main_selection_to_clipboard"
