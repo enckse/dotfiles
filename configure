@@ -19,30 +19,17 @@ _install() {
   esac
 }
 
-DRYRUN=0
-if [ -n "$1" ]; then
-  case "$1" in
-    "--dry-run")
-      DRYRUN=1
-      ;;
-    *)
-      echo "unknown command: $1"
-      exit 1
-      ;;
-  esac
-fi
-
 DIR=""
 SET=""
 FILE=""
 for SET in $(_install | sort -u); do
-  for FILE in $(find "$SET" -type f); do
-    [ "$DRYRUN" -eq 1 ] && echo "$FILE" | sed "s#HOME/##g"
+  while IFS= read -r -d '' FILE; do
+    echo "${FILE//$HOME/}"
     DIR=$(dirname "$FILE")
     [ "$DIR" != "." ] && mkdir -p "$HOME/$DIR"
     CMD="ln -sf"
     $CMD "$PWD/$FILE" "$HOME/$FILE"
-  done
+  done < <(find "$SET" -type f -print0)
 done
 
 unset SET DIR FILE DRYRUN
