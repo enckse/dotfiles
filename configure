@@ -1,4 +1,6 @@
 #!/bin/bash
+[ -z "$DOTFILES_EDITOR" ] && echo "DOTFILES_EDITOR must be set" && exit 1
+
 _install() {
   case "$(basename "$SHELL")" in
     "zsh")
@@ -8,10 +10,25 @@ _install() {
 
   echo ".config/git/"
   echo ".ssh/"
-  case $(uname) in
-    "Darwin")
+  case "$DOTFILES_EDITOR" in
+    "helix")
       echo ".config/helix/"
       echo ".config/efm-langserver/"
+      ;;
+    "vim")
+      echo ".config/vim"
+      ;;
+    *)
+      {
+        echo
+        echo "[ERROR] unknown editor: $DOTFILES_EDITOR"
+        echo
+      } >&2
+      exit 1
+      ;;
+  esac
+  case $(uname) in
+    "Darwin")
       echo ".config/pkgversions/"
       echo ".config/kitty/"
       echo ".config/vfu/"
@@ -31,5 +48,3 @@ for SET in $(_install | sort -u); do
     $CMD "$PWD/$FILE" "$HOME/$FILE"
   done < <(find "$SET" -type f -print0)
 done
-
-unset SET DIR FILE DRYRUN
