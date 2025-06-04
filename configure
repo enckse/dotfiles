@@ -29,7 +29,7 @@ _install() {
   esac
   case $(uname) in
     "Darwin")
-      echo ".config/pkgversions/"
+      echo ".config/pkgv/"
       echo ".config/kitty/"
       echo ".config/vfu/"
       ;;
