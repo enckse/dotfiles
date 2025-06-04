@@ -12,7 +12,7 @@ export PKGV_STORE="$HOME/.local/pkgv"
 
 # =========
 export SECRET_ROOT="$HOME/.ttypty/secrets"
-export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/db/config.toml"
+export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/config.toml"
 
 # =========
 command -v wac > /dev/null && wac motd && wac manage
