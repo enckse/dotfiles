@@ -1,7 +1,8 @@
-local results = {}
-if os.getenv("PKGV_DEPLOYED_OS") == "darwin" then
-  table.insert(results, {url = "https://github.com/kovidgoyal/kitty"})
-  table.insert(results, {url = "https://github.com/rxhanson/Rectangle"})
+local filter_darwin = function(config)
+    return config.os == "darwin"
 end
-table.insert(results, {url = "https://gitlab.alpinelinux.org/alpine/aports"})
-return results
+return {
+  {url = "https://github.com/kovidgoyal/kitty", selector = filter_darwin},
+  {url = "https://github.com/rxhanson/Rectangle", selector = filter_darwin},
+  {url = "https://gitlab.alpinelinux.org/alpine/aports"}
+}
