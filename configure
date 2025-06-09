@@ -31,7 +31,7 @@ _install() {
     "Darwin")
       echo ".config/pkgv/"
       echo ".config/kitty/"
-      echo ".config/vfu/"
+      [ -d "/Applications/vfu.app" ] && echo ".config/vfu/"
       ;;
   esac
 }
