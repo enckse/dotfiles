@@ -2,6 +2,7 @@ let g:ale_linters_explicit = 1
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_save = 1
 let g:ale_completion_enabled = 1
+let g:ale_completion_delay = 500
 let g:ale_detail_to_floating_preview = 1
 let g:ale_hover_to_floating_preview = 1
 let g:ale_hover_to_preview = 1
@@ -25,4 +26,3 @@ endif
 if executable("zig")
   let g:ale_fixers.zig = ["zigfmt"]
 endif
-let g:ale_completion_delay = 500
