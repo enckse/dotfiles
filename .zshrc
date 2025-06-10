@@ -4,10 +4,11 @@ export EDITOR=vim
 [ -e "$HOME/.config/dotfiles/editor" ] && DOTFILES_EDITOR=$(cat "$HOME/.config/dotfiles/editor") && EDITOR="$DOTFILES_EDITOR" && export DOTFILES_EDITOR EDITOR
 export VISUAL=$EDITOR
 export GIT_EDITOR=$EDITOR
+export GOPATH="$HOME/.cache/go"
+export PKGV_STORE="$HOME/.local/pkgv"
 
 # =========
 autoload -Uz compinit && compinit
-export PKGV_STORE="$HOME/.local/pkgv"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 # =========
@@ -23,19 +24,20 @@ bindkey '\e[F' end-of-line
 
 # =========
 [ -x "/Applications/MacVim.app/Contents/bin/vim" ] && alias vim="/Applications/MacVim.app/Contents/bin/vim"
-command -v bat > /dev/null && alias cat=bat
-command -v rg > /dev/null && alias grep="rg"
-alias vi="$EDITOR"
 [ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
-alias less="less -R"
+alias vi="$EDITOR"
 
 # =========
+alias less="less -R"
+if command -v bat > /dev/null; then
+  alias cat=bat
+  export BAT_OPTS="-pp --theme 'Monokai Extended'"
+fi
+command -v rg > /dev/null && alias grep="rg"
 if command -v delta > /dev/null; then
   export GIT_PAGER=delta
   export DELTA_PAGER="less -R -c -X"
 fi
-command -v bat > /dev/null && export BAT_OPTS="-pp --theme 'Monokai Extended'"
-export GOPATH="$HOME/.cache/go"
 command -v git-uncommitted > /dev/null && zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
 
 # =========
