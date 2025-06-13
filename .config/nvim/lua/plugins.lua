@@ -1,12 +1,12 @@
-vim.g.airline_extensions = {"tabline"}
-vim.g.airline_extensions["tabline"] = {["formatter"] = "unique_tail_improved"}
+vim.g.airline_extensions = { "tabline" }
+vim.g.airline_extensions["tabline"] = { ["formatter"] = "unique_tail_improved" }
 
 require("lsp")
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
-  callback = function()
-    if vim.bo.filetype == "sh" then
-        require("lint").try_lint("shellcheck")
-    end
-  end,
+    callback = function()
+        if vim.bo.filetype == "sh" then
+            require("lint").try_lint("shellcheck")
+        end
+    end,
 })
