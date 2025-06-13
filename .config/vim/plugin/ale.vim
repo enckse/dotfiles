@@ -26,3 +26,6 @@ endif
 if executable("zig")
   let g:ale_fixers.zig = ["zigfmt"]
 endif
+if executable("stylua")
+  let g:ale_fixers.lua = ["stylua"]
+endif
