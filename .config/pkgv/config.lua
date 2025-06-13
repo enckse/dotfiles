@@ -20,6 +20,9 @@ return {
             end
             return false
         end
+        if string.find(name, ".cmake.") then
+            return is_nvim
+        end
         if string.find(name, "[.]utils[.]mksquashfs") then
             return false
         end
