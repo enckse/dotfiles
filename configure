@@ -18,6 +18,9 @@ _install() {
     "vim")
       echo ".config/vim"
       ;;
+    "nvim")
+      echo ".config/nvim"
+      ;;
     *)
       {
         echo
