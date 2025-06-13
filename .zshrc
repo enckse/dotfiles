@@ -43,7 +43,12 @@ command -v git-uncommitted > /dev/null && zstyle ':completion:*:*:git:*' user-co
 # =========
 cleanup-caches() {
   local dir
-  for dir in ".cache/staticcheck" ".cache/gopls" ".cache/go-build" ".cache/vim"; do
+  for dir in ".cache/staticcheck" \
+             ".cache/gopls" \
+             ".cache/go-build" \
+             ".cache/vim" \
+             ".local/state/nvim/swap" \
+             ".local/state/nvim/undo"; do
     dir="$HOME/$dir"
     [ -d "$dir" ] && find "$dir" -type f -mtime +1 -delete
   done
