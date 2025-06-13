@@ -1,9 +1,31 @@
+-- nvim-cmp settings
+local cmp = require("cmp")
+
+cmp.setup({
+    snippet = {
+        expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+        end,
+    },
+    mapping = cmp.mapping.preset.insert({
+        ['<Right>'] = cmp.mapping.confirm({ select = false }),
+    }),
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' },
+    }, {
+        { name = 'buffer' },
+    })
+})
+
 -- lsp
 require("lspclients")
+local capababilities = require('cmp_nvim_lsp').default_capabilities()
 for exe, client in pairs(get_clients()) do
     if vim.fn.executable(exe) then
         settings = {}
         settings.name = exe
+        settings.capabilities = capababilities
         client(settings)
     end
 end
@@ -43,5 +65,11 @@ vim.keymap.set("n", "<C-e>", function()
 end, { noremap = true, silent = true }
 )
 
--- completions
-require('mini.completion').setup()
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client:supports_method('textDocument/documentHighlight') then
+            client.server_capabilities.semanticTokensProvider = nil
+        end
+    end
+})

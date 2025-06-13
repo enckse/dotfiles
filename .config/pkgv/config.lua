@@ -5,7 +5,6 @@ local is_nvim = editor == "nvim"
 local editor_namespace = "[.]editors[.]"
 return {
     enabled = function(name)
-        print(name)
         if string.find(name, editor_namespace) then
             if string.find(name, editor_namespace .. "vim") then
                 return is_vim
