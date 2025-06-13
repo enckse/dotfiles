@@ -20,11 +20,11 @@ return {
             end
             return false
         end
-        if string.find(name, ".cmake.") then
-            return is_nvim
-        end
-        if string.find(name, "[.]utils[.]mksquashfs") then
-            return false
+        for _, opt in pairs({"cmake", "mksquashfs"}) do
+            local match = "[.]" .. opt .. "[.]"
+            if string.find(name, match) then
+                return false
+            end
         end
         return true
     end
