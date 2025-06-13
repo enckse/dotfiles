@@ -7,33 +7,35 @@ local function new_client_autocmd(pattern, factory)
     })
 end
 
-function get_clients()
-    local configurations = {}
-    configurations["lua-language-server"] = function(options)
-        new_client_autocmd({ "lua" }, function()
-            return {
-                name = options.name,
-                capabilities = options.capabilities,
-                cmd = { options.name }
-            }
-        end)
-    end
-    configurations["gopls"] = function(options)
-        new_client_autocmd({ 'go', 'gomod' }, function(args)
-            return {
-                name = options.name,
-                capabilities = options.capabilities,
-                cmd = { options.name },
-                root_dir = vim.fs.root(args.buf, { 'go.mod', 'go.sum' }),
-                settings = {
-                    gopls = {
-                        gofumpt = true,
-                        staticcheck = true
+return {
+    get = function()
+        local configurations = {}
+        configurations["lua-language-server"] = function(options)
+            new_client_autocmd({ "lua" }, function()
+                return {
+                    name = options.name,
+                    capabilities = options.capabilities,
+                    cmd = { options.name }
+                }
+            end)
+        end
+        configurations["gopls"] = function(options)
+            new_client_autocmd({ 'go', 'gomod' }, function(args)
+                return {
+                    name = options.name,
+                    capabilities = options.capabilities,
+                    cmd = { options.name },
+                    root_dir = vim.fs.root(args.buf, { 'go.mod', 'go.sum' }),
+                    settings = {
+                        gopls = {
+                            gofumpt = true,
+                            staticcheck = true
+                        }
                     }
                 }
-            }
+            end
+            )
         end
-        )
+        return configurations
     end
-    return configurations
-end
+}

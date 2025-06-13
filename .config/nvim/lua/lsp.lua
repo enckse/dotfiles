@@ -19,11 +19,11 @@ cmp.setup({
 })
 
 -- lsp
-require("lspclients")
+local clients = require("lspclients")
 local capababilities = require('cmp_nvim_lsp').default_capabilities()
-for exe, client in pairs(get_clients()) do
+for exe, client in pairs(clients.get()) do
     if vim.fn.executable(exe) then
-        settings = {}
+        local settings = {}
         settings.name = exe
         settings.capabilities = capababilities
         client(settings)
