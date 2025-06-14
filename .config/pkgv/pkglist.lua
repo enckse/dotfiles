@@ -1,7 +1,6 @@
 local filter_darwin = function(app)
 	return function(config)
-		local _, _, code = os.execute(string.format("test -d '/Applications/%s.app'", app))
-		if code == 0 then
+		if config.run(string.format("test -d '/Applications/%s.app'", app)) then
 			return config.os == "darwin"
 		end
 		return false
