@@ -17,7 +17,15 @@ export SECRET_ROOT="$HOME/.ttypty/secrets"
 export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/config.toml"
 
 # =========
-command -v wac > /dev/null && wac motd && wac manage
+_motd() {
+  $@ | sed "1i\[$1]\n===" | sed '$a\ '
+}
+
+# =========
+if command -v wac > /dev/null; then
+  _motd wac motd
+  wac manage
+fi
 
 # =========
 if [ "$SHELL_NAME" = "zsh" ]; then
@@ -40,7 +48,10 @@ if command -v delta > /dev/null; then
   export GIT_PAGER=delta
   export DELTA_PAGER="less -R -c -X"
 fi
-[ "$SHELL_NAME" = "zsh" ] && command -v git-uncommitted > /dev/null && zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
+if command -v git-uncommitted > /dev/null; then
+  [ "$SHELL_NAME" = "zsh" ] && zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
+  _motd git uncommitted
+fi
 
 # =========
 _caches() {
@@ -73,9 +84,6 @@ sshagent() {
 
 sshagent
 unset -f sshagent
-
-# =========
-command -v git-motd >/dev/null && git motd
 
 # =========
 if [ "$SHELL_NAME" = "zsh" ]; then
