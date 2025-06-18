@@ -20,7 +20,7 @@ return {
             end
             return false
         end
-        for _, opt in pairs({"cmake", "mksquashfs"}) do
+        for _, opt in pairs({"cmake", "mksquashfs", "just"}) do
             local match = "[.]" .. opt .. "[.]"
             if string.find(name, match) then
                 return false
