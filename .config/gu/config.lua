@@ -1,6 +1,6 @@
 return {
 	goflags = "-trimpath -buildmode=pie -mod=readonly -modcacherw -buildvcs=false",
-	target = "target",
+	target = "target/",
 	ldflags = os.getenv("LDFLAGS"),
 	env_filter = "~/",
 }
