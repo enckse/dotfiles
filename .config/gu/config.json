@@ -1,0 +1,11 @@
+{
+  "goflags": [
+    "-trimpath",
+    "-buildmode=pie",
+    "-mod=readonly",
+    "-modcacherw",
+    "-buildvcs=false"
+  ],
+  "version": true,
+  "target": "target/"
+}
