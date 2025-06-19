@@ -17,11 +17,8 @@ _install() {
       echo ".config/helix/"
       echo ".config/efm-langserver/"
       ;;
-    "vim")
-      echo ".config/vim"
-      ;;
-    "nvim")
-      echo ".config/nvim"
+    "vim" | "nvim")
+      echo ".config/$DOTFILES_EDITOR"
       ;;
     *)
       {

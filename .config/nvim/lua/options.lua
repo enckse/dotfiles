@@ -1,6 +1,6 @@
-vim.opt.background = 'dark'
+vim.opt.background = "dark"
 vim.opt.confirm = true
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 vim.opt.expandtab = true
 vim.opt.completeopt = "noinsert"
 vim.opt.number = true
@@ -31,4 +31,4 @@ vim.g.loaded_node_provider = 0
 vim.g.loaded_ruby_provider = 0
 
 -- use a special colorscheme
-vim.cmd 'colorscheme ttypty'
+vim.cmd("colorscheme ttypty")

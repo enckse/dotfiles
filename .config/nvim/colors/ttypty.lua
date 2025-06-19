@@ -10,18 +10,18 @@
 -- This is Vim's default color scheme. It doesn't define the Normal
 -- highlighting, it uses whatever the colors used to be.
 
-vim.cmd.highlight('clear')
-vim.g.colors_name = 'vim'
+vim.cmd.highlight("clear")
+vim.g.colors_name = "vim"
 
 local hi = function(name, val)
-    -- Force links
-    val.force = true
+	-- Force links
+	val.force = true
 
-    -- Make sure that `cterm` attribute is not populated from `gui`
-    val.cterm = val.cterm or {} ---@type vim.api.keyset.highlight
+	-- Make sure that `cterm` attribute is not populated from `gui`
+	val.cterm = val.cterm or {} ---@type vim.api.keyset.highlight
 
-    -- Define global highlight
-    vim.api.nvim_set_hl(0, name, val)
+	-- Define global highlight
+	vim.api.nvim_set_hl(0, name, val)
 end
 
 --stylua: ignore start
