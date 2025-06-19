@@ -8,6 +8,11 @@ local function new_client_autocmd(pattern, factory)
 end
 
 return {
+	linters = function()
+		return {
+			sh = "shellcheck",
+		}
+	end,
 	formatters = function()
 		return {
 			go = "gofumpt",

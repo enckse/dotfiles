@@ -34,10 +34,14 @@ autocmd("BufWritePost", {
 	command = ":FormatWrite",
 })
 
+local linters = langs.linters()
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
 	callback = function()
-		if vim.bo.filetype == "sh" then
-			require("lint").try_lint("shellcheck")
+		for filetype, linter in pairs(linters) do
+			if vim.bo.filetype == filetype then
+				require("lint").try_lint(linter)
+				return
+			end
 		end
 	end,
 })
