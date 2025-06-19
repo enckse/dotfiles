@@ -4,16 +4,26 @@ vim.g.airline_extensions["tabline"] = { ["formatter"] = "unique_tail_improved" }
 require("lsp")
 
 -- handle formatting
-require("formatter").setup({
-	filetype = {
-		lua = {
-			require("formatter.filetypes.lua").stylua,
-		},
-		go = {
-			require("formatter.filetypes.go").gofumpt,
-		},
-	},
-})
+local formatting = {
+	filetype = {},
+}
+
+local has_formatter = false
+local add_formatter = function(lang, tool)
+	has_formatter = true
+	if vim.fn.executable(tool) then
+		local filetypes = require("formatter.filetypes." .. lang)
+		return filetypes[tool]
+	end
+	return nil
+end
+
+formatting.filetype.lua = add_formatter("lua", "stylua")
+formatting.filetype.go = add_formatter("go", "gofumpt")
+if has_formatter then
+	require("formatter").setup(formatting)
+end
+
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 augroup("__formatter__", { clear = true })
