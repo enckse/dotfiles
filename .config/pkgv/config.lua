@@ -20,10 +20,10 @@ return {
             end
             return false
         end
-        for _, opt in pairs({"cmake", "mksquashfs", "just"}) do
+        for opt, allowed in pairs({ cmake = is_nvim, mksquashfs = false, just = false, stylua = is_vim }) do
             local match = "[.]" .. opt .. "[.]"
             if string.find(name, match) then
-                return false
+                return allowed
             end
         end
         return true

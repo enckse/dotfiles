@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 })
 
 -- Shell
-vim.api.nvim_create_autocmd({"Filetype"}, {
+vim.api.nvim_create_autocmd({ "Filetype" }, {
     pattern = { "sh" },
     callback = function()
         vim.opt_local.shiftwidth = 2

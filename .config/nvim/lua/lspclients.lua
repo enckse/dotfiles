@@ -8,6 +8,9 @@ local function new_client_autocmd(pattern, factory)
 end
 
 return {
+    can_format = function(filetype)
+        return true
+    end,
     get = function()
         local configurations = {}
         configurations["lua-language-server"] = function(options)
