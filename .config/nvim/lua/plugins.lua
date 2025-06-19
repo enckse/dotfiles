@@ -10,16 +10,18 @@ local formatting = {
 
 local has_formatter = false
 local add_formatter = function(lang, tool)
-	has_formatter = true
 	if vim.fn.executable(tool) then
+		has_formatter = true
 		local filetypes = require("formatter.filetypes." .. lang)
 		return filetypes[tool]
 	end
 	return nil
 end
 
-formatting.filetype.lua = add_formatter("lua", "stylua")
-formatting.filetype.go = add_formatter("go", "gofumpt")
+local langs = require("languages")
+for lang, formatter in pairs(langs.formatters()) do
+	formatting.filetype[lang] = add_formatter(lang, formatter)
+end
 if has_formatter then
 	require("formatter").setup(formatting)
 end
