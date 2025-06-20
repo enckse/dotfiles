@@ -9,6 +9,7 @@ _install() {
   esac
 
   echo ".config/git/"
+  command -v jj >/dev/null && echo ".config/jj/"
   echo ".config/dotfiles/"
   echo ".config/gu/"
   echo ".ssh/"
