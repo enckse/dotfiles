@@ -10,13 +10,13 @@ _install() {
 
   echo ".config/git/"
   command -v jj >/dev/null && echo ".config/jj/"
+  command -v efm-langserver && echo ".config/efm-langserver/"
   echo ".config/dotfiles/"
   echo ".config/gu/"
   echo ".ssh/"
   case "$DOTFILES_EDITOR" in
     "hx")
       echo ".config/helix/"
-      echo ".config/efm-langserver/"
       ;;
     "vim" | "nvim")
       echo ".config/$DOTFILES_EDITOR"
@@ -34,7 +34,6 @@ _install() {
     "Darwin")
       echo ".config/pkgv/"
       echo ".config/kitty/"
-      [ -d "/Applications/vfu.app" ] && echo ".config/vfu/"
       ;;
   esac
 }

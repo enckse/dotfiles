@@ -20,7 +20,7 @@ return {
 			end
 			return false
 		end
-		for opt, allowed in pairs({ cmake = is_nvim, mksquashfs = false, just = false }) do
+		for opt, allowed in pairs({ cmake = is_nvim, mksquashfs = false, just = false, jj = false }) do
 			local match = "[.]" .. opt .. "[.]"
 			if string.find(name, match) then
 				return allowed
