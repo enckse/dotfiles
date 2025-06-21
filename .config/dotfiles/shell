@@ -1,4 +1,5 @@
 #!/bin/sh
+export SECRET_ROOT="$HOME/.ttypty/secrets"
 export LOCAL_FS="$HOME/.fs/$(uname | tr '[:upper:]' '[:lower:]')"
 [ -d "$LOCAL_FS" ] && export PATH="$LOCAL_FS/bin:$PATH"
 
