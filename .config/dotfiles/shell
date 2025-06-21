@@ -44,6 +44,7 @@ sshagent
 unset -f sshagent
 
 loadcomps() {
+  [ ! -d "$HOME/.local/share" ] && return
   for file in $(find "$HOME/.local/share" -type f -name "*-completion*"); do
     . "$file"
   done
