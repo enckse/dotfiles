@@ -10,6 +10,7 @@ _motd() {
     return
   fi
   echo "[$1]"
+  echo "==="
   echo "$data"
 }
 

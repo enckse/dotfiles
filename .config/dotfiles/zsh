@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 if command -v wac > /dev/null; then
+  wac setup
   _motd wac motd
   wac manage
 fi
