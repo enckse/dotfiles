@@ -14,7 +14,7 @@ for tool in vim vi git; do
   alias $tool="echo no $tool"
 done
 quickfix() {
-  /usr/bin/vim $@
+  /usr/bin/vim --clean $@
 }
 
 autoload -Uz compinit && compinit
