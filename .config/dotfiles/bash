@@ -24,11 +24,7 @@ if command -v git-uncommitted > /dev/null; then
   _motd git uncommitted
 fi
 
-if [ -d "$LOCAL_FS/share/completions" ]; then
-  for FILE in "$LOCAL_FS/share/completions/"*; do
-    source "$FILE"
-  done
-fi
+loadcomps
 
 USE_HOST="\h"
 [ -n "$IS_CONTAINER" ] && USE_HOST="$IS_CONTAINER"

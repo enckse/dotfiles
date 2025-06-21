@@ -3,22 +3,22 @@ if command -v wac > /dev/null; then
   wac setup
   _motd wac motd
   wac manage
+else
+  echo "wac unavailable"
 fi
 
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
 
-vim() {
-  echo "no vim"
-}
-git() {
-  echo "no git"
+for tool in vim vi git; do
+  alias $tool="echo no $tool"
+done
+quickfix() {
+  /usr/bin/vim $@
 }
 
 autoload -Uz compinit && compinit
-for file in $(find "$LOCAL_FS" -type f -name "env.sh"); do
-  . "$file"
-done
+loadcomps
 
 autoload -U promptinit && promptinit
 precmd() {
