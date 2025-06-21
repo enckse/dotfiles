@@ -1,5 +1,4 @@
 check_version "https://git.sr.ht/~enckse/git-tools"
-check_version "https://git.sr.ht/~enckse/gu"
 check_version "https://git.sr.ht/~enckse/lockbox"
 check_version "https://github.com/apple/container"
 check_version "https://github.com/dominikh/go-tools"

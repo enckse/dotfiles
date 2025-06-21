@@ -2,6 +2,7 @@
 export SECRET_ROOT="$HOME/.ttypty/secrets"
 export LOCAL_FS="$HOME/.fs/$(uname | tr '[:upper:]' '[:lower:]')"
 [ -d "$LOCAL_FS" ] && export PATH="$LOCAL_FS/bin:$PATH"
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 
 _motd() {
   data=$($@)

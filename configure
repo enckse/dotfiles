@@ -23,8 +23,11 @@ _install() {
   case $(uname) in
     "Darwin")
       echo ".config/kitty/"
+      echo ".local/bin/transcode-media"
+      echo ".local/bin/file-uploader"
       ;;
     "Linux")
+      echo ".local/bin/pkgversions"
       echo ".config/git/"
       ;;
   esac
