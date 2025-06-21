@@ -32,6 +32,7 @@ _install() {
       ;;
     "Linux")
       echo ".local/bin/pkgversions"
+      echo ".local/bin/pkgtools"
       echo ".config/git/"
       ;;
   esac

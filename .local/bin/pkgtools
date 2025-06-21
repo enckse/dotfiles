@@ -1,0 +1,59 @@
+#!/usr/bin/make -f
+GOPLS         := "v0.19.1"
+GOTOOLS       := "v0.34.0"
+STATICCHECK   := "v0.6.1"
+GOFUMPT       := "v0.8.0"
+REVIVE        := "v1.10.0"
+LOCKBOX       := "v1.6.1"
+GITTOOLS      := "v0.4.0"
+
+GO_PKG        := $(HOME)/.local/pkg/go
+COMPLETIONS   := $(HOME)/.local/share/completions
+TOOL          :=
+VERS          :=
+TOOL_NAME     :=
+EXISTS        :=
+ifdef TOOL
+TOOL_NAME     := $(shell echo "$(TOOL)" | sed 's#/cmd/\.\.\.##g' | rev | cut -d "/" -f 1 | rev)
+EXISTS        := $(GO_PKG)/$(TOOL_NAME).$(VERS)
+endif
+NO_TOOL_CHECK := 0
+TOOL_CHECK    := $(TOOL_NAME)
+
+VIM_PLUGINS   := $(HOME)/.config/vim/pack/plugins/start
+PLUGIN        :=
+PLUGIN_NAME   :=
+PLUGIN_DIR    :=
+ifdef PLUGIN
+PLUGIN_NAME   := $(shell echo "$(PLUGIN)" | rev | cut -d "/" -f 1 | rev)
+PLUGIN_DIR    := $(VIM_PLUGINS)/$(PLUGIN_NAME)
+endif
+
+MAKE_FILE     := $(abspath $(lastword $(MAKEFILE_LIST)))
+MAKE_CMD      := make --file $(MAKE_FILE)  --no-print-directory
+
+all:
+	@mkdir -p "$(GO_PKG)" "$(VIM_PLUGINS)" "$(COMPLETIONS)"
+	@$(MAKE_CMD) goinstall VERS="$(GOFUMPT)" TOOL="mvdan.cc/gofumpt"
+	@$(MAKE_CMD) goinstall VERS="$(GOPLS)" TOOL="golang.org/x/tools/gopls" TOOL_CHECK="golang/tools"
+	@$(MAKE_CMD) goinstall VERS="$(GOPLS)" TOOL="golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize" NO_TOOL_CHECK=1
+	@$(MAKE_CMD) goinstall VERS="$(REVIVE)" TOOL="github.com/mgechev/revive"
+	@$(MAKE_CMD) goinstall VERS="$(STATICCHECK)" TOOL="honnef.co/go/tools/cmd/staticcheck" TOOL_CHECK="dominikh/go-tools"
+	@$(MAKE_CMD) goinstall VERS="$(GOTOOLS)" TOOL="golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment" TOOL_CHECK="golang/tools"
+	@$(MAKE_CMD) goinstall VERS="$(GITTOOLS)" TOOL="git.sr.ht/~enckse/git-tools/cmd/..."
+	@$(MAKE_CMD) goinstall VERS="$(LOCKBOX)" TOOL="git.sr.ht/~enckse/lockbox/cmd/lb" TOOL_CHECK="lockbox"
+	@$(MAKE_CMD) viminstall PLUGIN="https://github.com/vim-airline/vim-airline"
+	@$(MAKE_CMD) viminstall PLUGIN="https://github.com/dense-analysis/ale"
+	@lb completions bash > "$(COMPLETIONS)/lb-completions.sh"
+	@find $(GO_PKG) -type f -mtime +1 -delete
+
+goinstall:
+	@echo "go tool: $(TOOL)"
+	@[ $(NO_TOOL_CHECK) -eq 1 ] || grep -q "$(TOOL_CHECK)" $(HOME)/.config/dotfiles/packages
+	@test -e $(EXISTS) || go install $(TOOL)@$(VERS)
+	@touch $(EXISTS)
+
+viminstall:
+	@echo "vim plugin: $(PLUGIN_NAME)"
+	@test -d $(PLUGIN_DIR) || git clone --quiet $(PLUGIN) $(PLUGIN_DIR)
+	@git -C $(PLUGIN_DIR) pull --quiet
