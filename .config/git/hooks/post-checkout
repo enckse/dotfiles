@@ -1,0 +1,8 @@
+#!/bin/bash
+ORIGIN_URL=$(git config remote.origin.url)
+NAME=$(echo "$ORIGIN_URL" | cut -d ":" -f 2)
+if [ "$(git remote show origin | grep "Push" | grep "URL:" | wc -l)" -gt 1 ]; then
+  exit 0
+fi
+git remote set-url --add --push origin "sr.ht:$NAME"
+git remote set-url --add --push origin "git@git.sr.ht:~enckse/$NAME"

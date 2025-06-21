@@ -7,10 +7,6 @@ export GIT_EDITOR="$EDITOR"
 export GOPATH="$HOME/.cache/go"
 export PATH="$GOPATH/bin:$PATH"
 
-[ -e "$PKGV_STORE/env" ] && . "$PKGV_STORE/env"
-
-export LOCKBOX_CONFIG_TOML="$SECRET_ROOT/config.toml"
-
 [ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
 alias vi="$EDITOR"
 
