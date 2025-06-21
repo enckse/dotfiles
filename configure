@@ -26,7 +26,6 @@ _install() {
       ;;
     "Linux")
       echo ".config/git/"
-      echo ".config/gu/"
       ;;
   esac
 }
