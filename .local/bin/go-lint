@@ -1,0 +1,9 @@
+#!/bin/sh -e
+[ ! -e 'go.mod' ] && echo 'cowardly failing to run go lint commands' && exit 1
+go vet ./... 2>&1 | sed 's/^/govet: /g'
+revive ./... 2>&1 | sed 's/^/revive: /g'
+fieldalignment ./... 2>&1 | sed 's/^/fieldalignment: /g'
+modernize -test ./... 2>&1 | sed 's/^/modernize: /g'
+staticcheck -checks all -debug.run-quickfix-analyzers ./... 2>&1 | sed 's/^/staticcheck: /g'
+gofumpt -l -extra $(find . -type f -name "*.go") 2>&1 | sed 's/^/gofumpt: /g'
+gopls check -severity=hint $(find . -type f -name "*.go") 2>&1 | sed 's/^/gopls: /g'

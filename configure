@@ -10,6 +10,10 @@ _install() {
 
   echo ".config/dotfiles/"
   echo ".ssh/"
+  if command -v go >/dev/null; then
+    echo ".local/bin/go-mod-updates"
+    echo ".local/bin/go-lint"
+  fi
   case "$DOTFILES_EDITOR" in
     "hx")
       echo ".config/helix/"
