@@ -52,11 +52,16 @@ sshagent
 unset -f sshagent
 
 if [ -e "$HOME/.config/dotfiles/wac" ]; then
-  if command -v wac > /dev/null; then
-    _motd wac motd
-  else
-    _motdheader wac
-    echo "-> unavailable"
-    echo
-  fi
+  case "$-" in
+    *i*)
+    if command -v wac > /dev/null; then
+      _motd wac motd
+      wac manage
+    else
+      _motdheader wac
+      echo "-> unavailable"
+      echo
+    fi
+      ;;
+  esac
 fi
