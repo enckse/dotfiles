@@ -1,5 +1,5 @@
 #!/bin/bash
-_install() {
+dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
   {
     echo "#!/usr/bin/env $SHELL_NAME"
@@ -41,7 +41,8 @@ _install() {
 DIR=""
 SET=""
 FILE=""
-for SET in $(_install | sort -u); do
+[ -e "dotfiles.env" ] && source "dotfiles.env"
+for SET in $(dotfiles | sort -u); do
   while IFS= read -r -d '' FILE; do
     echo "${FILE//$HOME/}"
     DIR=$(dirname "$FILE")
