@@ -1,15 +1,19 @@
 #!/bin/sh
 export SECRET_ROOT="$HOME/.ttypty/secrets"
-[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+
+_motdheader() {
+  echo "[$1]"
+  echo "==="
+}
 
 _motd() {
   data=$($@)
   if [ -z "$data" ]; then
     return
   fi
-  echo "[$1]"
-  echo "==="
+  _motdheader "$1"
   echo "$data"
+  echo
 }
 
 _caches() {
@@ -28,14 +32,18 @@ _caches
 unset -f _caches
 
 sshagent() {
-  envfile="$HOME/.local/state/ssh-agent.env"
-  mkdir -p "$(dirname "$envfile")"
-  if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    ssh-agent > "$envfile"
-  fi
-  export SSH_AUTH_SOCK="$HOME/.local/state/ssh-agent.socket"
-  if [ ! -f "$SSH_AUTH_SOCK" ]; then
-    . "$envfile" > /dev/null
+  LOCAL_AGENT=1
+  [ -e "$HOME/.config/dotfiles/ssh-agent" ] && LOCAL_AGENT=0
+  if [ "$LOCAL_AGENT" -eq 1 ]; then
+    envfile="$HOME/.local/state/ssh-agent.env"
+    mkdir -p "$(dirname "$envfile")"
+    if ! pgrep -u "$USER" '^ssh-agent$' > /dev/null; then
+      ssh-agent > "$envfile"
+    fi
+    export SSH_AUTH_SOCK="$HOME/.local/state/ssh-agent.socket"
+    if [ ! -f "$SSH_AUTH_SOCK" ]; then
+      . "$envfile" > /dev/null
+    fi
   fi
   ssh-add "$HOME/.ssh/"*.privkey >/dev/null 2>&1
 }
@@ -43,9 +51,12 @@ sshagent() {
 sshagent
 unset -f sshagent
 
-loadcomps() {
-  [ ! -d "$HOME/.local/share" ] && return
-  for file in $(find "$HOME/.local/share" -type f -name "*-completion*"); do
-    . "$file"
-  done
-}
+if [ -e "$HOME/.config/dotfiles/wac" ]; then
+  if command -v wac > /dev/null; then
+    _motd wac motd
+  else
+    _motdheader wac
+    echo "-> unavailable"
+    echo
+  fi
+fi

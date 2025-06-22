@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 # =========
+for FILE in bash.bashrc bash_completion; do
+  [ -e "/etc/$FILE" ] && source "/etc/$FILE"
+done
 export EDITOR=vim
 [ -e "$HOME/.config/dotfiles/editor" ] && DOTFILES_EDITOR=$(cat "$HOME/.config/dotfiles/editor") && EDITOR="$DOTFILES_EDITOR" && export DOTFILES_EDITOR EDITOR
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 export GOPATH="$HOME/.cache/go"
 export PATH="$GOPATH/bin:$PATH"
+export PKGV_STORE="$HOME/.pkgv"
+[ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 [ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
 alias vi="$EDITOR"
@@ -23,8 +28,6 @@ fi
 if command -v git-uncommitted > /dev/null; then
   _motd git uncommitted
 fi
-
-loadcomps
 
 USE_HOST="\h"
 [ -n "$IS_CONTAINER" ] && USE_HOST="$IS_CONTAINER"

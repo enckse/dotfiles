@@ -1,12 +1,4 @@
 #!/usr/bin/env zsh
-if command -v wac > /dev/null; then
-  wac setup
-  _motd wac motd
-  wac manage
-else
-  echo "wac unavailable"
-fi
-
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
 
@@ -16,9 +8,6 @@ done
 quickfix() {
   /usr/bin/vim --clean $@
 }
-
-autoload -Uz compinit && compinit
-loadcomps
 
 autoload -U promptinit && promptinit
 precmd() {
