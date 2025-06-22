@@ -4,6 +4,7 @@ dotfiles() {
   {
     echo "#!/usr/bin/env $SHELL_NAME"
     echo "# do NOT edit, auto-generated"
+    echo '[[ "$-" != *i* ]] && return'
     echo "source \"$HOME/.config/dotfiles/shell\""
     echo "source \"$HOME/.config/dotfiles/$SHELL_NAME\""
   } > "$HOME/.${SHELL_NAME}rc"

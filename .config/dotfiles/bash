@@ -9,8 +9,6 @@ export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 export GOPATH="$HOME/.cache/go"
 export PATH="$GOPATH/bin:$PATH"
-export PKGV_STORE="$HOME/.pkgv"
-[ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 [ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
 alias vi="$EDITOR"
@@ -25,7 +23,7 @@ if command -v delta > /dev/null; then
   export GIT_PAGER=delta
   export DELTA_PAGER="less -R -c -X"
 fi
-if [[ "$-" == *i* ]] && command -v git-uncommitted > /dev/null; then
+if command -v git-uncommitted > /dev/null; then
   _motd git uncommitted
 fi
 

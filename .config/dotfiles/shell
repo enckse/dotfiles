@@ -1,5 +1,7 @@
 #!/bin/sh
 export SECRET_ROOT="$HOME/.ttypty/secrets"
+export PKGV_STORE="$HOME/.pkgv"
+[ -e "$PKGV_STORE/env" ] && . "$PKGV_STORE/env"
 
 _motdheader() {
   echo "[$1]"
@@ -52,16 +54,12 @@ sshagent
 unset -f sshagent
 
 if [ -e "$HOME/.config/dotfiles/wac" ]; then
-  case "$-" in
-    *i*)
-    if command -v wac > /dev/null; then
-      _motd wac motd
-      wac manage
-    else
-      _motdheader wac
-      echo "-> unavailable"
-      echo
-    fi
-      ;;
-  esac
+  if command -v wac > /dev/null; then
+    _motd wac motd
+    wac manage
+  else
+    _motdheader wac
+    echo "-> unavailable"
+    echo
+  fi
 fi
