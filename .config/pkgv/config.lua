@@ -9,6 +9,8 @@ return {
 		if system.os == "linux" then
 			disabled.sed = false
 			disabled.container = false
+		elseif system.os == "darwin" then
+			disabled.age = false
 		end
 		if string.find(name, editor_namespace) then
 			if string.find(name, editor_namespace .. "vim") then

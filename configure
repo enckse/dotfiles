@@ -6,11 +6,9 @@ dotfiles() {
     echo "# do NOT edit, auto-generated"
     echo '[[ "$-" != *i* ]] && return'
     echo "source \"$HOME/.config/dotfiles/shell\""
-    echo "source \"$HOME/.config/dotfiles/$SHELL_NAME\""
   } > "$HOME/.${SHELL_NAME}rc"
 
   echo ".config/dotfiles/shell"
-  echo ".config/dotfiles/${SHELL_NAME}"
   echo ".ssh/"
   if command -v go >/dev/null; then
     echo ".local/bin/go-mod-updates"
@@ -20,20 +18,23 @@ dotfiles() {
     "hx")
       echo ".config/helix/"
       ;;
-    "nvim")
-      echo ".config/nvim"
-      ;;
-    "vim")
-      echo ".vimrc"
-      echo ".vim"
+    "nvim" | "vim")
+      echo ".config/$DOTFILES_EDITOR/"
       ;;
     *)
       ;;
   esac
   echo ".config/pkgv/"
   echo ".config/kitty/"
-  echo ".local/bin/file-uploader"
   echo ".config/git/"
+  case "$(uname)" in
+    "Darwin")
+      echo ".local/bin/transcode-media"
+      ;;
+    "Linux")
+      echo ".local/bin/file-uploader"
+      ;;
+  esac
 }
 
 DIR=""

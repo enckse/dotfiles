@@ -1,33 +1,3 @@
 #!/usr/bin/env bash
 # =========
-for FILE in bash.bashrc bash_completion; do
-  [ -e "/etc/$FILE" ] && source "/etc/$FILE"
-done
-export EDITOR=vim
-[ -e "$HOME/.config/dotfiles/editor" ] && DOTFILES_EDITOR=$(cat "$HOME/.config/dotfiles/editor") && EDITOR="$DOTFILES_EDITOR" && export DOTFILES_EDITOR EDITOR
-export VISUAL="$EDITOR"
-export GIT_EDITOR="$EDITOR"
-export GOPATH="$HOME/.cache/go"
-export PATH="$GOPATH/bin:$PATH"
 
-[ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
-alias vi="$EDITOR"
-
-alias less="less -R"
-if command -v bat > /dev/null; then
-  alias cat=bat
-  export BAT_OPTS="-pp --theme 'Monokai Extended'"
-fi
-command -v rg > /dev/null && alias grep="rg"
-if command -v delta > /dev/null; then
-  export GIT_PAGER=delta
-  export DELTA_PAGER="less -R -c -X"
-fi
-if command -v git-uncommitted > /dev/null; then
-  _motd git uncommitted
-fi
-
-USE_HOST="\h"
-[ -n "$IS_CONTAINER" ] && USE_HOST="$IS_CONTAINER"
-PS1="[\u@\[\e[93m\]$USE_HOST\[\e[0m\]:\W]$ "
-command -v git-uncommitted >/dev/null && PS1="\$(git uncommitted pwd 2>/dev/null)$PS1"
