@@ -112,6 +112,7 @@ case "$SHELL_NAME" in
     command -v git-uncommitted >/dev/null && PS1="\$(git uncommitted pwd 2>/dev/null)$PS1"
     ;;
   "zsh")
+    zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
     autoload -U promptinit && promptinit
     precmd() {
       GIT_UNCOMMIT=""
