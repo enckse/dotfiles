@@ -1,49 +1,47 @@
-#!/usr/bin/make -f
-MODS          := go vim misc rust
-TARGETS       := setup $(MODS)
+#!/bin/sh -e
+LIB="$HOME/.local/libexec/pkgtools"
+[ -z "$1" ] && echo "command required" && exit 1
+UPDATE="update"
+VERS="versions"
 
-LIB           := $(HOME)/.ttypty/dotfiles/.local/libexec/pkgtools
-CACHE         := $(HOME)/.cache/pkgtools
-LOCAL_BIN     := $(HOME)/.local/bin
-ENV           := $(HOME)/.local/share/pkgtools
-OS            := $(shell uname | tr '[:upper:]' '[:lower:]')
-SH            := bash
-FRIENDLY      := $(OS)
-ARCH          := $(shell uname -m)
-ALTARCH       := $(ARCH)
-ifeq ($(OS), darwin)
-	SH        := zsh
-	FRIENDLY  := apple
-endif
-ifeq ($(ARCH), arm64)
-	ALTARCH   := aarch64
-endif
+_zsh() {
+  cat << EOF
+  #compdef _pkgtools pkgtools
 
-MAKE_FILE     := $(abspath $(lastword $(MAKEFILE_LIST)))
-MAKE_ARGS     := --no-print-directory
-MAKE_CMD      := make --file $(MAKE_FILE) $(MAKE_ARGS)
+_pkgtools() {
+  local curcontext="\$curcontext" state len args
+  typeset -A opt_args
+  _arguments \\
+    '1: :->main'\\
+    '*: :->args'
 
-.PHONY: $(TARGETS)
+  len=\${#words[@]}
+  case \$state in
+    main)
+        _arguments "1:main:($UPDATE $VERS)"
+    ;;
+    *)
+  esac
+}
 
-all: $(TARGETS)
+compdef _pkgtools pkgtools
+EOF
+}
 
-setup:
-	@mkdir -p "$(ENV)" "$(CACHE)"
-
-$(MODS):
-	@$(MAKE_CMD) _lib MODULE=$@.mk
-
-_lib:
-	@make -f $(LIB)/$(MODULE) \
-		LOCAL_BIN=$(LOCAL_BIN) \
-		CACHE=$(CACHE) \
-		SH=$(SH) \
-        ENV=$(ENV) \
-		COMPLETIONS=$(ENV) \
-		FRIENDLY=$(FRIENDLY) \
-		OS=$(OS) \
-		ARCH=$(ARCH) \
-		ALTARCH=$(ALTARCH) \
-		LIB=$(LIB) \
-		MAKE_ARGS=$(MAKE_ARGS) \
-		MAKE_CMD="make -f $(LIB)/$(MODULE) $(MAKE_ARGS)"
+case "$1" in
+  "update")
+    exec "$LIB/wrapper"
+    ;;
+  "versions")
+    exec "$LIB/versions" "$2"
+    ;;
+  "completions")
+    if [ "$(basename "$SHELL")" = "zsh" ]; then
+      _zsh
+      exit 0
+    fi
+    ;;
+  *)
+    echo "unknown command: $1"
+    exit 1
+esac

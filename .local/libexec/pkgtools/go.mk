@@ -58,6 +58,7 @@ binaries:
 	@$(MAKE_CMD) _goinstall VERS="$(RESTIC)" TOOL="github.com/restic/restic/cmd/restic"
 	@test -x $(WAC_BINARY) || $(MAKE_CMD) _wac
 	@install -Dm755 $(WAC_BINARY) $(LOCAL_BIN)/
+	@SHELL=$(SH) wac completions > $(COMPLETIONS)/wac-completions.sh
 	@lb completions $(SH) > "$(COMPLETIONS)/lb-completions.sh"
 	@find $(GO_PKG) -maxdepth 1 -type f -mtime +1 -name "$(INSTALLED)*" -delete
 
