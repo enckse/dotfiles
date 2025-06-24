@@ -6,7 +6,7 @@ FORCE=0
 RAN=0
 UPDATE=0
 
-while getopts "fu" opt ; do
+while getopts "fcu" opt ; do
   case $opt in
     f)
       FORCE=1
@@ -14,6 +14,24 @@ while getopts "fu" opt ; do
     u)
       UPDATE=1
       FORCE=1
+      ;;
+    c)
+      {
+      cat << EOF
+# pkgversions completion
+
+_pkgversions() {
+  local cur
+  cur=\${COMP_WORDS[COMP_CWORD]}
+  if [ "\$COMP_CWORD" -eq 1 ]; then
+    COMPREPLY=( \$(compgen -W "-f -u" -- "\$cur") )
+  fi
+}
+
+complete -F _pkgversions -o bashdefault pkgversions
+EOF
+      }
+      exit 0
       ;;
     *)
       echo "unknown arg $opt"
@@ -80,6 +98,14 @@ vim_plugin() {
   [ ! -d "$DIR" ] && echo "initializing vim plugin: $BASE" && git clone --quiet "$1" "$DIR"
   echo "updating vim plugin: $BASE"
   git -C "$DIR" pull --quiet 
+}
+
+completion() {
+  [ "$UPDATE" -eq 0 ] && return
+  [ -z "$1" ] && [ -z "$2" ] && echo "$@ lack completion information" && exit 1
+  COMPS="$HOME/.local/share/completions"
+  mkdir -p "$COMPS"
+  "$1" "$2" > "$COMPS/$1.sh"
 }
 
 check_version() {
