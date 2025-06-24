@@ -21,7 +21,7 @@ endif
 all: $(TARGETS)
 
 vim:
-	@echo "building vim"
+	@echo "building: vim"
 	@mkdir -p $(WORKDIR)
 	@test -e $(TAR) || curl -L "https://github.com/vim/vim/archive/refs/tags/$(VERSION).tar.gz" > $(TAR)
 	@echo "$(HASH)  $(TAR)" > $(SUM)
@@ -39,7 +39,7 @@ _compile:
 
 
 vim-plugins:
-	@echo "fetching vim plugins"
+	@echo "fetching: vim plugins"
 	@mkdir -p $(VIM_PLUGINS)
 	@$(MAKE_CMD) _viminstall PLUGIN="https://github.com/vim-airline/vim-airline"
 	@$(MAKE_CMD) _viminstall PLUGIN="https://github.com/dense-analysis/ale"
