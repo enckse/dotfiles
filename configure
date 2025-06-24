@@ -8,7 +8,7 @@ dotfiles() {
     echo "source \"$HOME/.config/dotfiles/shell\""
   } > "$HOME/.${SHELL_NAME}rc"
 
-  echo ".config/dotfiles/shell"
+  echo ".config/dotfiles/"
   echo ".ssh/"
   if command -v go >/dev/null; then
     echo ".local/bin/go-mod-updates"
@@ -24,7 +24,9 @@ dotfiles() {
     *)
       ;;
   esac
-  echo ".config/pkgv/"
+  echo ".local/bin/pkgtools"
+  echo ".local/bin/pkgversions"
+  echo ".local/libexec/pkgtools"
   echo ".config/kitty/"
   echo ".config/git/"
   case "$(uname)" in

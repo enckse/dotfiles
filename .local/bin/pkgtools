@@ -1,0 +1,49 @@
+#!/usr/bin/make -f
+MODS          := go vim misc rust
+TARGETS       := setup $(MODS)
+
+LIB           := $(HOME)/.ttypty/dotfiles/.local/libexec/pkgtools
+CACHE         := $(HOME)/.cache/pkgtools
+LOCAL_BIN     := $(HOME)/.local/bin
+ENV           := $(HOME)/.local/share/pkgtools
+OS            := $(shell uname | tr '[:upper:]' '[:lower:]')
+SH            := bash
+FRIENDLY      := $(OS)
+ARCH          := $(shell uname -m)
+ALTARCH       := $(ARCH)
+ifeq ($(OS), darwin)
+	SH        := zsh
+	FRIENDLY  := apple
+endif
+ifeq ($(ARCH), arm64)
+	ALTARCH   := aarch64
+endif
+
+MAKE_FILE     := $(abspath $(lastword $(MAKEFILE_LIST)))
+MAKE_ARGS     := --no-print-directory
+MAKE_CMD      := make --file $(MAKE_FILE) $(MAKE_ARGS)
+
+.PHONY: $(TARGETS)
+
+all: $(TARGETS)
+
+setup:
+	@mkdir -p "$(ENV)" "$(CACHE)"
+
+$(MODS):
+	@$(MAKE_CMD) _lib MODULE=$@.mk
+
+_lib:
+	@make -f $(LIB)/$(MODULE) \
+		LOCAL_BIN=$(LOCAL_BIN) \
+		CACHE=$(CACHE) \
+		SH=$(SH) \
+        ENV=$(ENV) \
+		COMPLETIONS=$(ENV) \
+		FRIENDLY=$(FRIENDLY) \
+		OS=$(OS) \
+		ARCH=$(ARCH) \
+		ALTARCH=$(ALTARCH) \
+		LIB=$(LIB) \
+		MAKE_ARGS=$(MAKE_ARGS) \
+		MAKE_CMD="make -f $(LIB)/$(MODULE) $(MAKE_ARGS)"
