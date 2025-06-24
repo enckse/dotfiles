@@ -4,10 +4,17 @@ mkdir -p "$PKGS_CACHE"
 RUN="$PKGS_CACHE/run"
 FORCE=0
 RAN=0
+UPDATE=0
 
-while getopts "f" opt ; do
+while getopts "fu" opt ; do
   case $opt in
-    f) FORCE=1;;
+    f)
+      FORCE=1
+      ;;
+    u)
+      UPDATE=1
+      FORCE=1
+      ;;
     *)
       echo "unknown arg $opt"
       exit 1
@@ -51,11 +58,35 @@ _version() {
   git-feed -url "$1"
 }
 
+go_version() {
+  go_install "$2" "$3"
+  [ "$UPDATE" -eq 1 ] && return
+  check_version "$1"
+}
+
+go_install() {
+  [ "$UPDATE" -eq 0 ] && return
+  [ -z "$1" ] && [ -z "$2" ] && echo "$@ has no version information to install" && exit 1
+  echo "go installing: $1"
+  go install "$1@$2"
+}
+
+vim_plugin() {
+  [ "$UPDATE" -eq 0 ] && return
+  PACK="$HOME/.config/vim/pack/plugins/start"
+  mkdir -p "$PACK"
+  BASE=$(basename "$1")
+  DIR="$PACK/$BASE"
+  [ ! -d "$DIR" ] && echo "initializing vim plugin: $BASE" && git clone --quiet "$1" "$DIR"
+  echo "updating vim plugin: $BASE"
+  git -C "$DIR" pull --quiet 
+}
+
 check_version() {
+  [ "$UPDATE" -eq 1 ] && return
   FOUND=0
   BASE=$(basename "$1")
-  FILTER="$2"
-  for vers in $(_version "$1" | grep -E "$FILTER"); do
+  for vers in $(_version "$1"); do
     FOUND=1
     _store "$BASE" "$vers"
   done
@@ -66,4 +97,4 @@ check_version() {
 }
 
 source "$HOME/.config/dotfiles/packages"
-[ "$RAN" -eq 0 ] && touch "$RUN"
+[ "$UPDATE" -eq 0 ] && [ "$RAN" -eq 0 ] && touch "$RUN"

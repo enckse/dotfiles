@@ -24,17 +24,14 @@ dotfiles() {
     *)
       ;;
   esac
-  echo ".local/bin/pkgtools"
-  echo ".local/bin/pkgversions"
-  echo ".local/libexec/pkgtools"
-  echo ".config/kitty/"
-  echo ".config/git/"
   case "$(uname)" in
     "Darwin")
       echo ".local/bin/transcode-media"
+      echo ".config/kitty/"
       ;;
     "Linux")
-      echo ".local/bin/file-uploader"
+      echo ".local/bin/pkgversions"
+      echo ".config/git/"
       ;;
   esac
 }

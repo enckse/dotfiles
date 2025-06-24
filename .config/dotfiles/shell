@@ -64,16 +64,21 @@ sshagent
 unset -f sshagent
 
 export SECRET_ROOT="$HOME/.ttypty/secrets"
+export EDITOR=vim
 [ -e "$HOME/.config/dotfiles/editor" ] && DOTFILES_EDITOR=$(cat "$HOME/.config/dotfiles/editor") && EDITOR="$DOTFILES_EDITOR" && export DOTFILES_EDITOR EDITOR
+[ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 export GOPATH="$HOME/.cache/go"
-export PATH="$GOPATH/bin:$PATH"
+[ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
-if [ -d "$HOME/.local/share/pkgtools" ]; then
-    for FILE in $(find "$HOME/.local/share/pkgtools" -type f); do
-        . "$FILE"
-    done
+if [ -z "$DOTFILES_EDITOR" ]; then
+  for a in git vim vi; do
+    alias $a="echo $a is disabled"
+  done
+  quickfix() {
+    /usr/bin/vim --clean $@
+  }
 fi
 
 alias vi="$EDITOR"
@@ -99,9 +104,6 @@ if [ -e "$HOME/.config/dotfiles/wac" ]; then
   fi
 fi
 
-export EDITOR=vim
-
-[ "$EDITOR" != "vim" ] && alias vim="$EDITOR"
 if command -v git-uncommitted > /dev/null; then
   _motd git uncommitted
 fi
@@ -114,7 +116,7 @@ case "$SHELL_NAME" in
     command -v git-uncommitted >/dev/null && PS1="\$(git uncommitted pwd 2>/dev/null)$PS1"
     ;;
   "zsh")
-    zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
+    command -v git-uncommitted >/dev/null &&zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
     autoload -U promptinit && promptinit
     precmd() {
       GIT_UNCOMMIT=""
