@@ -1,9 +1,12 @@
 #!/bin/sh -e
 [ ! -e 'go.mod' ] && echo 'cowardly failing to run go lint commands' && exit 1
-go vet ./... 2>&1 | sed 's/^/govet: /g'
-revive ./... 2>&1 | sed 's/^/revive: /g'
-fieldalignment ./... 2>&1 | sed 's/^/fieldalignment: /g'
-modernize -test ./... 2>&1 | sed 's/^/modernize: /g'
-staticcheck -checks all -debug.run-quickfix-analyzers ./... 2>&1 | sed 's/^/staticcheck: /g'
-gofumpt -l -extra $(find . -type f -name "*.go") 2>&1 | sed 's/^/gofumpt: /g'
-gopls check -severity=hint $(find . -type f -name "*.go") 2>&1 | sed 's/^/gopls: /g'
+_tool() {
+  $@ 2>&1 | grep -v '^$'
+}
+_tool go vet ./... | sed 's/^/govet: /g'
+_tool revive ./... | sed 's/^/revive: /g'
+_tool fieldalignment ./... | sed 's/^/fieldalignment: /g'
+_tool modernize -test ./... | sed 's/^/modernize: /g'
+_tool staticcheck -checks all -debug.run-quickfix-analyzers ./... | sed 's/^/staticcheck: /g'
+_tool gofumpt -l -extra $(find . -type f -name "*.go") | sed 's/^/gofumpt: /g'
+_tool gopls check -severity=hint $(find . -type f -name "*.go") | sed 's/^/gopls: /g'
