@@ -3,7 +3,7 @@ GOPLS_VERS="v0.19.1"
 go_version \
   "https://git.sr.ht/~enckse/lockbox" \
   "git.sr.ht/~enckse/lockbox/cmd/lb" \
-  "v1.6.1"
+  "v1.7.0"
 go_version \
   "https://git.sr.ht/~enckse/git-tools" \
   "git.sr.ht/~enckse/git-tools/cmd/..." \
