@@ -53,6 +53,7 @@ _store() {
   hashed="$(echo "$1 -> $2" | sha256sum | cut -c 1-7)"
   file="$PKGS_CACHE/$name.$vers.$hashed"
   if [ -e "$file" ]; then
+    touch "$file"
     return
   fi
   echo "$1 -> $2"
@@ -124,3 +125,4 @@ check_version() {
 
 source "$HOME/.config/dotfiles/packages"
 [ "$UPDATE" -eq 0 ] && [ "$RAN" -eq 0 ] && touch "$RUN"
+find "$PKGS_CACHE" -type f -mtime +1 -delete
