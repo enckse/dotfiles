@@ -105,9 +105,7 @@ fi
 
 if [ -e "$HOME/.config/dotfiles/wac" ]; then
   if command -v wac > /dev/null; then
-    wac setup
-    wac manage
-    _motd wac motd
+    _motd wac service
   else
     _motdheader wac
     echo "-> unavailable"
