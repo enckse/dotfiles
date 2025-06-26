@@ -30,10 +30,14 @@ go_install \
 go_install \
   "golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment" \
   "v0.34.0"
-vim_plugin \
-  "https://github.com/vim-airline/vim-airline"
-vim_plugin \
-  "https://github.com/dense-analysis/ale"
+case "$DOTFILES_EDITOR" in
+  "vim")
+    editor_plugin \
+      "https://github.com/vim-airline/vim-airline"
+    editor_plugin \
+      "https://github.com/dense-analysis/ale"
+    ;;
+esac
 check_version \
   "https://github.com/apple/container"
 check_version \

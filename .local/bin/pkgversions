@@ -90,14 +90,15 @@ go_install() {
   go install "$1@$2"
 }
 
-vim_plugin() {
+editor_plugin() {
   [ "$UPDATE" -eq 0 ] && return
-  PACK="$HOME/.config/vim/pack/plugins/start"
+  [ -z "$DOTFILES_EDITOR" ] && echo "no editor set" && return 
+  PACK="$HOME/.config/$DOTFILES_EDITOR/pack/plugins/start"
   mkdir -p "$PACK"
   BASE=$(basename "$1")
   DIR="$PACK/$BASE"
   [ ! -d "$DIR" ] && echo "initializing vim plugin: $BASE" && git clone --quiet "$1" "$DIR"
-  echo "updating vim plugin: $BASE"
+  echo "updating editor plugin: $BASE"
   git -C "$DIR" pull --quiet 
 }
 
