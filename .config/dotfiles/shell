@@ -82,7 +82,7 @@ export GIT_EDITOR="$EDITOR"
 export GOPATH="$HOME/.cache/go"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
-if [ -z "$DOTFILES_EDITOR" ]; then
+if [ ! -e "$HOME/.config/dotfiles/dev" ]; then
   for a in git vim vi; do
     alias $a="echo $a is disabled"
   done

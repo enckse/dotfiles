@@ -10,10 +10,6 @@ dotfiles() {
 
   echo ".config/dotfiles/"
   echo ".ssh/"
-  if command -v go >/dev/null; then
-    echo ".local/bin/go-mod-updates"
-    echo ".local/bin/go-lint"
-  fi
   case "$DOTFILES_EDITOR" in
     "hx")
       echo ".config/helix/"
@@ -24,16 +20,16 @@ dotfiles() {
     *)
       ;;
   esac
-  case "$(uname)" in
-    "Darwin")
-      echo ".local/bin/transcode-media"
-      echo ".config/kitty/"
-      ;;
-    "Linux")
-      echo ".local/bin/pkgversions"
-      echo ".config/git/"
-      ;;
-  esac
+  command -v kitty > /dev/null && echo ".config/kitty"
+  if [ -e "$HOME/.config/dotfiles/dev" ]; then
+    echo ".local/bin/pkgversions"
+    echo ".config/git/"
+    if command -v go >/dev/null; then
+      echo ".local/bin/go-mod-updates"
+      echo ".local/bin/go-lint"
+    fi
+  fi
+  [ "$(uname)" = "Darwin" ] && echo ".local/bin/transcode-media"
 }
 
 DIR=""
