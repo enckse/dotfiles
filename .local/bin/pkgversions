@@ -1,10 +1,10 @@
 #!/bin/sh -e
 PKGS_CACHE="$HOME/.cache/pkgversions"
-mkdir -p "$PKGS_CACHE"
 RUN="$PKGS_CACHE/run"
 FORCE=0
 RAN=0
 UPDATE=0
+INIT=0
 
 while getopts "fcu" opt ; do
   case $opt in
@@ -39,6 +39,9 @@ EOF
       ;;
   esac
 done
+
+[ ! -d "$PKGS_CACHE" ] && [ "$UPDATE" -eq 0 ] && echo "no cache, initializing via update" && UPDATE=1 && INIT=1
+mkdir -p "$PKGS_CACHE"
 
 if [ "$FORCE" -eq 0 ] && [ -e "$RUN" ]; then
   if [ "$(find "$RUN" -type f -mmin -60 | wc -l)" -gt 0 ]; then
@@ -107,6 +110,7 @@ editor_plugin() {
 
 completion() {
   [ "$UPDATE" -eq 0 ] && return
+  [ "$INIT" -eq 1 ] && echo "not generating completions on init" && return
   [ -z "$1" ] && [ -z "$2" ] && echo "$@ lack completion information" && exit 1
   COMPS="$HOME/.local/share/completions"
   mkdir -p "$COMPS"
