@@ -5,9 +5,14 @@ FORCE=0
 RAN=0
 UPDATE=0
 INIT=0
+VERS=0.0.1
 
-while getopts "fcu" opt ; do
+while getopts "fcuv" opt ; do
   case $opt in
+    v)
+      echo "$VERS"
+      exit 0
+      ;;
     f)
       FORCE=1
       ;;
@@ -106,15 +111,6 @@ editor_plugin() {
   [ ! -d "$DIR" ] && echo "initializing vim plugin: $BASE" && git clone --quiet "$1" "$DIR"
   echo "updating editor plugin: $BASE"
   git -C "$DIR" pull --quiet 
-}
-
-completion() {
-  [ "$UPDATE" -eq 0 ] && return
-  [ "$INIT" -eq 1 ] && echo "not generating completions on init" && return
-  [ -z "$1" ] && [ -z "$2" ] && echo "$@ lack completion information" && exit 1
-  COMPS="$HOME/.local/share/completions"
-  mkdir -p "$COMPS"
-  "$1" "$2" > "$COMPS/$1.sh"
 }
 
 check_version() {

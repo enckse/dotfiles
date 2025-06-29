@@ -48,5 +48,3 @@ check_version \
   "https://gitlab.alpinelinux.org/alpine/aports"
 check_version \
   "https://github.com/restic/restic"
-completion "lb" "completions"
-completion "pkgversions" "-c"

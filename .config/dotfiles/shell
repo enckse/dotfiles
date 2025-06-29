@@ -7,7 +7,6 @@ case "$SHELL_NAME" in
     done
     ;;
   "zsh")
-    autoload -Uz compinit && compinit
     bindkey '\e[H' beginning-of-line
     bindkey '\e[F' end-of-line
     ;;
@@ -63,16 +62,6 @@ sshagent() {
 sshagent
 unset -f sshagent
 
-loadcomps() {
-  [ ! -d "$HOME/.local/share/completions/" ] && return
-  for FILE in $(find "$HOME/.local/share/completions/" -type f); do
-    source "$FILE"
-  done
-}
-
-loadcomps
-unset -f loadcomps
-
 export SECRET_ROOT="$HOME/.ttypty/secrets"
 export EDITOR=vim
 [ -e "$HOME/.config/dotfiles/editor" ] && DOTFILES_EDITOR=$(cat "$HOME/.config/dotfiles/editor") && EDITOR="$DOTFILES_EDITOR" && export DOTFILES_EDITOR EDITOR
@@ -82,6 +71,8 @@ export GIT_EDITOR="$EDITOR"
 export GOPATH="$HOME/.cache/go"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+[ -e "$HOME/.config/dotfiles/completions" ] && source "$HOME/.config/dotfiles/completions"
+
 if [ ! -e "$HOME/.config/dotfiles/dev" ]; then
   for a in git vim vi; do
     alias $a="echo $a is disabled"
