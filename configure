@@ -30,6 +30,14 @@ dotfiles() {
     fi
   fi
   [ "$(uname)" = "Darwin" ] && echo ".local/bin/transcode-media"
+  if [ ! -e "$HOME/.config/dotfiles/dev" ]; then
+    {
+      echo "[user]"
+      echo "  useConfigOnly = true"
+      echo "[include]"
+      echo "  path = $PWD/.config/git/tools.config"
+    } > "$HOME/.gitconfig"
+  fi
 }
 
 DIR=""
