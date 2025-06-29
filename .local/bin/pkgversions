@@ -103,8 +103,7 @@ go_install() {
 
 editor_plugin() {
   [ "$UPDATE" -eq 0 ] && return
-  [ -z "$DOTFILES_EDITOR" ] && echo "no editor set" && return 
-  PACK="$HOME/.config/$DOTFILES_EDITOR/pack/plugins/start"
+  PACK="$HOME/.config/vim/pack/plugins/start"
   mkdir -p "$PACK"
   BASE=$(basename "$1")
   DIR="$PACK/$BASE"

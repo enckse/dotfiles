@@ -30,24 +30,20 @@ go_install \
 go_install \
   "golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment" \
   "v0.34.0"
-case "$DOTFILES_EDITOR" in
-  "vim")
-    editor_plugin \
-      "https://github.com/vim-airline/vim-airline"
-	editor_plugin \
-      "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
-	editor_plugin \
-      "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
-	editor_plugin \
-      "https://github.com/prabirshrestha/asyncomplete.vim"
-	editor_plugin \
-      "https://github.com/prabirshrestha/vim-lsp"
-	editor_plugin \
-      "https://github.com/bfrg/vim-qf-diagnostics"
-	editor_plugin \
-      "https://github.com/itspriddle/vim-shellcheck"
-    ;;
-esac
+editor_plugin \
+  "https://github.com/vim-airline/vim-airline"
+editor_plugin \
+  "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
+editor_plugin \
+  "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
+editor_plugin \
+  "https://github.com/prabirshrestha/asyncomplete.vim"
+editor_plugin \
+  "https://github.com/prabirshrestha/vim-lsp"
+editor_plugin \
+  "https://github.com/bfrg/vim-qf-diagnostics"
+editor_plugin \
+  "https://github.com/itspriddle/vim-shellcheck"
 check_version \
   "https://github.com/apple/container"
 check_version \
