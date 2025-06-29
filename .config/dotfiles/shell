@@ -1,13 +1,4 @@
 #!/bin/sh
-SHELL_NAME=$(basename "$SHELL")
-case "$SHELL_NAME" in
-  "bash")
-    for FILE in bash.bashrc bash_completion; do
-      [ -e "/etc/$FILE" ] && . "/etc/$FILE"
-    done
-    ;;
-esac
-
 motdheader() {
   echo "[$1]"
   echo "==="
