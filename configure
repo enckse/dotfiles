@@ -33,7 +33,6 @@ dotfiles() {
     echo ".local/bin/transcode-media"
     command -v container >/dev/null && echo ".local/bin/devcontainer"
   fi
-  command -v efm-langserver > /dev/null && echo ".config/efm-langserver"
   if [ ! -e "$HOME/.config/dotfiles/dev" ]; then
     {
       echo "[user]"
