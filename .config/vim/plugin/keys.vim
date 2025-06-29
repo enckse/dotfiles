@@ -42,4 +42,4 @@ vnoremap gj G
 
 " completions/loc/helpers
 inoremap <C-Return> <C-n>
-nnoremap <C-e> :ALEHover<CR>
+nnoremap <C-e> <NOP>
