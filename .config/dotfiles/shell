@@ -3,7 +3,7 @@ SHELL_NAME=$(basename "$SHELL")
 case "$SHELL_NAME" in
   "bash")
     for FILE in bash.bashrc bash_completion; do
-      [ -e "/etc/$FILE" ] && source "/etc/$FILE"
+      [ -e "/etc/$FILE" ] && . "/etc/$FILE"
     done
     ;;
   "zsh")
