@@ -22,7 +22,6 @@ set whichwrap=b,s,<,>,[,],h,l
 set foldmethod=indent
 set foldlevelstart=99
 set signcolumn=yes
-set clipboard=unnamedplus
 set backspace=indent,eol,start
 set omnifunc=syntaxcomplete#Complete
 set completeopt=noinsert
