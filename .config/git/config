@@ -1,8 +1,5 @@
 [core]
     autocrlf = input
-[include]
-    path = ~/.config/git/delta.config
-    path = ~/.config/git/personal.config
 [diff]
     colorMoved = default
 [grep]
@@ -25,3 +22,47 @@
     format = man
 [merge]
     conflictstyle = diff3
+# overrides
+[include]
+    path = ~/.config/git/tools.config
+[core]
+    hooksPath = ~/.config/git/hooks
+[diff "lb"]
+    textconv = lb conv
+[url "~/Store/git/private/"]
+    insteadOf = private:
+[url "~/Store/git/sr.ht/"]
+    insteadOf = sr.ht:
+[includeIf "hasconfig:remote.*.url:private:**"]
+    path = ~/.config/git/local.config
+[includeIf "hasconfig:remote.*.url:sr.ht:**"]
+    path = ~/.config/git/local.config
+# user/signing
+[user]
+    email = sean@ttypty.com
+    signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKRFpkRgIsKPHHP23GMtn2vaQz2WuHyEO97SKom9Y6ch
+[commit]
+    gpgSign = true
+[tag]
+    gpgSign = true
+[gpg]
+    format = ssh
+[gpg "ssh"]
+    allowedSignersFile = ~/.ssh/allowed_signers
+# delta configuration
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    light = false
+    features = decorations
+    keep-plus-minus-markers = true
+    line-numbers = true
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
