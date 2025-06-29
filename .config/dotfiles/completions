@@ -1,19 +1,19 @@
 #!/bin/sh
-COMPS="$HOME/.local/share/completions"
-mkdir -p "$COMPS"
+export SHELL_COMPS="$HOME/.local/share/completions"
+mkdir -p "$SHELL_COMPS"
 COMP_SHELL="$(basename "$SHELL")"
 
 _gencomp() {
   NAME="$1"
   VERS="$(echo $2 | sha256sum | cut -c 1-7)"
-  FILE="$COMPS/$NAME.$VERS.sh"
+  FILE="$SHELL_COMPS/$NAME.$VERS.sh"
   if [ ! -e "$FILE" ]; then
-    find "$COMPS" -type f -name "$NAME.*" -delete
+    find "$SHELL_COMPS" -type f -name "$NAME.*" -delete
     if ! "$1" $3 > "$FILE"; then
       rm -f "$FILE"
     fi
   fi
-  [ "$COMP_SHELL" = "zsh" ] && ln -sf "$FILE" "$COMPS/_$NAME"
+  [ "$COMP_SHELL" = "zsh" ] && ln -sf "$FILE" "$SHELL_COMPS/_$NAME"
 }
 
 
@@ -51,15 +51,3 @@ if command -v devcontainer > /dev/null; then
     "$(devcontainer version)" \
     "completions"
 fi
-
-case "$COMP_SHELL" in
-  "zsh")
-    export FPATH="$COMPS:$FPATH"
-    autoload -Uz compinit && compinit
-    ;;
-  "bash")
-    for FILE in $(find "$COMPS" -type f); do
-      source "$FILE"
-    done
-    ;;
-esac

@@ -1,12 +1,7 @@
 #!/bin/bash
 dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
-  {
-    echo "#!/usr/bin/env $SHELL_NAME"
-    echo "# do NOT edit, auto-generated"
-    echo '[[ "$-" != *i* ]] && return'
-    echo "source \"$HOME/.config/dotfiles/shell\""
-  } > "$HOME/.${SHELL_NAME}rc"
+  echo ".${SHELL_NAME}rc"
 
   echo ".config/dotfiles/"
   echo ".ssh/"
