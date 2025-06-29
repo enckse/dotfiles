@@ -7,7 +7,7 @@ go_version \
 go_version \
   "https://git.sr.ht/~enckse/git-tools" \
   "git.sr.ht/~enckse/git-tools/cmd/..." \
-  "v0.4.0"
+  "v0.5.0"
 go_version \
   "https://github.com/dominikh/go-tools" \
   "honnef.co/go/tools/cmd/staticcheck" \
