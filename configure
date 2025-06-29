@@ -11,10 +11,7 @@ dotfiles() {
   echo ".config/dotfiles/"
   echo ".ssh/"
   case "$DOTFILES_EDITOR" in
-    "hx")
-      echo ".config/helix/"
-      ;;
-    "nvim" | "vim")
+    "vim")
       echo ".config/$DOTFILES_EDITOR/"
       ;;
     *)
