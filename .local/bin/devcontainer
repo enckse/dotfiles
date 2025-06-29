@@ -1,0 +1,173 @@
+#!/bin/sh -e
+
+! command -v container > /dev/null && echo "no container tool" && exit 1
+
+VERS="0.0.3"
+REBUILD=0
+KILL=0
+REAPING=0
+IS_REBUILD="rebuild"
+IS_STOP="stop"
+IS_LIST="list"
+IS_REAP="reap"
+CALLSIGN="devcontainer."
+if [ -n "$1" ]; then
+  case "$1" in
+    "version")
+      echo "$VERS"
+      exit 0
+      ;;
+    "$IS_REAP")
+      REAPING=1
+      ;;
+    "$IS_STOP")
+      KILL=1
+      ;;
+    "$IS_REBUILD")
+      REBUILD=1
+      ;;
+    "$IS_LIST")
+      container list | grep "$CALLSIGN" | cut -d " " -f 1
+      exit 0
+      ;;
+    "completions")
+      {
+        cat << EOF
+#compdef _devcontainer devcontainer
+
+_devcontainer() {
+  local curcontext="\$curcontext" state len args
+  typeset -A opt_args
+  _arguments \\
+    '1: :->main'\\
+    '*: :->args'
+
+  len=\${#words[@]}
+  case \$state in
+    main)
+        _arguments "1:main:($IS_STOP $IS_REBUILD $IS_LIST)"
+    ;;
+    *)
+  esac
+}
+
+compdef _devcontainer devcontainer
+EOF
+      }
+      exit 0
+      ;;
+    *)
+      echo "unknown argument: $1"
+      exit 1
+      ;;
+  esac
+fi
+
+LIB="$HOME/.config/devcontainer"
+ENV="$LIB/env.sh"
+[ ! -e "$ENV" ] && echo "no env available for configuration" && exit 1
+source "$ENV"
+if [ -z "$USER_HOME" ] || [ -z "$USER_SHELL" ]; then
+  echo "USER_HOME/USER_SHELL must be set"
+  exit 1
+fi
+
+BUILD_SH="build.sh"
+CONFIG="$LIB/$BUILD_SH"
+CACHE="$HOME/.cache/devcontainer"
+FS="$HOME/.devcontainer"
+PIDS="$CACHE/pids"
+REAP_SCREEN="devcontainer.reaping"
+mkdir -p "$CACHE" "$FS/home" "$FS/apks" "$PIDS"
+HASH=$(sha256sum "$CONFIG" | cut -c 1-7)
+NAME="$CALLSIGN$HASH.$(date +%Y-%U)"
+DAEMONS="$CACHE/daemon"
+DAEMON="$DAEMONS/$NAME"
+MOUNTS=""
+MOUNTS="--mount type=bind,source=$FS/home,target=$USER_HOME/"
+MOUNTS="$MOUNTS --mount type=bind,source=$FS/apks,target=/etc/apk/cache"
+MOUNTS="$MOUNTS --mount type=bind,source=$HOME/.local,target=$USER_HOME/.host"
+MOUNTS="$MOUNTS --mount type=bind,source=$(readlink -f $LIB),target=/opt/lib/"
+MOUNTS="$MOUNTS --mount type=bind,source=$CACHE,target=/opt/cache/"
+CWD="$USER_HOME"
+for DIR in $USER_MOUNTS; do
+  MOUNTS="$MOUNTS --mount type=bind,source=$HOME/$DIR,target=$USER_HOME/$DIR"
+  if echo "$PWD" | grep -q "$HOME/$DIR"; then
+    CWD="$(echo "$PWD" | sed "s#$HOME#$USER_HOME#g")"
+  fi
+done
+
+_containermgr() {
+  container list --all | grep "$CALLSIGN" | cut -d " " -f 1 | xargs container $1 >/dev/null
+}
+
+_end() {
+  echo "managing containers"
+  find "$1" -type f -delete
+  sleep 1
+  _containermgr stop
+  _containermgr rm
+}
+
+_stop() {
+  _end "$DAEMONS"
+}
+
+if [ "$REAPING" -eq 1 ]; then
+  DID_REAP=0
+  while [ "$DID_REAP" -lt 600 ]; do
+    DID_REAP=$((DID_REAP+1))
+    for PID in $(find "$PIDS" -type f); do
+      echo "$DID_REAP"
+      if ! ps -p "$(basename "$PID")" > /dev/null; then
+        echo "reaping: $PID"
+        rm -f "$PID"
+      fi
+      DID_REAP=0
+    done
+    sleep 1
+  done
+  _stop
+  exit 0
+fi
+
+[ "$KILL" -eq 1 ] && _stop && exit 0
+
+if container list | grep -q "$NAME"; then
+  echo "connecting to session"
+else
+  REBUILD=1
+fi
+
+if [ "$REBUILD" -eq 1 ]; then
+  _end "$CACHE"
+  echo "building container ($NAME)"
+  container run \
+    -it \
+    --detach \
+    --env DAEMON_NAME=$NAME \
+    --env USER_NAME="$USER" \
+    --env USER_SHELL="$USER_SHELL" \
+    --name "$NAME" \
+    ${MOUNTS} \
+    alpine:edge \
+    /bin/sh /opt/lib/build.sh 
+fi
+while [ ! -e "$DAEMON" ]; do printf "."; sleep 1; done
+
+echo
+touch "$PIDS/$$"
+if ! screen -list 2>&1 | grep -q "$REAP_SCREEN"; then
+  screen -S "$REAP_SCREEN" -dm "$0" "$IS_REAP"
+fi
+
+exec container \
+    exec \
+    -it \
+    --cwd "$CWD" \
+    --user $USER \
+    --env IS_CONTAINER="$(echo "$NAME" | cut -d "." -f 1)" \
+    --env USER="$USER" \
+    --env SHELL="$USER_SHELL" \
+    "$NAME" \
+    "$USER_SHELL"

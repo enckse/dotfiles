@@ -29,7 +29,10 @@ dotfiles() {
       echo ".local/bin/go-lint"
     fi
   fi
-  [ "$(uname)" = "Darwin" ] && echo ".local/bin/transcode-media"
+  if [ "$(uname)" = "Darwin" ]; then
+    echo ".local/bin/transcode-media"
+    command -v container >/dev/null && echo ".local/bin/devcontainer"
+  fi
   if [ ! -e "$HOME/.config/dotfiles/dev" ]; then
     {
       echo "[user]"
