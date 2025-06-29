@@ -2,37 +2,26 @@
 dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
   echo ".${SHELL_NAME}rc"
-
   echo ".config/dotfiles/"
-  echo ".ssh/"
-  case "$DOTFILES_EDITOR" in
-    "vim")
-      echo ".config/$DOTFILES_EDITOR/"
+  case "$(uname)" in
+    "Linux")
+      echo ".ssh/"
+      echo ".config/vim/"
+      echo ".local/bin/pkgversions"
+      echo ".config/git/"
+      if command -v go >/dev/null; then
+        echo ".local/bin/go-mod-updates"
+        echo ".local/bin/go-lint"
+      fi
       ;;
-    *)
+    "Darwin")
+      echo ".local/bin/transcode-media"
+      echo ".gitconfig"
+      echo ".config/git/tools.config"
+      command -v container >/dev/null && echo ".local/bin/devcontainer"
+      command -v kitty > /dev/null && echo ".config/kitty"
       ;;
   esac
-  command -v kitty > /dev/null && echo ".config/kitty"
-  if [ -e "$HOME/.config/dotfiles/dev" ]; then
-    echo ".local/bin/pkgversions"
-    echo ".config/git/"
-    if command -v go >/dev/null; then
-      echo ".local/bin/go-mod-updates"
-      echo ".local/bin/go-lint"
-    fi
-  fi
-  if [ "$(uname)" = "Darwin" ]; then
-    echo ".local/bin/transcode-media"
-    command -v container >/dev/null && echo ".local/bin/devcontainer"
-  fi
-  if [ ! -e "$HOME/.config/dotfiles/dev" ]; then
-    {
-      echo "[user]"
-      echo "  useConfigOnly = true"
-      echo "[include]"
-      echo "  path = $PWD/.config/git/tools.config"
-    } > "$HOME/.gitconfig"
-  fi
 }
 
 DIR=""
