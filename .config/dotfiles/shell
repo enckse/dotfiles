@@ -28,7 +28,7 @@ sshagent() {
 }
 
 loadcomps() {
-  [ -e "$HOME/.config/dotfiles/completions" ] && source "$HOME/.config/dotfiles/completions"
+  [ -e "$HOME/.config/dotfiles/completions" ] && . "$HOME/.config/dotfiles/completions"
 }
 
 uncommitted() {

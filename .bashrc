@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 source "$HOME/.config/dotfiles/shell"
 
 for FILE in bash.bashrc bash_completion; do
@@ -27,12 +27,13 @@ export GOPATH="$HOME/.cache/go"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 
 loadcomps
-for FILE in $(find "$SHELL_COMPS" -type f); do
+while IFS= read -r FILE; do
   . "$FILE"
-done
+done < <(find "$SHELL_COMPS" -type f)
+
 unset FILE
 
-alias vi="$EDITOR"
+alias vi="\$EDITOR"
 alias less="less -R"
 if command -v bat > /dev/null; then
   alias cat=bat
