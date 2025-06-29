@@ -1,9 +1,12 @@
 if executable('gopls')
-    " pip install python-lsp-server
     au User lsp_setup call lsp#register_server({
         \ 'name': 'gopls',
         \ 'cmd': {server_info->['gopls']},
         \ 'allowlist': ['go'],
+        \ 'initialization_options': {
+        \     'staticcheck': v:true,
+        \     'gofumpt': v:true,
+        \ },
         \ })
 endif
 

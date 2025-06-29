@@ -42,6 +42,10 @@ case "$DOTFILES_EDITOR" in
       "https://github.com/prabirshrestha/asyncomplete.vim"
 	editor_plugin \
       "https://github.com/prabirshrestha/vim-lsp"
+	editor_plugin \
+      "https://github.com/bfrg/vim-qf-diagnostics"
+	editor_plugin \
+      "https://github.com/itspriddle/vim-shellcheck"
     ;;
 esac
 check_version \
