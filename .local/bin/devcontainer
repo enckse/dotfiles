@@ -77,8 +77,9 @@ CONFIG="$LIB/$BUILD_SH"
 CACHE="$HOME/.cache/devcontainer"
 FS="$HOME/.devcontainer"
 PIDS="$CACHE/pids"
-REAP_SCREEN="devcontainer.reaping"
-mkdir -p "$CACHE" "$FS/home" "$FS/apks" "$PIDS"
+MGR="$CACHE/manager"
+REAPPID="$MGR/pidfile"
+mkdir -p "$CACHE" "$FS/home" "$FS/apks" "$PIDS" "$MGR"
 HASH=$(sha256sum "$CONFIG" | cut -c 1-7)
 NAME="$CALLSIGN$HASH"
 DAEMONS="$CACHE/daemon"
@@ -114,20 +115,22 @@ _stop() {
 }
 
 if [ "$REAPING" -eq 1 ]; then
-  DID_REAP=0
-  while [ "$DID_REAP" -lt 600 ]; do
-    DID_REAP=$((DID_REAP+1))
-    for PID in $(find "$PIDS" -type f); do
-      echo "$DID_REAP"
-      if ! ps -p "$(basename "$PID")" > /dev/null; then
-        echo "reaping: $PID"
-        rm -f "$PID"
-      fi
-      DID_REAP=0
+  echo "$$" > "$REAPPID"
+  {
+    DID_REAP=0
+    while [ "$DID_REAP" -lt 600 ]; do
+      DID_REAP=$((DID_REAP+1))
+      for PID in $(find "$PIDS" -type f); do
+        if ! ps -p "$(basename "$PID")" > /dev/null; then
+          echo "reaping: $PID"
+          rm -f "$PID"
+        fi
+        DID_REAP=0
+      done
+      sleep 1
     done
-    sleep 1
-  done
-  _stop
+    _stop
+  } > "$MGR/reaping.log" 2>&1
   exit 0
 fi
 
@@ -157,8 +160,16 @@ while [ ! -e "$DAEMON" ]; do printf "."; sleep 1; done
 
 echo
 touch "$PIDS/$$"
-if ! screen -list 2>&1 | grep -q "$REAP_SCREEN"; then
-  screen -S "$REAP_SCREEN" -dm "$0" "$IS_REAP"
+START_REAP=1
+if [ -e "$REAPPID" ]; then
+  REAPER=$(cat "$REAPPID")
+  if ps -p "$REAPER" > /dev/null 2>&1; then
+    START_REAP=0
+  fi
+fi
+if [ "$START_REAP" -eq 1 ]; then
+  "$0" "$IS_REAP" &
+  disown
 fi
 
 exec container \
