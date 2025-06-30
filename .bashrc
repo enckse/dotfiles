@@ -9,12 +9,11 @@ unset FILE
 for DIR in ".cache/staticcheck" \
            ".cache/gopls" \
            ".cache/go-build" \
-           ".cache/vim" \
-           ".local/state/nvim/swap" \
-           ".local/state/nvim/undo"; do
+           ".cache/vim"; do
   DIR="$HOME/$DIR"
-  [ -d "$DIR" ] && find "$DIR" -type f -mtime +1 -delete
+  [ -d "$DIR" ] && find "$DIR" -type f -mmin +120 -delete
 done
+
 
 unset DIR
 
