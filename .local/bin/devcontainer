@@ -66,7 +66,7 @@ fi
 LIB="$HOME/.config/devcontainer"
 ENV="$LIB/env.sh"
 [ ! -e "$ENV" ] && echo "no env available for configuration" && exit 1
-source "$ENV"
+. "$ENV"
 if [ -z "$USER_HOME" ] || [ -z "$USER_SHELL" ]; then
   echo "USER_HOME/USER_SHELL must be set"
   exit 1
@@ -80,7 +80,7 @@ PIDS="$CACHE/pids"
 REAP_SCREEN="devcontainer.reaping"
 mkdir -p "$CACHE" "$FS/home" "$FS/apks" "$PIDS"
 HASH=$(sha256sum "$CONFIG" | cut -c 1-7)
-NAME="$CALLSIGN$HASH.$(date +%Y-%U)"
+NAME="$CALLSIGN$HASH"
 DAEMONS="$CACHE/daemon"
 DAEMON="$DAEMONS/$NAME"
 MOUNTS=""
