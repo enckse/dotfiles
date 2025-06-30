@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+CLIP=""
+PASTE=""
+DAEMON="daemonize"
+CACHE="$HOME/.cache/clipmgr"
+LOG="$CACHE/daemon.log"
+PIDFILE="$CACHE/pidfile"
+TERMINAL_NAME=""
+mkdir -p "$CACHE"
+case "$(uname)" in
+  "Darwin")
+    TERMINAL_NAME="/kitty"
+    CLIP="pbcopy"
+    PASTE="pbpaste"
+esac
+[ -z "$CLIP" ] && echo "no clip command set" && exit 1
+[ -z "$PASTE" ] && echo "no paste command set" && exit 1
+[ -z "$TERMINAL_NAME" ] && echo "no terminal set" && exit 1
+
+if [ -n "$1" ]; then
+  [ "$1" != "$DAEMON" ] && echo "unknown command" && exit 1
+  echo "$$" > "$PIDFILE"
+  {
+    date
+    echo "initialized"
+    COUNT=0
+    while [ "$COUNT" -lt 120 ]; do
+      sleep 1
+      if ! pgrep -f -q "$TERMINAL_NAME"; then
+        COUNT=$((COUNT+1))
+      fi
+      if [ -z "$($PASTE)" ]; then
+        continue
+      fi
+      CURRENT=$($PASTE | sha256sum | cut -c 1-7)
+      CLEAR=120
+      while [ "$CLEAR" -gt 0 ]; do
+        READ=$($PASTE | sha256sum | cut -c 1-7)
+        [ "$READ" != "$CURRENT" ] && break
+        CLEAR=$((CLEAR-1))
+        sleep 1
+      done
+      if [ "$CLEAR" -eq 0 ]; then
+        date
+        echo "clearing clipboard"
+        printf "" | $CLIP
+      fi
+      COUNT=0
+    done
+    echo "exiting"
+    date
+  } > "$LOG" 2>&1
+  exit 0
+fi
+
+START=1
+if [ -e "$PIDFILE" ]; then
+  RUNNING=$(cat "$PIDFILE")
+  if ps -p "$RUNNING" > /dev/null 2>&1; then
+    START=0
+  fi
+fi
+if [ "$START" -eq 1 ]; then
+  "$0" "$DAEMON" &
+  disown
+fi
