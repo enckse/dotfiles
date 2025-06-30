@@ -95,7 +95,7 @@ go_install() {
   [ "$UPDATE" -eq 0 ] && return
   [ -z "$1" ] && [ -z "$2" ] && echo "$@ has no version information to install" && exit 1
   echo "go installing: $1"
-  INSTALLED="$PKGS_CACHE/installed.go.$(echo "$1 $2" | sha256sum | cut -c 1-7)"
+  INSTALLED="$PKGS_CACHE/installed.go.$(echo "$1" | tr -cd '[:alnum:]._-').$(echo "$1 $2" | sha256sum | cut -c 1-7)"
   [ -e "$INSTALLED" ] && return
   go install "$1@$2"
   touch "$INSTALLED"

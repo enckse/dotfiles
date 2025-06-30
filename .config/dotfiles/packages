@@ -24,6 +24,10 @@ go_version \
   "https://github.com/mvdan/gofumpt" \
   "mvdan.cc/gofumpt" \
   "v0.8.0"
+go_version \
+  "https://github.com/theimpostor/osc" \
+  "github.com/theimpostor/osc" \
+  "v0.4.8"
 go_install \
   "golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize" \
   "$GOPLS_VERS"
