@@ -28,7 +28,11 @@ sshagent() {
 }
 
 loadcomps() {
-  [ -e "$HOME/.config/dotfiles/completions" ] && . "$HOME/.config/dotfiles/completions"
+  [ ! -e "$HOME/.config/dotfiles/completions" ] && return
+  . "$HOME/.config/dotfiles/completions"
+  for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
+    . "$FILE"
+  done
 }
 
 uncommitted() {

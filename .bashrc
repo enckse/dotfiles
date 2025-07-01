@@ -26,11 +26,6 @@ export GOPATH="$HOME/.cache/go"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 
 loadcomps
-while IFS= read -r FILE; do
-  . "$FILE"
-done < <(find "$SHELL_COMPS" -type f)
-
-unset FILE
 
 alias vi="\$EDITOR"
 alias less="less -R"

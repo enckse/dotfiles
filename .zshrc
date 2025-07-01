@@ -4,9 +4,8 @@ bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
 
 sshagent
-loadcomps
-export FPATH="$SHELL_COMPS:$FPATH"
 autoload -Uz compinit && compinit
+loadcomps
 
 for a in git vim vi; do
   alias $a="echo $a is disabled"

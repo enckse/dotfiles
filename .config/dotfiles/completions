@@ -1,7 +1,6 @@
 #!/bin/sh
 export SHELL_COMPS="$HOME/.local/share/completions"
 mkdir -p "$SHELL_COMPS"
-COMP_SHELL="$(basename "$SHELL")"
 
 _gencomp() {
   NAME="$1"
@@ -9,11 +8,10 @@ _gencomp() {
   FILE="$SHELL_COMPS/$NAME.$VERS.sh"
   if [ ! -e "$FILE" ]; then
     find "$SHELL_COMPS" -type f -name "$NAME.*" -delete
-    if ! "$1" $3 > "$FILE"; then
+    if ! "$1" $3  | sed 's/^_container$/compdef _container container/g' > "$FILE"; then
       rm -f "$FILE"
     fi
   fi
-  [ "$COMP_SHELL" = "zsh" ] && ln -sf "$FILE" "$SHELL_COMPS/_$NAME"
 }
 
 
