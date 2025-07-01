@@ -19,7 +19,7 @@ LOG="$CACHE/$(date +%Y-%m-%d).log"
   date
   echo "initialized"
   COUNT=0
-  while [ "$COUNT" -lt 10 ]; do
+  while [ "$COUNT" -lt 30 ]; do
     sleep 1
     if ! pgrep -f -q "devcontainer"; then
       COUNT=$((COUNT+1))
