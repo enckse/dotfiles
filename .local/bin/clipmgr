@@ -1,7 +1,6 @@
 #!/bin/sh
 CLIP="pbcopy"
 PASTE="pbpaste"
-TERMINAL_NAME="/kitty"
 APP="/Applications/ClipMgr.app"
 
 if [ -z "$1" ]; then
@@ -22,7 +21,7 @@ LOG="$CACHE/$(date +%Y-%m-%d).log"
   COUNT=0
   while [ "$COUNT" -lt 10 ]; do
     sleep 1
-    if ! pgrep -f -q "$TERMINAL_NAME"; then
+    if ! pgrep -f -q "devcontainer"; then
       COUNT=$((COUNT+1))
     fi
     if [ -z "$($PASTE)" ]; then

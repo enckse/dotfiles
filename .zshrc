@@ -23,7 +23,22 @@ else
   echo
 fi
 
-command -v clipmgr > /dev/null && clipmgr
+if command -v clipmgr > /dev/null; then
+  LB=$(command -v lb)
+  if [ -n "$LB" ]; then
+    lb() {
+      clipmgr
+      $LB $@
+    }
+  fi
+  DEVCON=$(command -v devcontainer)
+  if [ -n "$DEVCON" ]; then
+    devcontainer() {
+      clipmgr
+      $DEVCON $@
+    }
+  fi
+fi
 
 uncommitted
 
