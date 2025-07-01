@@ -109,6 +109,7 @@ _stop() {
 
 [ "$KILL" -eq 1 ] && _stop && exit 0
 
+container system start
 if container list | grep -q "$NAME"; then
   echo "connecting to session"
 else

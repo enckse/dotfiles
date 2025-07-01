@@ -23,6 +23,8 @@ else
   echo
 fi
 
+command -v clipmgr > /dev/null && clipmgr
+
 uncommitted
 
 command -v git-uncommitted >/dev/null &&zstyle ':completion:*:*:git:*' user-commands uncommitted:'show uncommitted changes'
