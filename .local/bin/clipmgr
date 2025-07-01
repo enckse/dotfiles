@@ -19,9 +19,9 @@ LOG="$CACHE/$(date +%Y-%m-%d).log"
   date
   echo "initialized"
   COUNT=0
-  while [ "$COUNT" -lt 30 ]; do
+  while [ "$COUNT" -lt 15 ]; do
     sleep 1
-    if ! pgrep -f -q "devcontainer"; then
+    if ! pgrep -f -q "/zsh"; then
       COUNT=$((COUNT+1))
     fi
     if [ -z "$($PASTE)" ]; then

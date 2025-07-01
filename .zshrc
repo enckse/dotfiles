@@ -23,24 +23,7 @@ else
   echo
 fi
 
-if command -v clipmgr > /dev/null; then
-  LB=$(command -v lb)
-  if [ -n "$LB" ]; then
-    lb() {
-      if echo "$@" | grep -q "clip"; then
-        clipmgr
-      fi
-      $LB $@
-    }
-  fi
-  DEVCON=$(command -v devcontainer)
-  if [ -n "$DEVCON" ]; then
-    devcontainer() {
-      clipmgr
-      $DEVCON $@
-    }
-  fi
-fi
+command -v clipmgr > /dev/null && clipmgr
 
 uncommitted
 
