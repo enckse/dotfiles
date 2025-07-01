@@ -27,7 +27,9 @@ if command -v clipmgr > /dev/null; then
   LB=$(command -v lb)
   if [ -n "$LB" ]; then
     lb() {
-      clipmgr
+      if echo "$@" | grep -q "clip"; then
+        clipmgr
+      fi
       $LB $@
     }
   fi
