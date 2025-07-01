@@ -16,7 +16,6 @@ dotfiles() {
       ;;
     "Darwin")
       echo ".local/bin/transcode-media"
-      echo ".local/bin/clipmgr"
       echo ".gitconfig"
       echo ".config/git/tools.config"
       command -v container >/dev/null && echo ".local/bin/devcontainer"
