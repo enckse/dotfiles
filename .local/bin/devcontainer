@@ -124,10 +124,11 @@ if [ "$REBUILD" -eq 1 ]; then
   trap _rmcache EXIT INT TERM
   echo "building container ($NAME)"
   container build \
-	  --build-arg USER_SHELL="$USER_SHELL" \
-	  --build-arg USER="$USER" \
-	  -f "$CONTAINERFILE" \
-	  -t "$NAME"
+    --build-arg USER_SHELL="$USER_SHELL" \
+    --build-arg USER="$USER" \
+    -f "$CONTAINERFILE" \
+    -t "$NAME" \
+    "$FS"
   _rmcache
 fi
 
