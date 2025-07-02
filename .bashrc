@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 source "$HOME/.config/dotfiles/shell"
 
-for FILE in bash.bashrc; do
-  echo "$FILE"
-  [ -e "/etc/$FILE" ] && . "/etc/$FILE"
-done
-unset FILE
+[ -e "/etc/bash/bashrc" ] && . /etc/bash/bashrc
 
 for DIR in ".cache/staticcheck" \
            ".cache/gopls" \
@@ -14,8 +10,6 @@ for DIR in ".cache/staticcheck" \
   DIR="$HOME/$DIR"
   [ -d "$DIR" ] && find "$DIR" -type f -mmin +120 -delete
 done
-
-
 unset DIR
 
 sshagent
