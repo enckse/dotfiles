@@ -5,7 +5,6 @@
 VERS="0.0.3"
 REBUILD=0
 KILL=0
-REAPING=0
 IS_REBUILD="rebuild"
 IS_STOP="stop"
 IS_LIST="list"
