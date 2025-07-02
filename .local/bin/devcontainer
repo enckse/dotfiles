@@ -2,28 +2,26 @@
 
 ! command -v container > /dev/null && echo "no container tool" && exit 1
 
-VERS="0.0.4"
+VERS="0.0.5"
 REBUILD=0
-KILL=0
 IS_REBUILD="rebuild"
-IS_STOP="stop"
-IS_LIST="list"
+IS_CLEAN="clean"
 CALLSIGN="devcontainer."
+CLEAN=0
+CLEAN_CMD=0
 if [ -n "$1" ]; then
   case "$1" in
     "version")
       echo "$VERS"
       exit 0
       ;;
-    "$IS_STOP")
-      KILL=1
+    "$IS_CLEAN")
+      CLEAN_CMD=1
+      CLEAN=1
       ;;
     "$IS_REBUILD")
       REBUILD=1
-      ;;
-    "$IS_LIST")
-      container list | grep "$CALLSIGN" | cut -d " " -f 1
-      exit 0
+      CLEAN=1
       ;;
     "completions")
       {
@@ -40,7 +38,7 @@ _devcontainer() {
   len=\${#words[@]}
   case \$state in
     main)
-        _arguments "1:main:($IS_STOP $IS_REBUILD $IS_LIST)"
+        _arguments "1:main:($IS_REBUILD $IS_CLEAN)"
     ;;
     *)
   esac
@@ -98,15 +96,17 @@ _end() {
   container images prune
 }
 
-[ "$KILL" -eq 1 ] && _end && exit 0
-
 container system start
 if ! container images ls | grep -q "$NAME"; then
   REBUILD=1
 fi
 
-if [ "$REBUILD" -eq 1 ]; then
+if [ "$CLEAN" -eq 1 ]; then
   _end
+  [ "$CLEAN_CMD" -eq 1 ] && exit 0
+fi
+
+if [ "$REBUILD" -eq 1 ]; then
   echo "building container ($NAME)"
   container build \
 	  --build-arg USER_SHELL="$USER_SHELL" \
