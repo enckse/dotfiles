@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 source "$HOME/.config/dotfiles/shell"
 
-for FILE in bash.bashrc bash_completion; do
+for FILE in bash.bashrc; do
+  echo "$FILE"
   [ -e "/etc/$FILE" ] && . "/etc/$FILE"
 done
 unset FILE
