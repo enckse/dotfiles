@@ -64,6 +64,7 @@ ENV="$LIB/env.sh"
 [ -z "$USER_HOME" ] && echo "no user home set" && exit 1
 CONTAINERFILE="$LIB/Containerfile"
 FS="$HOME/.devcontainer"
+BUILD_CACHE="$FS/build"
 HASH=$(sha256sum "$CONTAINERFILE" | cut -c 1-7)
 NAME="$CALLSIGN$HASH.$(date +%Y%U)"
 MOUNTS=""
@@ -96,6 +97,18 @@ _end() {
   container images prune
 }
 
+_rmcache() {
+  rm -f "$BUILD_CACHE"
+}
+
+if [ -e "$BUILD_CACHE" ]; then
+  echo "waiting on build"
+  while [ -e "$BUILD_CACHE" ]; do
+    printf "."
+    sleep 1
+  done
+fi
+
 container system start
 if ! container images ls | grep -q "$NAME"; then
   REBUILD=1
@@ -107,12 +120,15 @@ if [ "$CLEAN" -eq 1 ]; then
 fi
 
 if [ "$REBUILD" -eq 1 ]; then
+  touch "$BUILD_CACHE"
+  trap _rmcache EXIT INT TERM
   echo "building container ($NAME)"
   container build \
 	  --build-arg USER_SHELL="$USER_SHELL" \
 	  --build-arg USER="$USER" \
 	  -f "$CONTAINERFILE" \
 	  -t "$NAME"
+  _rmcache
 fi
 
 echo
