@@ -2,7 +2,7 @@
 
 ! command -v container > /dev/null && echo "no container tool" && exit 1
 
-VERS="0.0.3"
+VERS="0.0.4"
 REBUILD=0
 KILL=0
 IS_REBUILD="rebuild"
@@ -60,28 +60,18 @@ fi
 
 LIB="$HOME/.config/devcontainer"
 ENV="$LIB/env.sh"
-[ ! -e "$ENV" ] && echo "no env available for configuration" && exit 1
+[ ! -e "$ENV" ] && echo "no env file?" && exit 1
 . "$ENV"
-if [ -z "$USER_HOME" ] || [ -z "$USER_SHELL" ]; then
-  echo "USER_HOME/USER_SHELL must be set"
-  exit 1
-fi
-
-BUILD_SH="build.sh"
-CONFIG="$LIB/$BUILD_SH"
-CACHE="$HOME/.cache/devcontainer"
+[ -z "$USER_SHELL" ] && echo "no user shell set" && exit 1
+[ -z "$USER_HOME" ] && echo "no user home set" && exit 1
+CONTAINERFILE="$LIB/Containerfile"
 FS="$HOME/.devcontainer"
-mkdir -p "$CACHE" "$FS/home" "$FS/apks"
-HASH=$(sha256sum "$CONFIG" | cut -c 1-7)
-NAME="$CALLSIGN$HASH"
-DAEMONS="$CACHE/daemon"
-DAEMON="$DAEMONS/$NAME"
+HASH=$(sha256sum "$CONTAINERFILE" | cut -c 1-7)
+NAME="$CALLSIGN$HASH.$(date +%Y%U)"
 MOUNTS=""
 MOUNTS="--mount type=bind,source=$FS/home,target=$USER_HOME/"
 MOUNTS="$MOUNTS --mount type=bind,source=$FS/apks,target=/etc/apk/cache"
 MOUNTS="$MOUNTS --mount type=bind,source=$HOME/.local,target=$USER_HOME/.host"
-MOUNTS="$MOUNTS --mount type=bind,source=$(readlink -f $LIB),target=/opt/lib/"
-MOUNTS="$MOUNTS --mount type=bind,source=$CACHE,target=/opt/cache/"
 CWD="$USER_HOME"
 for DIR in $USER_MOUNTS; do
   MOUNTS="$MOUNTS --mount type=bind,source=$HOME/$DIR,target=$USER_HOME/$DIR"
@@ -91,54 +81,50 @@ for DIR in $USER_MOUNTS; do
 done
 
 _containermgr() {
-  container list --all | grep "$CALLSIGN" | cut -d " " -f 1 | xargs container $1 >/dev/null
+  LIST_ARGS="--all"
+  IS_IMAGES=""
+  if [ "$1" = "images" ]; then
+    LIST_ARGS=""
+    IS_IMAGES="images"
+  fi
+  container $IS_IMAGES list $LIST_ARGS | grep "$CALLSIGN" | cut -d " " -f 1 | xargs container $IS_IMAGES $2 >/dev/null
 }
 
 _end() {
   echo "managing containers"
-  find "$1" -type f -delete
-  sleep 1
-  _containermgr stop
-  _containermgr rm
+  _containermgr containers stop
+  _containermgr containers rm
+  _containermgr images delete
+  container images prune
 }
 
-_stop() {
-  _end "$DAEMONS"
-}
-
-[ "$KILL" -eq 1 ] && _stop && exit 0
+[ "$KILL" -eq 1 ] && _end && exit 0
 
 container system start
-if container list | grep -q "$NAME"; then
-  echo "connecting to session"
-else
+if ! container images ls | grep -q "$NAME"; then
   REBUILD=1
 fi
 
 if [ "$REBUILD" -eq 1 ]; then
-  _end "$CACHE"
+  _end
   echo "building container ($NAME)"
-  container run \
-    -it \
-    --detach \
-    --env DAEMON_NAME=$NAME \
-    --env USER_NAME="$USER" \
-    --env USER_SHELL="$USER_SHELL" \
-    --name "$NAME" \
-    ${MOUNTS} \
-    alpine:edge \
-    /bin/sh /opt/lib/build.sh 
+  container build \
+	  --build-arg USER_SHELL="$USER_SHELL" \
+	  --build-arg USER="$USER" \
+	  -f "$CONTAINERFILE" \
+	  -t "$NAME"
 fi
-while [ ! -e "$DAEMON" ]; do printf "."; sleep 1; done
 
 echo
 exec container \
-    exec \
+    run \
     -it \
+    --rm \
     --cwd "$CWD" \
     --user $USER \
     --env IS_CONTAINER="$(echo "$NAME" | cut -d "." -f 1)" \
     --env USER="$USER" \
     --env SHELL="$USER_SHELL" \
+    ${MOUNTS} \
     "$NAME" \
     "$USER_SHELL"
