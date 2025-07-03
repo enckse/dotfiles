@@ -14,6 +14,13 @@ motd() {
   echo
 }
 
+loadcomps() {
+  [ ! -d "$SHELL_COMPS" ] && return
+  for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
+    . "$FILE"
+  done
+}
+
 sshagent() {
   envfile="$HOME/.local/state/ssh-agent.env"
   mkdir -p "$(dirname "$envfile")"
@@ -44,11 +51,12 @@ cleancaches() {
 }
 
 shellready() {
-  unset -f uncommitted cleancaches sshagent motd motdheader
+  unset -f uncommitted cleancaches loadcomps sshagent motd motdheader shellready
 }
 
 
 export PKGV_STORE="$HOME/.pkgv"
+export SHELL_COMPS="$HOME/.local/share/completions"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 export SECRET_ROOT="$HOME/.ttypty/secrets"

@@ -6,6 +6,7 @@ bindkey '\e[F' end-of-line
 
 cleancaches
 sshagent
+loadcomps
 
 if command -v wac > /dev/null; then
   motd wac service
@@ -16,6 +17,7 @@ else
 fi
 
 command -v clipmgr > /dev/null && clipmgr
+command -v container > /dev/null && alias devcontainer="container run -it --mount type=bind,source=$HOME/Workspace,target=/opt/workspace --cwd /opt/workspace --rm alpine:edge /bin/sh"
 
 uncommitted
 

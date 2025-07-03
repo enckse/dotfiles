@@ -9,6 +9,13 @@ if executable('gopls')
         \ },
         \ })
 endif
+if executable("lua-language-server")
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'lua-language-server',
+        \ 'cmd': {server_info->['lua-language-server']},
+        \ 'allowlist': ['lua']
+        \ })
+endif
 
 let g:lsp_fold_enabled = 0
 let g:lsp_completion_documentation_delay = 500
@@ -29,15 +36,3 @@ augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
-
-autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-    \ 'name': 'buffer',
-    \ 'allowlist': ['*'],
-    \ 'blocklist': ['go'],
-    \ 'completor': function('asyncomplete#sources#buffer#completor'),
-    \ 'config': {
-    \    'max_buffer_size': 5000000,
-    \  },
-    \ }))
-
-autocmd VimEnter * :doautocmd BufWinEnter
