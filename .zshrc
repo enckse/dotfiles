@@ -1,11 +1,8 @@
 #!/usr/bin/env zsh
+autoload -Uz compinit && compinit
 source "$HOME/.config/dotfiles/shell"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
-
-autoload -Uz compinit && compinit
-export PKGV_STORE="$HOME/.pkgv"
-[ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 cleancaches
 sshagent

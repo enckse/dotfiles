@@ -48,6 +48,9 @@ shellready() {
 }
 
 
+export PKGV_STORE="$HOME/.pkgv"
+[ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
+
 export SECRET_ROOT="$HOME/.ttypty/secrets"
 export EDITOR=vim
 export VISUAL="$EDITOR"
