@@ -3,16 +3,12 @@ source "$HOME/.config/dotfiles/shell"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
 
-sshagent
 autoload -Uz compinit && compinit
-loadcomps
+export PKGV_STORE="$HOME/.pkgv"
+[ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
-for a in git vim vi; do
-  alias $a="echo $a is disabled"
-done
-quickfix() {
-  /usr/bin/vim --clean $@
-}
+cleancaches
+sshagent
 
 if command -v wac > /dev/null; then
   motd wac service

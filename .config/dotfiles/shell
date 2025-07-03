@@ -27,23 +27,44 @@ sshagent() {
   ssh-add "$HOME/.ssh/"*.privkey >/dev/null 2>&1
 }
 
-loadcomps() {
-  [ ! -e "$HOME/.config/dotfiles/completions" ] && return
-  . "$HOME/.config/dotfiles/completions"
-  for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
-    . "$FILE"
-  done
-}
-
 uncommitted() {
   if command -v git-uncommitted > /dev/null; then
     motd git uncommitted
   fi
 }
 
-shellready() {
-  unset -f uncommitted loadcomps sshagent motd motdheader
+cleancaches() {
+  for DIR in ".cache/staticcheck" \
+             ".cache/gopls" \
+             ".cache/go-build" \
+             ".cache/vim"; do
+    DIR="$HOME/$DIR"
+    [ -d "$DIR" ] && find "$DIR" -type f -mmin +120 -delete
+  done
 }
 
+shellready() {
+  unset -f uncommitted cleancaches sshagent motd motdheader
+}
+
+
 export SECRET_ROOT="$HOME/.ttypty/secrets"
+export EDITOR=vim
+export VISUAL="$EDITOR"
+export GIT_EDITOR="$EDITOR"
+export GOPATH="$HOME/.cache/go"
+[ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+
+alias vi="\$EDITOR"
+alias less="less -R"
+if command -v bat > /dev/null; then
+  alias cat=bat
+  export BAT_OPTS="-pp --theme 'Monokai Extended'"
+fi
+command -v rg > /dev/null && alias grep="rg"
+if command -v delta > /dev/null; then
+  export GIT_PAGER=delta
+  export DELTA_PAGER="less -R -c -X"
+fi
+
