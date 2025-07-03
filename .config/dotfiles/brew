@@ -13,4 +13,5 @@ if [ -d "/opt/homebrew" ]; then
   DIR="$HOMEBREW_PREFIX/share/zsh-completion"
   [ -d "$DIR" ] && export FPATH="$DIR:$FPATH"
   unset DIR NAME
+  export HOMEBREW_NO_AUTO_UPDATE=1
 fi

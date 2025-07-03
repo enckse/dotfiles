@@ -166,6 +166,6 @@ check_version() {
   fi
 }
 
-."$HOME/.config/dotfiles/packages"
+. "$HOME/.config/dotfiles/packages"
 [ "$UPDATE" -eq 0 ] && [ "$RAN" -eq 0 ] && touch "$RUN"
 find "$PKGS_CACHE" -type f -mtime +30 -delete
