@@ -5,7 +5,6 @@ LOCAL_BIN="$HOME/.local/bin"
 FORCE=0
 RAN=0
 UPDATE=0
-INIT=0
 VERS=0.0.1
 
 while getopts "fcuv" opt ; do
@@ -76,7 +75,7 @@ EOF
   esac
 done
 
-[ ! -d "$PKGS_CACHE" ] && [ "$UPDATE" -eq 0 ] && echo "no cache, initializing via update" && UPDATE=1 && INIT=1
+[ ! -d "$PKGS_CACHE" ] && [ "$UPDATE" -eq 0 ] && echo "no cache, initializing via update" && UPDATE=1
 mkdir -p "$PKGS_CACHE"
 
 if [ "$FORCE" -eq 0 ] && [ -e "$RUN" ]; then
@@ -167,6 +166,6 @@ check_version() {
   fi
 }
 
-source "$HOME/.config/dotfiles/packages"
+."$HOME/.config/dotfiles/packages"
 [ "$UPDATE" -eq 0 ] && [ "$RAN" -eq 0 ] && touch "$RUN"
 find "$PKGS_CACHE" -type f -mtime +30 -delete
