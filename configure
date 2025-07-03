@@ -2,6 +2,7 @@
 dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
   echo ".${SHELL_NAME}rc"
+  echo ".local/bin"
   echo ".config/dotfiles/"
   echo ".ssh/"
   echo ".config/vim/"

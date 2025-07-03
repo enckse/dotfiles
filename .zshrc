@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+[ -e "$HOME/.config/dotfiles/brew" ] && . "$HOME/.config/dotfiles/brew"
 autoload -Uz compinit && compinit
 source "$HOME/.config/dotfiles/shell"
 bindkey '\e[H' beginning-of-line
@@ -17,7 +18,12 @@ else
 fi
 
 command -v clipmgr > /dev/null && clipmgr
-command -v container > /dev/null && alias devcontainer="container run -it --mount type=bind,source=$HOME/Workspace,target=/opt/workspace --cwd /opt/workspace --rm alpine:edge /bin/sh"
+if command -v container > /dev/null; then
+    devcontainer() {
+        container system start
+        container run -it --mount "type=bind,source=$HOME/Workspace,target=/opt/workspace" --cwd /opt/workspace --rm alpine:edge /bin/sh
+    }
+fi
 
 uncommitted
 

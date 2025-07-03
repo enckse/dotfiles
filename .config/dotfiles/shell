@@ -16,6 +16,8 @@ motd() {
 
 loadcomps() {
   [ ! -d "$SHELL_COMPS" ] && return
+  [ ! -e "$HOME/.config/dotfiles/completions" ] && return
+  . "$HOME/.config/dotfiles/completions"
   for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
     . "$FILE"
   done
