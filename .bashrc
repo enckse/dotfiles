@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 source "$HOME/.config/dotfiles/shell"
 
-[ -e "/etc/bash/bashrc" ] && . /etc/bash/bashrc
-
 for DIR in ".cache/staticcheck" \
            ".cache/gopls" \
            ".cache/go-build" \

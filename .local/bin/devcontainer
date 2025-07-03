@@ -69,7 +69,7 @@ HASH=$(sha256sum "$CONTAINERFILE" | cut -c 1-7)
 NAME="$CALLSIGN$HASH.$(date +%Y%U)"
 MOUNTS=""
 MOUNTS="--mount type=bind,source=$FS/home,target=$USER_HOME/"
-MOUNTS="$MOUNTS --mount type=bind,source=$FS/apks,target=/etc/apk/cache"
+MOUNTS="$MOUNTS --mount type=bind,source=$FS/apks,target=/opt/apks"
 MOUNTS="$MOUNTS --mount type=bind,source=$HOME/.local,target=$USER_HOME/.host"
 CWD="$USER_HOME"
 for DIR in $USER_MOUNTS; do
