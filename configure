@@ -9,7 +9,7 @@ dotfiles() {
       echo ".local/bin/transcode-media"
       echo ".local/bin/devcontainer"
       echo ".gitconfig"
-      echo ".config/git/tools.config"
+      echo ".config/swiftbar/"
       command -v kitty > /dev/null && echo ".config/kitty"
       ;;
     "Linux")

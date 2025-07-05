@@ -23,8 +23,6 @@
 [merge]
     conflictstyle = diff3
 # overrides
-[include]
-    path = ~/.config/git/tools.config
 [core]
     hooksPath = ~/.config/git/hooks
 [diff "lb"]

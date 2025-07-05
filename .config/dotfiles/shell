@@ -35,18 +35,12 @@ sshagent() {
   ssh-add "$HOME/.ssh/"*.privkey >/dev/null 2>&1
 }
 
-uncommitted() {
-  if command -v git-uncommitted > /dev/null; then
-    motd git uncommitted
-  fi
-}
-
 cleancaches() {
   [ -d "$HOME/.cache/vim" ] && find "$HOME/.cache/vim" -type f -mmin +120 -delete
 }
 
 shellready() {
-  unset -f uncommitted cleancaches loadcomps sshagent motd motdheader shellready
+  unset -f cleancaches loadcomps sshagent motd motdheader shellready
 }
 
 
