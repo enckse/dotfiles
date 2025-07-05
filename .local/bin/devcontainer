@@ -140,6 +140,10 @@ for DIR in $USER_MOUNTS; do
     CWD="$(echo "$PWD" | sed "s#$HOME#$USER_HOME#g")"
   fi
 done
+TMPFS=""
+for DIR in $USER_TMPFS; do
+  TMPFS="$TMPFS --tmpfs $USER_HOME/$DIR"
+done
 
 ID="$(date +%Y%m%d%H%M%S).$NAME"
 echo
@@ -154,5 +158,6 @@ exec container \
     --env USER="$USER" \
     --env SHELL="$USER_SHELL" \
     ${MOUNTS} \
+    ${TMPFS} \
     "$NAME" \
     "$USER_SHELL"

@@ -42,13 +42,7 @@ uncommitted() {
 }
 
 cleancaches() {
-  for DIR in ".cache/staticcheck" \
-             ".cache/gopls" \
-             ".cache/go-build" \
-             ".cache/vim"; do
-    DIR="$HOME/$DIR"
-    [ -d "$DIR" ] && find "$DIR" -type f -mmin +120 -delete
-  done
+  [ -d "$HOME/.cache/vim" ] && find "$HOME/.cache/vim" -type f -mmin +120 -delete
 }
 
 shellready() {
