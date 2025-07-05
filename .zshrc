@@ -8,6 +8,13 @@ cleancaches
 sshagent
 loadcomps
 
+for CMD in git vim vi; do
+    alias $CMD="echo $CMD disabled"
+done
+quickfix() {
+    /usr/bin/vim --clean $@
+}
+
 if command -v wac > /dev/null; then
   motd wac service
 else
