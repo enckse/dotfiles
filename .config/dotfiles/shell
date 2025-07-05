@@ -1,19 +1,4 @@
 #!/bin/sh
-motdheader() {
-  echo "[$1]"
-  echo "==="
-}
-
-motd() {
-  data=$($@)
-  if [ -z "$data" ]; then
-    return
-  fi
-  motdheader "$1"
-  echo "$data"
-  echo
-}
-
 loadcomps() {
   [ ! -e "$HOME/.config/dotfiles/completions" ] && return
   . "$HOME/.config/dotfiles/completions"
@@ -40,7 +25,7 @@ cleancaches() {
 }
 
 shellready() {
-  unset -f cleancaches loadcomps sshagent motd motdheader shellready
+  unset -f cleancaches loadcomps sshagent shellready
 }
 
 
