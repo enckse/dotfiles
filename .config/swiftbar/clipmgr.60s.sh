@@ -13,6 +13,7 @@ find "$CACHE" -type f -mtime +3 -delete
 LOG="$CACHE/$(date +%Y-%m-%d).log"
 printf " 📋\n---\n"
 date
+echo "---"
 [ -e "$LOG" ] && tail -n 10 "$LOG"
 if [ -z "$CONTENT" ]; then
   exit 0
