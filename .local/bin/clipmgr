@@ -1,4 +1,5 @@
 #!/bin/sh
+[ -n "$SSH_CONNECTION" ] && exit 0
 CLIP="pbcopy"
 PASTE="pbpaste"
 APP="/Applications/ClipMgr.app"

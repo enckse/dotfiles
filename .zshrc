@@ -18,6 +18,7 @@ else
 fi
 
 command -v clipmgr > /dev/null && clipmgr
+
 if command -v container > /dev/null; then
     devcontainer() {
         container system start
