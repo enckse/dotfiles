@@ -82,7 +82,7 @@ _header() {
 
 _version() {
   _header "$1"
-  git-feed -url "$1"
+  git ls-remote "$1" | tr '\t' ' ' | cut -d ' ' -f 2 | grep "refs/tags" | sed 's#refs/tags/##g' | grep -v '{}$'
 }
 
 go_version() {

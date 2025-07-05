@@ -4,10 +4,6 @@ go_version \
   "git.sr.ht/~enckse/lockbox/cmd/lb" \
   "v1.9.0"
 go_version \
-  "https://git.sr.ht/~enckse/git-tools" \
-  "git.sr.ht/~enckse/git-tools/cmd/..." \
-  "v0.5.0"
-go_version \
   "https://github.com/dominikh/go-tools" \
   "honnef.co/go/tools/cmd/staticcheck" \
   "v0.6.1"
@@ -48,7 +44,7 @@ check_version \
 check_version \
   "https://github.com/rxhanson/Rectangle"
 check_version \
-  "https://gitlab.alpinelinux.org/alpine/aports"
+  "https://gitlab.alpinelinux.org/alpine/aports.git/"
 check_version \
   "https://github.com/restic/restic"
 check_version \
