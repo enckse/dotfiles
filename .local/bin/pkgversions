@@ -55,27 +55,6 @@ if [ "$FORCE" -eq 0 ] && [ -e "$RUN" ]; then
   fi
 fi
 
-_store() {
-  name=$(echo "$1" | tr -cd "[:alnum:]._-")
-  vers=$(echo "$2" | tr -cd "[:alnum:]._-")
-  hashed="$(echo "$1 -> $2" | sha256sum | cut -c 1-7)"
-  file="$PKGS_CACHE/$name.$vers.$hashed"
-  if [ -e "$file" ]; then
-    touch "$file"
-    return
-  fi
-  echo "$1 -> $2"
-  printf "  processed? (y/N) "
-  read yesno
-  case "$yesno" in
-    "Y" | "y")
-      echo "$1 $2" > "$file"
-      return
-      ;;
-  esac
-  RAN=1
-}
-
 _header() {
   echo "processing: $1" >&2
 }
@@ -115,17 +94,24 @@ editor_plugin() {
 check_version() {
   [ "$UPDATE" -eq 1 ] && return
   FOUND=0
-  BASE=$(basename "$1")
-  for vers in $(_version "$1"); do
-    FOUND=1
-    _store "$BASE" "$vers"
-  done
-  if [ -z "$FILTER" ] && [ "$FOUND" -eq 0 ]; then
-    echo "no versions found"
-    exit 1
+  BASE=$(echo "$1" | tr -cd "[:alnum:]._-" | sed 's/^https//g')
+  _version "$1" | sort -u > "$BASE"
+  PREV="$BASE.prev"
+  touch "$PREV"
+  if diff -u "$PREV" "$BASE"; then
+    return
   fi
+  printf "  processed? (y/N) "
+  read yesno
+  case "$yesno" in
+    "Y" | "y")
+      mv "$BASE" "$PREV"
+      return
+      ;;
+  esac
+  RAN=1
 }
 
-source "$HOME/.config/dotfiles/packages"
+. "$HOME/.config/dotfiles/packages"
 [ "$UPDATE" -eq 0 ] && [ "$RAN" -eq 0 ] && touch "$RUN"
 find "$PKGS_CACHE" -type f -mtime +30 -delete
