@@ -1,9 +1,9 @@
 #!/bin/sh -e
 VERS="0.1.0"
 LIB="$HOME/.config/devcontainer"
-BUILDFILE="$HOME/.cache/devcontainer"
-mkdir -p "$BUILDFILE"
-BUILDFILE="$BUILDFILE/building"
+CACHE="$HOME/.cache/devcontainer"
+mkdir -p "$CACHE"
+BUILDFILE="$CACHE/building"
 [ ! -d "$LIB" ] && echo "configs not found" && exit 1
 ENV="$HOME/.config/devcontainer/env.sh"
 . "$ENV"
@@ -26,6 +26,7 @@ IS_STOP="stop"
 STOP=0
 CLEAN=0
 REBUILD=0
+ORPHANS=0
 if [ -n "$1" ]; then
   case "$1" in
     "version")
@@ -34,6 +35,9 @@ if [ -n "$1" ]; then
       ;;
     "$IS_STOP")
       STOP=1
+      ;;
+    "orphans")
+      ORPHANS=1
       ;;
     "completions")
       {
@@ -79,6 +83,16 @@ _getcontainers() {
   container $1 ls $2 | grep "$CALLSIGN" | cut -d " " -f 1 | xargs container $3 $4
 }
 
+_orphans() {
+  for RUNNING in $(container ls --all | grep "$CALLSIGN" | cut -d " " -f 1); do
+    if ps aux | grep "container run" | grep -q "$RUNNING"; then
+      continue
+    fi
+    echo "stopping orphan container: $RUNNING"
+    container stop "$RUNNING"
+  done
+}
+
 _stopcontainers() {
   _getcontainers "" "--all" "" "stop"
   _getcontainers "" "--all" "" "delete"
@@ -94,6 +108,7 @@ if ! container system status 2>&1 | grep -q '^apiserver is running$'; then
   echo "starting container system..."
   container system start
 fi
+[ "$ORPHANS" -eq 1 ] && _orphans && exit 0
 [ "$STOP" -eq 1 ] && _stopcontainers && exit 0
 if [ "$CLEAN" -eq 1 ]; then
   _stopall
@@ -106,15 +121,6 @@ if [ "$REBUILD" -eq 0 ]; then
   fi
 fi
 
-if [ "$CLEAN" -eq 0 ]; then
-  for RUNNING in $(container ls --all | grep "$CALLSIGN" | cut -d " " -f 1); do
-    if ps aux | grep "container run" | grep -q "$RUNNING"; then
-      continue
-    fi
-    echo "stopping orphan container: $RUNNING"
-    container stop "$RUNNING"
-  done
-fi
 
 while [ -e "$BUILDFILE" ]; do sleep 1; printf "."; done
 if [ "$REBUILD" -eq 1 ]; then

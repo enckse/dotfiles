@@ -23,6 +23,7 @@ else
   echo
 fi
 
+command -v devcontainer > /dev/null && (devcontainer orphans >/dev/null 2>&1 &)
 command -v clipmgr > /dev/null && clipmgr
 
 uncommitted
