@@ -18,6 +18,7 @@ if [ ! -e "$CONTAINERFILE" ] || [ ! -e "$ENV" ]; then
 fi
 CALLSIGN="devcontainer."
 NAME="${CALLSIGN}$(sha256sum "$CONTAINERFILE" | cut -c 1-7).$(date +%Y%U)"
+ID="$(date +%Y%m%d%H%M%S).$NAME"
 IS_CLEAN="clean"
 IS_REBUILD="rebuild"
 IS_STOP="stop"
@@ -145,7 +146,6 @@ for DIR in $USER_TMPFS; do
   TMPFS="$TMPFS --tmpfs $USER_HOME/$DIR"
 done
 
-ID="$(date +%Y%m%d%H%M%S).$NAME"
 echo
 exec container \
     run \
