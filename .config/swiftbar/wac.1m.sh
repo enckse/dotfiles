@@ -6,6 +6,10 @@
 #
 # Dependencies: none.
 
+LOCKER="$HOME/.local/bin/is-screen-locked"
+[ ! -x "$LOCKER" ] && exit 0
+! "$LOCKER" && exit 0
+
 _notavailable() {
   echo " ∅ wac"
   exit 0

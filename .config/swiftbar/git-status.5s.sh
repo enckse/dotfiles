@@ -6,6 +6,10 @@
 #
 # Dependencies: none.
 
+LOCKER="$HOME/.local/bin/is-screen-locked"
+[ ! -x "$LOCKER" ] && exit 0
+! "$LOCKER" && exit 0
+
 BIN="$HOME/.local/bin/git-uncommitted"
 if [ ! -x "$BIN" ]; then
   echo " ∅ git"

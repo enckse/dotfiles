@@ -6,6 +6,7 @@ dotfiles() {
   echo ".local/bin/git-uncommitted"
   case "$(uname)" in
     "Darwin")
+      echo ".local/bin/is-screen-locked"
       echo ".local/bin/transcode-media"
       echo ".local/bin/devcontainer"
       echo ".gitconfig"
