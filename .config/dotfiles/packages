@@ -51,3 +51,5 @@ check_version \
   "https://gitlab.alpinelinux.org/alpine/aports"
 check_version \
   "https://github.com/restic/restic"
+check_version \
+  "https://github.com/swiftbar/SwiftBar"
