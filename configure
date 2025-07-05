@@ -2,12 +2,25 @@
 dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
   echo ".${SHELL_NAME}rc"
-  echo ".local/bin"
   echo ".config/dotfiles/"
-  echo ".ssh/"
-  echo ".config/vim/"
-  echo ".config/git/"
-  command -v kitty > /dev/null && echo ".config/kitty"
+  case "$(uname)" in
+    "Darwin")
+      echo ".local/bin/clipmgr"
+      echo ".local/bin/transcode-media"
+      echo ".local/bin/devcontainer"
+      echo ".gitconfig"
+      echo ".config/git/tools.config"
+      command -v kitty > /dev/null && echo ".config/kitty"
+      ;;
+    "Linux")
+      echo ".ssh/"
+      echo ".local/bin/go-lint"
+      echo ".local/bin/go-mod-updates"
+      echo ".local/bin/pkgversions"
+      echo ".config/vim/"
+      echo ".config/git/"
+      ;;
+  esac
 }
 
 DIR=""

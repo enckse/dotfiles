@@ -3,6 +3,7 @@ source "$HOME/.config/dotfiles/shell"
 
 cleancaches
 sshagent
+loadcomps
 uncommitted
 
 USE_HOST="\h"

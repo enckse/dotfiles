@@ -15,7 +15,8 @@ motd() {
 }
 
 loadcomps() {
-  [ ! -d "$SHELL_COMPS" ] && return
+  [ ! -e "$HOME/.config/dotfiles/completions" ] && return
+  . "$HOME/.config/dotfiles/completions"
   for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
     . "$FILE"
   done
@@ -62,7 +63,7 @@ export SECRET_ROOT="$HOME/.ttypty/secrets"
 export EDITOR=vim
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
-export GOPATH="$HOME/.cache/go"
+command -v go > /dev/null && export GOPATH="$HOME/.cache/go"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 

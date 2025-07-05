@@ -1,0 +1,95 @@
+#!/bin/sh -e
+VERS="0.0.1"
+LIB="$HOME/.config/devcontainer"
+[ ! -d "$LIB" ] && echo "configs not found" && exit 1
+ENV="$HOME/.config/devcontainer/env.sh"
+. "$ENV"
+if [ -z "$USER_HOME" ] || [ -z "$USER_SHELL" ] || [ -z "$USER_MOUNTS" ]; then
+  echo "user settings not configured"
+  exit 1
+fi
+CONTAINERFILE="$LIB/Containerfile"
+if [ ! -e "$CONTAINERFILE" ] || [ ! -e "$ENV" ]; then
+  echo "no containerfile/env file?"
+  exit 1
+fi
+CALLSIGN="devcontainer."
+NAME="${CALLSIGN}$(sha256sum "$CONTAINERFILE" | cut -c 1-7).$(date +%Y%U)"
+IS_CLEAN="clean"
+IS_REBUILD="rebuild"
+
+CLEAN=0
+REBUILD=0
+if [ -n "$1" ]; then
+  case "$1" in
+    "version")
+      echo "$VERS"
+      exit 0
+      ;;
+    "completions")
+      exit 0
+      ;;
+    "$IS_REBUILD")
+      CLEAN=1
+      REBUILD=1
+      ;;
+    "$IS_CLEAN")
+      CLEAN=1
+      ;;
+  esac
+fi
+
+_getcontainers() {
+  container $1 ls $2 | grep "^$CALLSIGN" | cut -d " " -f 1 | xargs container $3 $4
+}
+
+_stopall() {
+  _getcontainers "" "--all" "" "stop"
+  _getcontainers "" "--all" "" "delete"
+  _getcontainers "images" "" "images" "delete"
+  container images prune
+}
+
+container system start
+if [ "$CLEAN" -eq 1 ]; then
+  _stopall
+  [ "$REBUILD" -eq 0 ] && exit 0
+fi
+
+if [ "$REBUILD" -eq 0 ]; then
+  if ! container images ls | grep -q "^$NAME"; then
+    REBUILD=1
+  fi
+fi
+
+if [ "$REBUILD" -eq 1 ]; then
+  container build \
+    --build-arg USER_SHELL="$USER_SHELL" \
+    --build-arg USER="$USER" \
+    -f "$CONTAINERFILE" \
+    -t "$NAME"
+fi
+
+MOUNTS=""
+MOUNTS="--mount type=bind,source=$HOME/.devcontainer,target=$USER_HOME/"
+MOUNTS="$MOUNTS --mount type=bind,source=$HOME/.local,target=$USER_HOME/.host"
+CWD="$USER_HOME"
+for DIR in $USER_MOUNTS; do
+  MOUNTS="$MOUNTS --mount type=bind,source=$HOME/$DIR,target=$USER_HOME/$DIR"
+  if echo "$PWD" | grep -q "$HOME/$DIR"; then
+    CWD="$(echo "$PWD" | sed "s#$HOME#$USER_HOME#g")"
+  fi
+done
+echo
+exec container \
+    run \
+    -it \
+    --rm \
+    --cwd "$CWD" \
+    --user $USER \
+    --env IS_CONTAINER="$(echo "$NAME" | cut -d "." -f 1)" \
+    --env USER="$USER" \
+    --env SHELL="$USER_SHELL" \
+    ${MOUNTS} \
+    "$NAME" \
+    "$USER_SHELL"
