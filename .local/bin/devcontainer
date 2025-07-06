@@ -27,6 +27,7 @@ STOP=0
 CLEAN=0
 REBUILD=0
 ORPHANS=0
+NEW_BUILD=0
 if [ -n "$1" ]; then
   case "$1" in
     "version")
@@ -118,12 +119,21 @@ fi
 if [ "$REBUILD" -eq 0 ]; then
   if ! container images ls | grep -q "^$NAME"; then
     REBUILD=1
+    NEW_BUILD=1
   fi
 fi
 
-
-while [ -e "$BUILDFILE" ]; do sleep 1; printf "."; done
+while [ -e "$BUILDFILE" ]; do 
+  if [ "$REBUILD" -eq 1 ]; then
+    echo "container image is building, please wait"
+    REBUILD=0
+  fi
+  sleep 1
+  printf "."
+done
 if [ "$REBUILD" -eq 1 ]; then
+  ARGS=""
+  [ "$NEW_BUILD" -eq 1 ] && ARGS="--no-cache"
   touch "$BUILDFILE"
   _rmbuildfile() {
     rm -f "$BUILDFILE"
@@ -132,6 +142,7 @@ if [ "$REBUILD" -eq 1 ]; then
   container build \
     --build-arg USER_SHELL="$USER_SHELL" \
     --build-arg USER="$USER" \
+    ${ARGS} \
     -f "$CONTAINERFILE" \
     -t "$NAME"
   _rmbuildfile
