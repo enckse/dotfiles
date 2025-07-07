@@ -8,7 +8,14 @@ GITCLEAN_NORMAL=''
 
 _gitcmd() {
   HEADER=$(echo "$2" | cut -d " " -f 1)
-  /usr/bin/git -C "$1" ${2} | sed "s/^/ -> /g;s/$/ ($HEADER)/g"
+  RESULT=$(/usr/bin/git -C "$1" ${2})
+  if [ "$HEADER" = "branch" ]; then
+    RESULT=$(echo "$RESULT" | grep -E -v '(master|main)')
+  fi
+  if [ -z "$RESULT" ]; then
+    return
+  fi
+  echo " ($HEADER)"
 }
 
 _gitstatus() {

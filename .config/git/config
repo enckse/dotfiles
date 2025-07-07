@@ -27,9 +27,9 @@
     hooksPath = ~/.config/git/hooks
 [diff "lb"]
     textconv = lb conv
-[url "git.local:~/Store/git/private/"]
+[url "git.local:/mnt/storage/store/git/private/"]
     insteadOf = private:
-[url "git.local:~/Store/git/sr.ht/"]
+[url "git.local:/mnt/storage/store/git/sr.ht/"]
     insteadOf = sr.ht:
 [includeIf "hasconfig:remote.*.url:private:**"]
     path = ~/.config/git/local.config

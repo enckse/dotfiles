@@ -21,7 +21,7 @@ if [ ! -e "$ENV" ]; then
 fi
 . "$ENV"
 if command -v wac > /dev/null; then
-  MESSAGE=$(wac service)
+  MESSAGE=$(wac motd)
   DONE=$(wac "done")
   if [ "$DONE" = "true" ]; then
     if [ -z "$MESSAGE" ]; then
