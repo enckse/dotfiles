@@ -4,12 +4,12 @@ dotfiles() {
   echo ".${SHELL_NAME}rc"
   echo ".config/dotfiles/"
   echo ".local/bin/git-uncommitted"
+  echo ".gitconfig"
   case "$(uname)" in
     "Darwin")
       echo ".local/bin/is-screen-locked"
       echo ".local/bin/transcode-media"
       echo ".local/bin/devcontainer"
-      echo ".gitconfig"
       echo ".config/swiftbar/"
       command -v kitty > /dev/null && echo ".config/kitty"
       ;;
