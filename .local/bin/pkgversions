@@ -95,6 +95,7 @@ check_version() {
   [ "$UPDATE" -eq 1 ] && return
   BASE="$PKGS_CACHE/"$(echo "$1" | tr -cd "[:alnum:]._-" | sed 's/^https//g')
   _version "$1" | sort -u > "$BASE"
+  [ ! -s "$BASE" ] && echo "no versions, upstream error" && exit 1
   PREV="$BASE.prev"
   touch "$PREV"
   if diff -u "$PREV" "$BASE"; then
