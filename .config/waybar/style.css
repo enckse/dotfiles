@@ -1,0 +1,19 @@
+@import url("file:///etc/xdg/waybar/style.css");
+
+#custom-uncommitted {
+    padding-left: 5px;
+    padding-right: 5px;
+    background: green;
+}
+#custom-uncommitted.dirty {
+    background: red;
+}
+
+#custom-wac {
+    padding-left: 8px;
+    padding-right: 8px;
+    background: green;
+}
+#custom-wac.warning {
+    background: red;
+}
