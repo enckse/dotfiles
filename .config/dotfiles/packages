@@ -19,10 +19,6 @@ go_version \
   "https://github.com/mvdan/gofumpt" \
   "mvdan.cc/gofumpt" \
   "v0.8.0"
-go_version \
-  "https://github.com/theimpostor/osc" \
-  "github.com/theimpostor/osc" \
-  "v0.4.8"
 editor_plugin \
   "https://github.com/vim-airline/vim-airline"
 editor_plugin \
@@ -38,14 +34,4 @@ editor_plugin \
 editor_plugin \
   "https://github.com/itspriddle/vim-shellcheck"
 check_version \
-  "https://github.com/apple/container"
-check_version \
-  "https://github.com/kovidgoyal/kitty"
-check_version \
-  "https://github.com/rxhanson/Rectangle"
-check_version \
   "https://gitlab.alpinelinux.org/alpine/aports.git/"
-check_version \
-  "https://github.com/restic/restic"
-check_version \
-  "https://github.com/swiftbar/SwiftBar"
