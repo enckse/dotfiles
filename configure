@@ -3,16 +3,25 @@ dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
   echo ".${SHELL_NAME}rc"
   echo ".config/dotfiles/"
+  echo ".local/bin/git-uncommitted"
   echo ".gitconfig"
-  echo ".local/bin"
-  echo ".config/rc/"
-  command -v kitty > /dev/null && echo ".config/kitty"
-  command -v sway > /dev/null && echo ".config/sway"
-  command -v rofi > /dev/null && echo ".config/rofi"
-  command -v waybar > /dev/null && echo ".config/waybar"
-  echo ".ssh/"
-  echo ".config/vim/"
-  echo ".config/git/"
+  case "$(uname)" in
+    "Darwin")
+      echo ".local/bin/is-screen-locked"
+      echo ".local/bin/transcode-media"
+      echo ".local/bin/devcontainer"
+      echo ".config/swiftbar/"
+      command -v kitty > /dev/null && echo ".config/kitty"
+      ;;
+    "Linux")
+      echo ".ssh/"
+      echo ".local/bin/go-lint"
+      echo ".local/bin/go-mod-updates"
+      echo ".local/bin/pkgversions"
+      echo ".config/vim/"
+      echo ".config/git/"
+      ;;
+  esac
 }
 
 DIR=""

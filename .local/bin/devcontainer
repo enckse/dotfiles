@@ -1,0 +1,180 @@
+#!/bin/sh -e
+VERS="0.1.0"
+LIB="$HOME/.config/devcontainer"
+CACHE="$HOME/.cache/devcontainer"
+mkdir -p "$CACHE"
+BUILDFILE="$CACHE/building"
+[ ! -d "$LIB" ] && echo "configs not found" && exit 1
+ENV="$HOME/.config/devcontainer/env.sh"
+. "$ENV"
+if [ -z "$USER_HOME" ] || [ -z "$USER_SHELL" ] || [ -z "$USER_MOUNTS" ]; then
+  echo "user settings not configured"
+  exit 1
+fi
+CONTAINERFILE="$LIB/Containerfile"
+if [ ! -e "$CONTAINERFILE" ] || [ ! -e "$ENV" ]; then
+  echo "no containerfile/env file?"
+  exit 1
+fi
+CALLSIGN="devcontainer."
+NAME="${CALLSIGN}$(sha256sum "$CONTAINERFILE" | cut -c 1-7).$(date +%Y%U)"
+ID="$(date +%Y%m%d%H%M%S).$NAME"
+IS_CLEAN="clean"
+IS_REBUILD="rebuild"
+IS_STOP="stop"
+
+STOP=0
+CLEAN=0
+REBUILD=0
+ORPHANS=0
+NEW_BUILD=0
+if [ -n "$1" ]; then
+  case "$1" in
+    "version")
+      echo "$VERS"
+      exit 0
+      ;;
+    "$IS_STOP")
+      STOP=1
+      ;;
+    "orphans")
+      ORPHANS=1
+      ;;
+    "completions")
+      {
+        cat << EOF
+        #compdef _devcontainer devcontainer
+
+_devcontainer() {
+  local curcontext="\$curcontext" state len
+  typeset -A opt_args
+  _arguments \
+    '1: :->main'\
+    '*: :->args'
+
+  len=\${#words[@]}
+  case \$state in
+    main)
+        _arguments "1:main:($IS_CLEAN $IS_REBUILD $IS_STOP)"
+    ;;
+    *)
+  esac
+}
+
+compdef _devcontainer devcontainer
+EOF
+      }
+      exit 0
+      ;;
+    "$IS_REBUILD")
+      CLEAN=1
+      REBUILD=1
+      ;;
+    "$IS_CLEAN")
+      CLEAN=1
+      ;;
+    *)
+      echo "unknown command: $1"
+      exit 1
+      ;;
+  esac
+fi
+
+_getcontainers() {
+  container $1 ls $2 | grep "$CALLSIGN" | cut -d " " -f 1 | xargs container $3 $4
+}
+
+_orphans() {
+  for RUNNING in $(container ls --all | grep "$CALLSIGN" | cut -d " " -f 1); do
+    if ps aux | grep "container run" | grep -q "$RUNNING"; then
+      continue
+    fi
+    echo "stopping orphan container: $RUNNING"
+    container stop "$RUNNING"
+  done
+}
+
+_stopcontainers() {
+  _getcontainers "" "--all" "" "stop"
+  _getcontainers "" "--all" "" "delete"
+}
+
+_stopall() {
+  _stopcontainers
+  _getcontainers "images" "" "images" "delete"
+  container images prune
+}
+
+if ! container system status 2>&1 | grep -q '^apiserver is running$'; then
+  echo "starting container system..."
+  container system start
+fi
+[ "$ORPHANS" -eq 1 ] && _orphans && exit 0
+[ "$STOP" -eq 1 ] && _stopcontainers && exit 0
+if [ "$CLEAN" -eq 1 ]; then
+  _stopall
+  [ "$REBUILD" -eq 0 ] && exit 0
+fi
+
+if [ "$REBUILD" -eq 0 ]; then
+  if ! container images ls | grep -q "^$NAME"; then
+    REBUILD=1
+    NEW_BUILD=1
+  fi
+fi
+
+while [ -e "$BUILDFILE" ]; do 
+  if [ "$REBUILD" -eq 1 ]; then
+    echo "container image is building, please wait"
+    REBUILD=0
+  fi
+  sleep 1
+  printf "."
+done
+if [ "$REBUILD" -eq 1 ]; then
+  ARGS=""
+  [ "$NEW_BUILD" -eq 1 ] && ARGS="--no-cache"
+  touch "$BUILDFILE"
+  _rmbuildfile() {
+    rm -f "$BUILDFILE"
+  }
+  trap '_rmbuildfile' INT TERM HUP EXIT
+  container build \
+    --build-arg USER_SHELL="$USER_SHELL" \
+    --build-arg USER="$USER" \
+    ${ARGS} \
+    -f "$CONTAINERFILE" \
+    -t "$NAME"
+  _rmbuildfile
+fi
+
+MOUNTS=""
+MOUNTS="--mount type=bind,source=$HOME/.devcontainer,target=$USER_HOME/"
+MOUNTS="$MOUNTS --mount type=bind,source=$HOME/.local,target=$USER_HOME/.host"
+CWD="$USER_HOME"
+for DIR in $USER_MOUNTS; do
+  MOUNTS="$MOUNTS --mount type=bind,source=$HOME/$DIR,target=$USER_HOME/$DIR"
+  if echo "$PWD" | grep -q "$HOME/$DIR"; then
+    CWD="$(echo "$PWD" | sed "s#$HOME#$USER_HOME#g")"
+  fi
+done
+TMPFS=""
+for DIR in $USER_TMPFS; do
+  TMPFS="$TMPFS --tmpfs $USER_HOME/$DIR"
+done
+
+echo
+exec container \
+    run \
+    -it \
+    --rm \
+    --name "$ID" \
+    --cwd "$CWD" \
+    --user $USER \
+    --env IS_CONTAINER="$(echo "$NAME" | cut -d "." -f 1)" \
+    --env USER="$USER" \
+    --env SHELL="$USER_SHELL" \
+    ${MOUNTS} \
+    ${TMPFS} \
+    "$NAME" \
+    "$USER_SHELL"

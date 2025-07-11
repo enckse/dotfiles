@@ -31,7 +31,7 @@ _gitstatus() {
 
 FOUND=0
 {
-  for DIR in .ttypty workspace; do
+  for DIR in .ttypty Workspace; do
     for SUB in $(ls "$HOME/$DIR"); do
       REPO="$HOME/$DIR/$SUB"
       [ ! -d "$REPO/.git" ] && continue

@@ -1,0 +1,24 @@
+#!/bin/sh -e
+for file in *.*; do
+  ext=$(basename "$file" | rev | cut -d "." -f 1 | rev | tr '[:upper:]' '[:lower:]')
+  dt=$(date +"%d.T_%H%M%S")
+  hashed=$(shasum -a 256 "$file" | cut -c 1-7)
+  tmpl="$dt.$hashed."
+  case "$ext" in
+    "jpeg" | "jpg" | "mov")
+      [ "$ext" != "mov" ] && [ -z "$TRANSCODE_JPEG" ] && continue
+      to="$tmpl$ext"
+      echo "renaming: $file"
+      echo "  -> $to"
+      mv "$file" "$to"
+      ;;
+    "heic")
+      tmpl="${tmpl}jpeg"
+      echo "formatting: $file"
+      sips --setProperty format jpeg --out "${tmpl}" "$file" 2>&1 | sed 's#^\s*##g' | sed 's#^#  -> #g'
+      if [ -e "$tmpl" ]; then
+        rm -f "$file"
+      fi
+      ;;
+  esac
+done
