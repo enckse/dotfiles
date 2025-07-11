@@ -22,7 +22,7 @@ PS1="\u@\[\e[93m\]$USE_HOST\[\e[0m\] \W $ "
 unset USE_HOST
 {
   git-uncommitted
-  wac status
+  wac-status
   [ ! -e "/mnt/lbu/status" ] && echo "no etc backup"
   [ -s "/mnt/lbu/diff" ] && echo "etc changed"
 } | sed 's/^/-> /g'

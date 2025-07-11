@@ -92,7 +92,7 @@
     "custom/wac": {
     	"format": "{text}",
     	"interval": 30,
-    	"exec": "$HOME/.local/bin/wac json",
+    	"exec": "$HOME/.local/bin/wac-status json",
         "return-type": "json"
     }
 }
