@@ -3,7 +3,6 @@ input "1:1:AT_Translated_Set_2_keyboard" {
   xkb_options caps:ctrl_modifier
 }
 
-output HDMI-A-1 pos -1920 0
 output * bg #4688b0 solid_color
 
 set $sleep pkill -10 swayidle
