@@ -1,6 +1,10 @@
 #!/bin/sh
-GITDIRTY=""
-GITCLEAN=""
+GITDIRTY_ISSUE=""
+GITDIRTY_HIGHLIGHT=""
+GITDIRTY="⇆❌"
+GITCLEAN="⇆✅"
+GITDIRTY_NORMAL=''
+GITCLEAN_NORMAL=''
 
 _gitcmd() {
   HEADER=$(echo "$2" | cut -d " " -f 1)
@@ -25,20 +29,7 @@ _gitstatus() {
   } | sed "s#^#$BASE#g"
 }
 
-JSON=0
-[ -n "$1" ] && [ "$1" = "json" ] && JSON=1
-_text() {
-  if [ "$JSON" -eq 0 ]; then
-    echo "$1"
-    echo "---"
-    return
-  fi
-  printf "\"text\": \"%s git\", \"class\": \"%s\"" "$1" "$2"
-}
-
-DETAILS=""
 FOUND=0
-[ "$JSON" -eq 1 ] && printf "{"
 {
   for DIR in .ttypty workspace; do
     for SUB in $(ls "$HOME/$DIR"); do
@@ -47,21 +38,13 @@ FOUND=0
       SCAN=$(git -C "$REPO" config "status.scan" 2>/dev/null)
       [ -z "$SCAN" ] && SCAN="true"
       [ "$SCAN" != "true" ] && continue
-      STATUS=$(_gitstatus "$REPO" | grep -v '^$' | sed ':a;N;$!ba;s/\n/\\n/g')
+      STATUS=$(_gitstatus "$REPO" | grep -v '^$')
       [ -z "$STATUS" ] && continue
-      [ "$FOUND" -eq 0 ] && _text "$GITDIRTY" "dirty" && FOUND=1
-      [ -z "$DETAILS" ] && DETAILS="$STATUS" && continue
-      DETAILS="${DETAILS}\\n$STATUS"
+      [ "$FOUND" -eq 0 ] && printf " ${GITDIRTY_ISSUE}${GITDIRTY}${GITDIRTY_NORMAL}\n---\n" && FOUND=1
+      echo "$STATUS"
     done
   done
   if [ "$FOUND" -eq 0 ]; then
-    _text "$GITCLEAN" ""
-  else
-    if [ "$JSON" -eq 0 ]; then
-      echo "$DETAILS" | sed 's/\\n/\n/g'
-    else
-      printf ", \"tooltip\": \"%s\"" "$DETAILS"
-    fi
+    printf " ${GITDIRTY_HIGHLIGHT}${GITCLEAN}${GITCLEAN_NORMAL}\n---"
   fi
 } 2>/dev/null
-[ "$JSON" -eq 1 ] && printf "}"
