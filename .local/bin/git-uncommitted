@@ -28,7 +28,11 @@ _gitstatus() {
 JSON=0
 [ -n "$1" ] && [ "$1" = "json" ] && JSON=1
 _text() {
-  [ "$JSON" -eq 0 ] && return
+  if [ "$JSON" -eq 0 ]; then
+    echo "$1"
+    echo "---"
+    return
+  fi
   printf "\"text\": \"%s git\", \"class\": \"%s\"" "$1" "$2"
 }
 
