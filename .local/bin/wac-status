@@ -6,7 +6,7 @@ fi
 
 _cmd() {
   [ -e "$SUPPRESS" ] && date +%Y-%m-%d && return
-  curl --silent 'http://server.ttypty.com/status.txt'
+  curl 'http://server.ttypty.com/status.txt'
 
 }
 
