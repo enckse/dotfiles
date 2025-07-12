@@ -3,7 +3,7 @@ PKGS_CACHE="$HOME/.cache/pkgversions"
 RUN="$PKGS_CACHE/run"
 FORCE=0
 RAN=0
-VERS=0.0.1
+VERS=0.0.2
 
 while getopts "fcuv" opt ; do
   case $opt in
@@ -16,7 +16,29 @@ while getopts "fcuv" opt ; do
       ;;
     c)
       {
-      cat << EOF
+        USE_SHELL=$(basename "$SHELL")
+        [ "$USE_SHELL" = "zsh" ] && cat << EOF
+#compdef _pkgversions pkgversions
+
+_pkgversions() {
+  local curcontext="\$curcontext" state len
+  typeset -A opt_args
+  _arguments \
+    '1: :->main'\
+    '*: :->args'
+
+  len=\${#words[@]}
+  case \$state in
+    main)
+        _arguments "1:main:(-f)"
+    ;;
+    *)
+  esac
+}
+
+compdef _pkgversions pkgversions
+EOF
+       [ "$USE_SHELL" = "bash" ] && cat << EOF
 # pkgversions completion
 
 _pkgversions() {
