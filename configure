@@ -10,6 +10,7 @@ dotfiles() {
       echo ".local/bin/is-screen-locked"
       echo ".local/bin/transcode-media"
       echo ".local/bin/devcontainer"
+      echo ".local/bin/pkgversions"
       echo ".config/swiftbar/"
       command -v kitty > /dev/null && echo ".config/kitty"
       ;;
@@ -17,7 +18,6 @@ dotfiles() {
       echo ".ssh/"
       echo ".local/bin/go-lint"
       echo ".local/bin/go-mod-updates"
-      echo ".local/bin/pkgversions"
       echo ".config/vim/"
       echo ".config/git/"
       ;;

@@ -3,8 +3,6 @@ PKGS_CACHE="$HOME/.cache/pkgversions"
 RUN="$PKGS_CACHE/run"
 FORCE=0
 RAN=0
-UPDATE=0
-INIT=0
 VERS=0.0.1
 
 while getopts "fcuv" opt ; do
@@ -16,10 +14,6 @@ while getopts "fcuv" opt ; do
     f)
       FORCE=1
       ;;
-    u)
-      UPDATE=1
-      FORCE=1
-      ;;
     c)
       {
       cat << EOF
@@ -29,7 +23,7 @@ _pkgversions() {
   local cur
   cur=\${COMP_WORDS[COMP_CWORD]}
   if [ "\$COMP_CWORD" -eq 1 ]; then
-    COMPREPLY=( \$(compgen -W "-f -u" -- "\$cur") )
+    COMPREPLY=( \$(compgen -W "-f" -- "\$cur") )
   fi
 }
 
@@ -45,7 +39,6 @@ EOF
   esac
 done
 
-[ ! -d "$PKGS_CACHE" ] && [ "$UPDATE" -eq 0 ] && echo "no cache, initializing via update" && UPDATE=1 && INIT=1
 mkdir -p "$PKGS_CACHE"
 
 if [ "$FORCE" -eq 0 ] && [ -e "$RUN" ]; then
@@ -64,35 +57,7 @@ _version() {
   git ls-remote "$1" | tr '\t' ' ' | cut -d ' ' -f 2 | grep "refs/tags" | sed 's#refs/tags/##g' | grep -v '{}$'
 }
 
-go_version() {
-  go_install "$2" "$3"
-  [ "$UPDATE" -eq 1 ] && return
-  check_version "$1"
-}
-
-go_install() {
-  [ "$UPDATE" -eq 0 ] && return
-  [ -z "$1" ] && [ -z "$2" ] && echo "$@ has no version information to install" && exit 1
-  echo "go installing: $1"
-  INSTALLED="$PKGS_CACHE/installed.go.$(echo "$1" | tr -cd '[:alnum:]._-').$(echo "$1 $2" | sha256sum | cut -c 1-7)"
-  [ -e "$INSTALLED" ] && return
-  go install "$1@$2"
-  touch "$INSTALLED"
-}
-
-editor_plugin() {
-  [ "$UPDATE" -eq 0 ] && return
-  PACK="$HOME/.config/vim/pack/plugins/start"
-  mkdir -p "$PACK"
-  BASE=$(basename "$1")
-  DIR="$PACK/$BASE"
-  [ ! -d "$DIR" ] && echo "initializing vim plugin: $BASE" && git clone --quiet "$1" "$DIR"
-  echo "updating editor plugin: $BASE"
-  git -C "$DIR" pull --quiet 
-}
-
 check_version() {
-  [ "$UPDATE" -eq 1 ] && return
   BASE="$PKGS_CACHE/"$(echo "$1" | tr -cd "[:alnum:]._-" | sed 's/^https//g')
   _version "$1" | sort -u > "$BASE"
   [ ! -s "$BASE" ] && echo "no versions, upstream error" && exit 1
@@ -113,5 +78,5 @@ check_version() {
 }
 
 . "$HOME/.config/dotfiles/packages"
-[ "$UPDATE" -eq 0 ] && [ "$RAN" -eq 0 ] && touch "$RUN"
+[ "$RAN" -eq 0 ] && touch "$RUN"
 find "$PKGS_CACHE" -type f -mtime +30 -delete
