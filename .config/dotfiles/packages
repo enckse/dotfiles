@@ -10,7 +10,7 @@ go_version \
 go_version \
   "https://github.com/mgechev/revive" \
   "github.com/mgechev/revive" \
-  "v1.10.0"
+  "v1.11.0"
 go_version \
   "https://github.com/golang/tools" \
   "golang.org/x/tools/gopls" \
