@@ -17,7 +17,7 @@ if [ ! -e "$CONTAINERFILE" ] || [ ! -e "$ENV" ]; then
   exit 1
 fi
 CALLSIGN="devcontainer."
-NAME="${CALLSIGN}$(sha256sum "$CONTAINERFILE" | cut -c 1-7).$(date +%Y%U)"
+NAME="${CALLSIGN}$(sha256sum "$CONTAINERFILE" | cut -c 1-7).$(date +%Y%m)"
 ID="$(date +%Y%m%d%H%M%S).$NAME"
 IS_CLEAN="clean"
 IS_REBUILD="rebuild"
