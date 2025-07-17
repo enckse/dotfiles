@@ -1,0 +1,85 @@
+#!/bin/sh
+CLIP=""
+PASTE=""
+CACHE="$HOME/.cache/clipmgr"
+LOG="$CACHE/$(date +%Y-%m-%d).log"
+mkdir -p "$CACHE"
+find "$CACHE" -type f -mtime +7 -delete
+CLIP="pbcopy"
+PASTE="pbpaste"
+LAUNCHCTL="$HOME/Library/LaunchAgents/com.ttypty.clipmgr.plist"
+
+_setup() {
+  {
+  cat << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ttypty.clipmgr</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>$0</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>
+EOF
+  } > "$LAUNCHCTL"
+  launchctl load -w "$LAUNCHCTL"
+}
+
+if [ -n "$1" ]; then
+  case "$1" in
+    "setup")
+      _setup
+      ;;
+    "logs")
+      LOG="$(ls -1 "$CACHE" | sort -r | head -n 1)"
+      if [ -z "$LOG" ]; then
+        echo "no logs..."
+      else
+        tail -n 10 "$CACHE/$LOG"
+      fi
+      ;;
+    *)
+      echo "unknown command: $1"
+      exit 1
+      ;;
+  esac
+  exit 0
+fi
+
+_log() {
+  now=$(date +%Y-%m-%dT%H:%M:%S)
+  echo "$now - $1"
+}
+
+{
+  _log "initialized"
+  while : ; do
+    sleep 1
+    if [ -z "$($PASTE)" ]; then
+      continue
+    fi
+    CURRENT=$($PASTE | sha256sum | cut -c 1-7)
+    CLEAR=120
+    while [ "$CLEAR" -gt 0 ]; do
+      READ=$($PASTE | sha256sum | cut -c 1-7)
+      [ "$READ" != "$CURRENT" ] && break
+      CLEAR=$((CLEAR-1))
+      sleep 1
+    done
+    if [ "$CLEAR" -eq 0 ]; then
+      _log "clearing"
+      printf "" | $CLIP
+    fi
+  done
+} > "$LOG" 2>&1
