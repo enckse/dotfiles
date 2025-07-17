@@ -76,7 +76,7 @@ _header() {
 
 _version() {
   _header "$1"
-  git ls-remote "$1" | tr '\t' ' ' | cut -d ' ' -f 2 | grep "refs/tags" | sed 's#refs/tags/##g' | grep -v '{}$'
+  git -c http.lowSpeedTime=5 -c http.lowSpeedLimit=1000 ls-remote "$1" | tr '\t' ' ' | cut -d ' ' -f 2 | grep "refs/tags" | sed 's#refs/tags/##g' | grep -v '{}$'
 }
 
 check_version() {
