@@ -29,13 +29,6 @@ if command -v lb > /dev/null; then
     "completions"
 fi
 
-if command -v pkgversions > /dev/null; then
-  _gencomp \
-    pkgversions \
-    "$(pkgversions -v)" \
-    "-c"
-fi
-
 if command -v container > /dev/null; then
   _gencomp \
     container \
