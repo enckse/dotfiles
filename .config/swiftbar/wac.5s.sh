@@ -22,8 +22,7 @@ fi
 . "$ENV"
 if command -v wac > /dev/null; then
   MESSAGE=$(wac motd)
-  DONE=$(wac "done")
-  if [ "$DONE" = "true" ]; then
+  if [ "$?" -eq 0 ]; then
     if [ -z "$MESSAGE" ]; then
       printf " ●\n---\n"
     else
