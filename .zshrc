@@ -8,8 +8,6 @@ cleancaches
 sshagent
 loadcomps
 
-command -v wac >/dev/null && (wac manage >/dev/null 2>&1 &)
-
 for CMD in git vim vi; do
     alias $CMD="echo $CMD disabled"
 done

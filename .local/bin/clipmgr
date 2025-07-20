@@ -82,4 +82,4 @@ _log() {
       printf "" | $CLIP
     fi
   done
-} > "$LOG" 2>&1
+} >> "$LOG" 2>&1
