@@ -10,10 +10,10 @@ tools:
       - '%f:%l:%c: %trror: %m'
       - '%f:%l:%c: %tarning: %m'
       - '%f:%l:%c: %tote: %m'
-  bash-completion: &bash-completion
-    completion-command: 'bufcomp'
+  bash-bufcomp: &bash-bufcomp
+      completion-command: 'bufcomp'
 
 languages:
   bash:
-    - <<: *bash-completion
+    - <<: *bash-bufcomp
     - <<: *bash-shellcheck
