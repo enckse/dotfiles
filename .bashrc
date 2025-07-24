@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 source "$HOME/.config/dotfiles/shell"
 
-cleancaches
 sshagent
 loadcomps
 

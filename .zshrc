@@ -4,7 +4,6 @@ source "$HOME/.config/dotfiles/shell"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
 
-cleancaches
 sshagent
 loadcomps
 

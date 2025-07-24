@@ -20,12 +20,8 @@ sshagent() {
   ssh-add "$HOME/.ssh/"*.privkey >/dev/null 2>&1
 }
 
-cleancaches() {
-  [ -d "$HOME/.cache/vim" ] && find "$HOME/.cache/vim" -type f -mmin +120 -delete
-}
-
 shellready() {
-  unset -f cleancaches loadcomps sshagent shellready
+  unset -f loadcomps sshagent shellready
 }
 
 
@@ -33,12 +29,13 @@ export SHELL_COMPS="$HOME/.local/share/completions"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 export SECRET_ROOT="$HOME/.ttypty/secrets"
-export EDITOR=vim
+export EDITOR=hx
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 command -v go > /dev/null && export GOPATH="$HOME/.cache/go"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+[ "$EDITOR" != vim ] && alias vim="$EDITOR"
 
 alias vi="\$EDITOR"
 alias less="less -R"
