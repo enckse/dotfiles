@@ -5,6 +5,9 @@ true-color = true
 middle-click-paste = false
 auto-pairs = false
 bufferline = "always"
+continue-comments = false
+indent-heuristic = "simple"
+
 [editor.inline-diagnostics]
 cursor-line = "hint"
 other-lines = "hint"
