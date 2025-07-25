@@ -20,6 +20,7 @@ dotfiles() {
       echo ".local/bin/go-mod-updates"
       echo ".config/git/"
       echo ".config/helix/"
+      echo ".config/efm-langserver/"
       ;;
   esac
 }
