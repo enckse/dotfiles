@@ -11,7 +11,7 @@ tools:
       - '%f:%l:%c: %tarning: %m'
       - '%f:%l:%c: %tote: %m'
   bash-bufcomp: &bash-bufcomp
-      completion-command: 'bufcomp'
+      completion-command: 'bufcomp --type bash'
 
 languages:
   bash:
