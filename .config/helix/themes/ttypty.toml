@@ -1,6 +1,0 @@
-inherits = "monokai"
-
-"ui.bufferline" = {}
-"ui.bufferline.active" = { fg = "active_text", bg = "selection", modifiers = [
-  "bold",
-] }

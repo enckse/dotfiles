@@ -18,9 +18,8 @@ dotfiles() {
       echo ".ssh/"
       echo ".local/bin/go-lint"
       echo ".local/bin/go-mod-updates"
+      echo ".config/vim/"
       echo ".config/git/"
-      echo ".config/helix/"
-      echo ".config/efm-langserver/"
       ;;
   esac
 }

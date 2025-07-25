@@ -29,7 +29,7 @@ export SHELL_COMPS="$HOME/.local/share/completions"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 export SECRET_ROOT="$HOME/.ttypty/secrets"
-export EDITOR=hx
+export EDITOR=vim
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 command -v go > /dev/null && export GOPATH="$HOME/.cache/go"
