@@ -2,9 +2,9 @@
 command = "gopls"
 config = { "gofumpt" = true, "staticcheck" = true }
 
-[language-server.efm]
-command = "efm-langserver"
+[language-server.mbls]
+command = "mbls"
 
 [[language]]
-language-servers = [ "efm" ]
+language-servers = [ "mbls" ]
 name = "bash"
