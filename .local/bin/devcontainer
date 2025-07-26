@@ -140,6 +140,7 @@ if [ "$REBUILD" -eq 1 ]; then
   }
   trap '_rmbuildfile' INT TERM HUP EXIT
   container build \
+    --build-arg TERM="$TERM" \
     --build-arg USER_SHELL="$USER_SHELL" \
     --build-arg USER="$USER" \
     ${ARGS} \
