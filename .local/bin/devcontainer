@@ -1,7 +1,7 @@
 #!/bin/sh -e
 VERS="0.1.0"
 LIB="$HOME/.config/devcontainer"
-CACHE="$HOME/.cache/devcontainer"
+CACHE="$HOME/.local/state/devcontainer"
 mkdir -p "$CACHE"
 BUILDFILE="$CACHE/building"
 [ ! -d "$LIB" ] && echo "configs not found" && exit 1
@@ -145,7 +145,8 @@ if [ "$REBUILD" -eq 1 ]; then
     --build-arg USER="$USER" \
     ${ARGS} \
     -f "$CONTAINERFILE" \
-    -t "$NAME"
+    -t "$NAME" \
+    "$CACHE"
   _rmbuildfile
 fi
 
