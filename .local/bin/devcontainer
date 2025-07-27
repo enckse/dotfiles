@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh -ue
 VERS="0.1.0"
 LIB="$HOME/.config/devcontainer"
 CACHE="$HOME/.local/state/devcontainer"

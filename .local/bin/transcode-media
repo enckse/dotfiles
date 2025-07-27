@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh -ue
 for file in *.*; do
   ext=$(basename "$file" | rev | cut -d "." -f 1 | rev | tr '[:upper:]' '[:lower:]')
   dt=$(date +"%d.T_%H%M%S")
