@@ -18,5 +18,4 @@ vim_plugins() {
   echo "https://github.com/prabirshrestha/asyncomplete.vim"
   echo "https://github.com/prabirshrestha/vim-lsp"
   echo "https://github.com/bfrg/vim-qf-diagnostics"
-  echo "https://github.com/itspriddle/vim-shellcheck"
 }
