@@ -1,0 +1,22 @@
+#!/bin/sh -e
+dev_id() {
+  echo "$CONTAINER_IDENTIFIER"
+}
+
+go_tools() {
+  echo "mvdan.cc/gofumpt"
+  echo "golang.org/x/tools/gopls"
+  echo "honnef.co/go/tools/cmd/staticcheck"
+  echo "github.com/enckse/lockbox/cmd/lb"
+  echo "github.com/mgechev/revive"
+}
+
+vim_plugins() {
+  echo "https://github.com/vim-airline/vim-airline"
+  echo "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
+  echo "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
+  echo "https://github.com/prabirshrestha/asyncomplete.vim"
+  echo "https://github.com/prabirshrestha/vim-lsp"
+  echo "https://github.com/bfrg/vim-qf-diagnostics"
+  echo "https://github.com/itspriddle/vim-shellcheck"
+}

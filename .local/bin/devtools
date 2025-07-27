@@ -1,0 +1,56 @@
+#!/bin/sh -ue
+CONFIG="$HOME/.config/dotfiles/devtools"
+[ ! -e "$CONFIG" ] && exit 0
+. "$CONFIG"
+IDENTIFIER="$(dev_id)"
+[ -z "$IDENTIFIER" ] && exit 0
+CACHE="$HOME/.cache/devtools"
+IDENTIFIER="$CACHE/$IDENTIFIER.$(sha256sum "$CONFIG" | cut -c 1-7)"
+[ -e "$IDENTIFIER" ] && exit 0
+echo "initializing develepment tools..."
+mkdir -p "$CACHE"
+find "$CACHE" -type f -mtime +1 -delete
+
+_go_tools() {
+  [ -z "$GOPATH" ] && return
+  for BIN in $(go_tools); do
+    echo "installing go tool: $BIN"
+    if ! go install "$BIN@latest"; then
+      echo "  ^^^ failed ^^^"
+      exit 1
+    fi
+  done
+}
+
+_go_tools
+
+_vim_plugins() {
+  VIM_PLUGINS="$HOME/.config/vim/pack/plugin/start"
+  mkdir -p "$VIM_PLUGINS"
+  for PLUGIN in $(vim_plugins); do
+    NAME="$(basename "$PLUGIN")"
+    DEST="$VIM_PLUGINS/$NAME"
+    echo "configuring vim plugin: $NAME"
+    ERRORED=0
+    if [ ! -d "$DEST" ]; then
+      echo "-> cloning"
+      if ! git clone --quiet "$PLUGIN" "$DEST"; then
+        ERRORED=1
+      fi
+    fi
+    if [ "$ERRORED" -eq 0 ]; then
+      echo "-> updating"
+      if ! git -C "$DEST" pull --quiet; then
+        ERRORED=1
+      fi
+    fi
+    if [ "$ERRORED" -eq 1 ]; then
+      echo "  ^^^ failed ^^^"
+      exit 1
+    fi
+  done
+}
+
+_vim_plugins
+touch "$IDENTIFIER"
+exit 0

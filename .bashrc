@@ -3,7 +3,7 @@ source "$HOME/.config/dotfiles/shell"
 
 ssh_agent
 load_comps
-container_setup
+command -v devtools >/dev/null && devtools
 
 USE_HOST="\h"
 [ -n "$IS_CONTAINER" ] && USE_HOST="$IS_CONTAINER"

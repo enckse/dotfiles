@@ -146,7 +146,7 @@ if [ "$REBUILD" -eq 1 ]; then
     ${ARGS} \
     -f "$CONTAINERFILE" \
     -t "$NAME" \
-    "$HOME/.local/libexec/devcontainer"
+    "$CACHE"
   _rmbuildfile
 fi
 

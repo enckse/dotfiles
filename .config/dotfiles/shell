@@ -20,12 +20,8 @@ ssh_agent() {
   ssh-add "$HOME/.ssh/"*.privkey >/dev/null 2>&1
 }
 
-container_setup() {
-  command -v setup-devcontainer > /dev/null && setup-devcontainer
-}
-
 shell_ready() {
-  unset -f load_comps ssh_agent container_setup shell_ready
+  unset -f load_comps ssh_agent shell_ready
 }
 
 export SHELL_COMPS="$HOME/.local/share/completions"

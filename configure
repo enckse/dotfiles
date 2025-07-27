@@ -13,12 +13,12 @@ dotfiles() {
       echo ".local/bin/clipmgr"
       echo ".config/swiftbar/"
       command -v kitty > /dev/null && echo ".config/kitty"
-      mkdir -p "$HOME/.local/libexec" && cp -r "$PWD/.local/libexec/devcontainer" "$HOME/.local/libexec/"
       ;;
     "Linux")
       echo ".ssh/"
       echo ".local/bin/go-lint"
       echo ".local/bin/go-mod-updates"
+      echo ".local/bin/devtools"
       echo ".config/vim/"
       echo ".config/git/"
       ;;
