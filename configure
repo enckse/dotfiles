@@ -20,6 +20,7 @@ dotfiles() {
       echo ".local/bin/go-mod-updates"
       echo ".config/vim/"
       echo ".config/git/"
+      [ -n "$IS_CONTAINER" ] && echo ".local/bin/setup-container"
       ;;
   esac
 }

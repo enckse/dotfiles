@@ -1,5 +1,5 @@
 #!/bin/sh
-loadcomps() {
+load_comps() {
   [ ! -e "$HOME/.config/dotfiles/completions" ] && return
   . "$HOME/.config/dotfiles/completions"
   for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
@@ -7,7 +7,7 @@ loadcomps() {
   done
 }
 
-sshagent() {
+ssh_agent() {
   envfile="$HOME/.local/state/ssh-agent.env"
   mkdir -p "$(dirname "$envfile")"
   if ! pgrep -u "$USER" '^ssh-agent$' > /dev/null; then
@@ -20,10 +20,13 @@ sshagent() {
   ssh-add "$HOME/.ssh/"*.privkey >/dev/null 2>&1
 }
 
-shellready() {
-  unset -f loadcomps sshagent shellready
+container_setup() {
+  command -v setup-container > /dev/null && setup-container
 }
 
+shell_ready() {
+  unset -f load_comps ssh_agent container_setup shell_ready
+}
 
 export SHELL_COMPS="$HOME/.local/share/completions"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"

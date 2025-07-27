@@ -1,0 +1,53 @@
+#!/bin/sh -e
+[ -z "$CONTAINER_IDENTIFIER" ] && exit 0
+[ -z "$GOPATH" ] && exit 0
+CONTAINER_DIR="$HOME/.local/state/container"
+[ -e "$CONTAINER_DIR/$CONTAINER_IDENTIFIER" ] && exit 0
+find "$CONTAINER_DIR" -type f -mtime +1 -delete
+echo "initializing container tools..."
+mkdir -p "$CONTAINER_DIR"
+for BIN in "mvdan.cc/gofumpt" \
+           "golang.org/x/tools/gopls" \
+           "honnef.co/go/tools/cmd/staticcheck" \
+           "github.com/enckse/lockbox/cmd/lb" \
+           "github.com/mgechev/revive" \
+         ; do
+  echo "installing go tool: $BIN"
+  if ! go install "$BIN@latest"; then
+    echo "  ^^^ failed ^^^"
+    exit 1
+  fi
+done
+VIM_PLUGINS="$HOME/.config/vim/pack/plugin/start"
+mkdir -p "$VIM_PLUGINS"
+for PLUGIN in "https://github.com/vim-airline/vim-airline" \
+              "https://github.com/prabirshrestha/asyncomplete-buffer.vim" \
+              "https://github.com/prabirshrestha/asyncomplete-lsp.vim" \
+              "https://github.com/prabirshrestha/asyncomplete.vim" \
+              "https://github.com/prabirshrestha/vim-lsp" \
+              "https://github.com/bfrg/vim-qf-diagnostics" \
+              "https://github.com/itspriddle/vim-shellcheck" \
+            ; do
+  NAME="$(basename "$PLUGIN")"
+  DEST="$VIM_PLUGINS/$NAME"
+  echo "configuring vim plugin: $NAME"
+  ERRORED=0
+  if [ ! -d "$DEST" ]; then
+    echo "-> cloning"
+    if ! git clone --quiet "$PLUGIN" "$DEST"; then
+      ERRORED=1
+    fi
+  fi
+  if [ "$ERRORED" -eq 0 ]; then
+    echo "-> updating"
+    if ! git -C "$DEST" pull --quiet; then
+      ERRORED=1
+    fi
+  fi
+  if [ "$ERRORED" -eq 1 ]; then
+    echo "  ^^^ failed ^^^"
+    exit 1
+  fi
+done
+touch "$CONTAINER_DIR/$CONTAINER_IDENTIFIER"
+exit 0

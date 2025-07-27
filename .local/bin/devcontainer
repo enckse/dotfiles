@@ -173,6 +173,7 @@ exec container \
     --name "$ID" \
     --cwd "$CWD" \
     --user $USER \
+    --env CONTAINER_IDENTIFIER="$NAME" \
     --env IS_CONTAINER="$(echo "$NAME" | cut -d "." -f 1)" \
     --env USER="$USER" \
     --env SHELL="$USER_SHELL" \
