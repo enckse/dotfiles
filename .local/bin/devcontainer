@@ -28,7 +28,7 @@ CLEAN=0
 REBUILD=0
 ORPHANS=0
 NEW_BUILD=0
-if [ -n "$1" ]; then
+if [ $# -ge 1 ] && [ -n "$1" ]; then
   case "$1" in
     "version")
       echo "$VERS"
@@ -43,7 +43,7 @@ if [ -n "$1" ]; then
     "completions")
       {
         cat << EOF
-        #compdef _devcontainer devcontainer
+#compdef _devcontainer devcontainer
 
 _devcontainer() {
   local curcontext="\$curcontext" state len
