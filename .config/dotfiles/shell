@@ -21,7 +21,7 @@ ssh_agent() {
 }
 
 container_setup() {
-  command -v setup-container > /dev/null && setup-container
+  command -v setup-devcontainer > /dev/null && setup-devcontainer
 }
 
 shell_ready() {

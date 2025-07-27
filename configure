@@ -13,6 +13,7 @@ dotfiles() {
       echo ".local/bin/clipmgr"
       echo ".config/swiftbar/"
       command -v kitty > /dev/null && echo ".config/kitty"
+      mkdir -p "$HOME/.local/libexec" && cp -r "$PWD/.local/libexec/devcontainer" "$HOME/.local/libexec/"
       ;;
     "Linux")
       echo ".ssh/"
@@ -20,7 +21,6 @@ dotfiles() {
       echo ".local/bin/go-mod-updates"
       echo ".config/vim/"
       echo ".config/git/"
-      [ -n "$IS_CONTAINER" ] && echo ".local/bin/setup-container"
       ;;
   esac
 }
