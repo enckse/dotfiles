@@ -6,11 +6,11 @@ if executable("shellcheck")
       return ''
     end
   endfunction
-  
+
   function! s:update_error(val, temp, current)
     return extend(a:val, a:val.bufnr == a:temp ? { 'bufnr': a:current } : {})
   endfunction
-  
+
   function! s:shellcheck() abort
     let old_errorformat = &errorformat
     try
@@ -34,7 +34,7 @@ if executable("shellcheck")
       let &errorformat = old_errorformat
     endtry
   endfunction
-  
+
   def RunShellCheck()
       if &ft ==# 'sh'
           setlocal signcolumn=yes
@@ -43,7 +43,7 @@ if executable("shellcheck")
           exe ":DiagnosticsToggle"
       endif
   enddef
-  
+
   let g:qfdiagnostics = {
               \'virttext': v:true
               \}
