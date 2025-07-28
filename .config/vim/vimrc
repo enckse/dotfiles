@@ -16,13 +16,12 @@ set viminfo+=n$HOME/.cache/vim/viminfo
 let &g:directory=$HOME . '/.cache/vim'
 call CleanVimDir(&g:directory, "-mtime +1")
 
-let &g:undodir=&g:directory . '/undo//'
-let &g:backupdir=&g:directory . '/backup//'
-let &g:directory=&g:directory . '/swap//'
+let &g:undodir=&g:directory . '/undo/'
+let &g:backupdir=&g:directory . '/backup/'
+let &g:directory=&g:directory . '/swap/'
 call SetupVimDir(&g:directory)
 call SetupVimDir(&g:undodir)
 call SetupVimDir(&g:backupdir)
 call CleanVimDir(&g:undodir, "-mmin +60")
 
-highlight Pmenu ctermbg=grey guibg=grey ctermfg=black guifg=black
 let loaded_netrwPlugin = 1
