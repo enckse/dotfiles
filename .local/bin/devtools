@@ -4,8 +4,9 @@ CONFIG="$HOME/.config/dotfiles/devtools"
 . "$CONFIG"
 IDENTIFIER="$(dev_id)"
 [ -z "$IDENTIFIER" ] && exit 0
+IDENTIFIER="$IDENTIFIER.$(sha256sum "$CONFIG" | cut -c 1-7)"
 CACHE="$HOME/.cache/devtools"
-IDENTIFIER="$CACHE/$IDENTIFIER.$(sha256sum "$CONFIG" | cut -c 1-7)"
+IDENTIFIER="$CACHE/$(echo "$IDENTIFIER" | sha256sum | cut -c 1-7)"
 [ -e "$IDENTIFIER" ] && exit 0
 echo "initializing develepment tools..."
 mkdir -p "$CACHE"
