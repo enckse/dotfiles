@@ -7,7 +7,9 @@ IDENTIFIER="$(dev_id)"
 IDENTIFIER="$IDENTIFIER.$(sha256sum "$CONFIG" | cut -c 1-7)"
 CACHE="$HOME/.cache/devtools"
 IDENTIFIER="$CACHE/$(echo "$IDENTIFIER" | sha256sum | cut -c 1-7)"
-[ -e "$IDENTIFIER" ] && exit 0
+FORCE=0
+[ $# -ge 1 ] && [ -n "$1" ] && [ "$1" = "--force" ] && FORCE=1
+[ "$FORCE" -eq 0 ] && [ -e "$IDENTIFIER" ] && exit 0
 echo "initializing develepment tools..."
 mkdir -p "$CACHE"
 find "$CACHE" -type f -mtime +1 -delete
