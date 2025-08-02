@@ -16,6 +16,13 @@ if executable("lua-language-server")
         \ 'allowlist': ['lua']
         \ })
 endif
+if executable("zls")
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'zls',
+        \ 'cmd': {server_info->['zls']},
+        \ 'allowlist': ['zig'],
+        \ })
+endif
 
 let g:lsp_fold_enabled = 0
 let g:lsp_completion_documentation_delay = 500
