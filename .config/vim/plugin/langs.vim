@@ -1,41 +1,46 @@
 let buffer_ignores = []
 if executable('gopls')
-    call add(buffer_ignores, 'go')
+    let go_allow = ['go']
     au User lsp_setup call lsp#register_server({
         \ 'name': 'gopls',
         \ 'cmd': {server_info->['gopls']},
-        \ 'allowlist': ['go'],
+        \ 'allowlist': go_allow,
         \ 'initialization_options': {
         \     'staticcheck': v:true,
         \     'gofumpt': v:true,
         \ },
         \ })
+    let buffer_ignores = buffer_ignores + go_allow
 endif
 if executable("lua-language-server")
-    call add(buffer_ignores, 'lua')
+    let lua_allow = ['lua']
     au User lsp_setup call lsp#register_server({
         \ 'name': 'lua-language-server',
         \ 'cmd': {server_info->['lua-language-server']},
-        \ 'allowlist': ['lua']
+        \ 'allowlist': lua_allow,
         \ })
+    let buffer_ignores = buffer_ignores + lua_allow
 endif
 if executable("zls")
-    call add(buffer_ignores, 'zig')
+    let zig_allow = ['zig']
     au User lsp_setup call lsp#register_server({
         \ 'name': 'zls',
         \ 'cmd': {server_info->['zls']},
-        \ 'allowlist': ['zig'],
+        \ 'allowlist': zig_allow,
         \ })
+    let buffer_ignores = buffer_ignores + zig_allow
 endif
 if executable('clangd')
+    let c_allow = ['c', 'cpp', 'objc', 'objcpp']
     augroup lsp_setup
         autocmd!
         autocmd User lsp_setup call lsp#register_server({
                     \ 'name': 'clangd',
                     \ 'cmd': {server_info->['clangd']},
-                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                    \ 'whitelist': c_allow,
                     \ })
     augroup end
+    let buffer_ignores = buffer_ignores + c_allow
 endif
 
 let g:lsp_fold_enabled = 0
