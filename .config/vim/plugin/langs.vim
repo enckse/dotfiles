@@ -1,5 +1,8 @@
 let buffer_ignores = []
+let s:have_gopls = v:false
+let s:have_clangd = v:false
 if executable('gopls')
+    let s:have_gopls = v:true
     let go_allow = ['go']
     au User lsp_setup call lsp#register_server({
         \ 'name': 'gopls',
@@ -31,6 +34,7 @@ if executable("zls")
     let buffer_ignores = buffer_ignores + zig_allow
 endif
 if executable('clangd')
+    let s:have_clangd = v:true
     let c_allow = ['c', 'cpp', 'objc', 'objcpp']
     augroup lsp_setup
         autocmd!
@@ -55,7 +59,12 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre **.go,**.c,**.cpp,**.h,**.hpp call execute('LspDocumentFormatSync')
+    if s:have_clangd
+        autocmd! BufWritePre **.c,**.cpp,**.h,**.hpp call execute('LspDocumentFormatSync')
+    endif
+    if s:have_gopls
+        autocmd! BufWritePre **.go call execute('LspDocumentFormatSync')
+    endif
 endfunction
 
 augroup lsp_install
