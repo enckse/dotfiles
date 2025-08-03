@@ -64,7 +64,12 @@ _vim_plugins() {
   _count "$VIM_PLUGINS" "$COUNT" "vim-plugins"
 }
 
+_rust_tools() {
+  rust_tools
+}
+
 _go_tools
 _vim_plugins
+_rust_tools
 touch "$IDENTIFIER"
 exit 0

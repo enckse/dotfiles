@@ -1,6 +1,7 @@
 let buffer_ignores = []
 let s:have_gopls = v:false
 let s:have_clangd = v:false
+let s:have_rustanalyzer = v:false
 if executable('gopls')
     let s:have_gopls = v:true
     let go_allow = ['go']
@@ -46,6 +47,16 @@ if executable('clangd')
     augroup end
     let buffer_ignores = buffer_ignores + c_allow
 endif
+if executable("rust-analyzer")
+    let s:have_rustanalyzer = v:true
+    let rust_allow = ['rust']
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rust-analyzer',
+        \ 'cmd': {server_info->['rust-analyzer']},
+        \ 'whitelist': rust_allow,
+        \ })
+    let buffer_ignores = buffer_ignores + rust_allow
+endif
 
 let g:lsp_fold_enabled = 0
 let g:lsp_completion_documentation_delay = 500
@@ -64,6 +75,9 @@ function! s:on_lsp_buffer_enabled() abort
     endif
     if s:have_gopls
         autocmd! BufWritePre **.go call execute('LspDocumentFormatSync')
+    endif
+    if s:have_rustanalyzer
+        autocmd! BufWritePre **.rs call execute('LspDocumentFormatSync')
     endif
 endfunction
 
