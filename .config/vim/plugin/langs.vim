@@ -27,6 +27,16 @@ if executable("zls")
         \ 'allowlist': ['zig'],
         \ })
 endif
+if executable('clangd')
+    augroup lsp_setup
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'clangd',
+                    \ 'cmd': {server_info->['clangd']},
+                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                    \ })
+    augroup end
+endif
 
 let g:lsp_fold_enabled = 0
 let g:lsp_completion_documentation_delay = 500
@@ -40,7 +50,7 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre **.go call execute('LspDocumentFormatSync')
+    autocmd! BufWritePre **.go,**.c,**.cpp,**.h,**.hpp call execute('LspDocumentFormatSync')
 endfunction
 
 augroup lsp_install
