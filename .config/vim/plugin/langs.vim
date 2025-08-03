@@ -1,4 +1,5 @@
 let g:buffer_comp_ignores = []
+let g:buffer_formatting = []
 
 let g:lsp_fold_enabled = 0
 let g:lsp_completion_documentation_delay = 500
@@ -7,20 +8,21 @@ let g:lsp_diagnostics_virtual_text_enabled = 1
 let g:lsp_diagnostics_virtual_text_align = "right"
 let g:asyncomplete_popup_delay = 500
 
+function! FormatCode()
+    for formatter in g:buffer_formatting
+        if &filetype == formatter
+            call execute('LspDocumentFormatSync')
+            return
+        endif
+    endfor
+endfunction
+
 function! s:on_lsp_buffer_enabled() abort
     nnoremap <C-e> :LspDocumentDiagnostics<CR>
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     let g:lsp_format_sync_timeout = 1000
-    if exists("g:have_clangd")
-        autocmd! BufWritePre **.c,**.cpp,**.h,**.hpp call execute('LspDocumentFormatSync')
-    endif
-    if exists("g:have_gopls")
-        autocmd! BufWritePre **.go call execute('LspDocumentFormatSync')
-    endif
-    if exists("g:have_rustanalyzer")
-        autocmd! BufWritePre **.rs call execute('LspDocumentFormatSync')
-    endif
+    autocmd! BufWritePre * call FormatCode()
 endfunction
 
 augroup lsp_install
