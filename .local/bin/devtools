@@ -14,30 +14,20 @@ echo "initializing develepment tools..."
 mkdir -p "$CACHE"
 find "$CACHE" -type f -mtime +1 -delete
 
-_count() {
-  [ "$(ls "$1" | wc -l)" -ne "$2" ] && echo "mismatch: $3" && exit 1
-  echo "$3 completed"
-  return 0
-}
-
 _go_tools() {
   [ -z "$GOPATH" ] && return
-  COUNT=0
   for BIN in $(go_tools); do
     echo "installing go tool: $BIN"
     if ! go install "$BIN@latest"; then
       echo "  ^^^ failed ^^^"
       exit 1
     fi
-    COUNT=$((COUNT+1))
   done
-  _count "$GOPATH/bin" "$COUNT" "go-tools"
 }
 
 _vim_plugins() {
   VIM_PLUGINS="$HOME/.config/vim/pack/plugin/start"
   mkdir -p "$VIM_PLUGINS"
-  COUNT=0
   for PLUGIN in $(vim_plugins); do
     NAME="$(basename "$PLUGIN")"
     DEST="$VIM_PLUGINS/$NAME"
@@ -59,17 +49,24 @@ _vim_plugins() {
       echo "  ^^^ failed ^^^"
       exit 1
     fi
-    COUNT=$((COUNT+1))
   done
-  _count "$VIM_PLUGINS" "$COUNT" "vim-plugins"
 }
 
 _rust_tools() {
-  rust_tools
+  for TOOL in $(rust_tools); do
+    rustup add component "$TOOL"
+  done
+}
+
+_npm_tools() {
+  for TOOL in $(npm_tools); do
+    npm install -g "$TOOL"
+  done
 }
 
 _go_tools
 _vim_plugins
 _rust_tools
+_npm_tools
 touch "$IDENTIFIER"
 exit 0

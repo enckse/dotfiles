@@ -21,6 +21,13 @@ vim_plugins() {
   command -v zig >/dev/null && echo "https://github.com/ziglang/zig.vim"
 }
 
+npm_tools() {
+  ! command -v npm >/dev/null && return
+  echo "typescript"
+  echo "typescript-language-server"
+}
+
 rust_tools() {
-  command -v rustup >/dev/null && rustup component add rust-analyzer
+  ! command -v rustup >/dev/null && return
+  echo "rust-analyzer"
 }

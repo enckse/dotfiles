@@ -15,6 +15,7 @@ dotfiles() {
       command -v kitty > /dev/null && echo ".config/kitty"
       ;;
     "Linux")
+      command -v npm >/dev/null && echo ".npmrc"
       echo ".ssh/"
       echo ".local/bin/go-lint"
       echo ".local/bin/go-mod-updates"
