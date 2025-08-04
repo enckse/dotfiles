@@ -29,16 +29,36 @@ _gitstatus() {
   } | sed "s#^#$BASE#g"
 }
 
+_configured() {
+  git -C "$1" config "uncommitted.$2" 2>/dev/null
+}
+
+if [ -n "$1" ]; then
+  if [ "$1" != "pwd" ]; then
+    echo "unknown command: $1"
+    exit 1
+  fi
+  TREE=$(git -C "$PWD" rev-parse --is-inside-work-tree 2>/dev/null)
+  [ "$TREE" != "true" ] && exit 0
+  ENABLED=$(_configured "$PWD" "prompt")
+  [ "$ENABLED" = "false" ] && exit 0
+  STATUS=$(_gitstatus "$PWD" "prompt")
+  RESULT="clean"
+  COLOR="0;32"
+  [ -n "$STATUS" ] && RESULT="dirty" && COLOR="0;31"
+  printf "\e[%sm(%s)\033[0m" "$COLOR" "$RESULT"
+  exit 0
+fi
 FOUND=0
 {
   for DIR in .ttypty Workspace; do
     for SUB in $(ls "$HOME/$DIR"); do
       REPO="$HOME/$DIR/$SUB"
       [ ! -d "$REPO/.git" ] && continue
-      SCAN=$(git -C "$REPO" config "status.scan" 2>/dev/null)
+      SCAN=$(_configured "$REPO" "scan")
       [ -z "$SCAN" ] && SCAN="true"
       [ "$SCAN" != "true" ] && continue
-      STATUS=$(_gitstatus "$REPO" | grep -v '^$')
+      STATUS=$(_gitstatus "$REPO" "scan" | grep -v '^$')
       [ -z "$STATUS" ] && continue
       [ "$FOUND" -eq 0 ] && printf " ${GITDIRTY_ISSUE}${GITDIRTY}${GITDIRTY_NORMAL}\n---\n" && FOUND=1
       echo "$STATUS"
