@@ -15,13 +15,9 @@ mkdir -p "$CACHE"
 find "$CACHE" -type f -mtime +1 -delete
 
 _go_tools() {
-  [ -z "$GOPATH" ] && return
   for BIN in $(go_tools); do
-    echo "installing go tool: $BIN"
-    if ! go install "$BIN@latest"; then
-      echo "  ^^^ failed ^^^"
-      exit 1
-    fi
+    echo "installing: $BIN"
+    go install "$BIN@latest"
   done
 }
 
@@ -54,12 +50,14 @@ _vim_plugins() {
 
 _rust_tools() {
   for TOOL in $(rust_tools); do
+    echo "installing: $TOOL"
     rustup add component "$TOOL"
   done
 }
 
 _npm_tools() {
   for TOOL in $(npm_tools); do
+    echo "installing: $TOOL"
     npm install -g "$TOOL"
   done
 }

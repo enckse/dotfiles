@@ -4,6 +4,7 @@ dev_id() {
 }
 
 go_tools() {
+  [ -z "$GOPATH" ] && return
   echo "mvdan.cc/gofumpt"
   echo "golang.org/x/tools/gopls"
   echo "honnef.co/go/tools/cmd/staticcheck"

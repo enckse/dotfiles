@@ -8,3 +8,4 @@ au User lsp_setup call lsp#register_server({
     \ 'allowlist': s:lua_allow,
     \ })
 let g:buffer_comp_ignores = g:buffer_comp_ignores + s:lua_allow
+let g:buffer_formatting = g:buffer_formatting + s:lua_allow
