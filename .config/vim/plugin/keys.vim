@@ -23,7 +23,7 @@ for i in ['', '2-', '3-', '4-']
     noremap mouse <NOP>
 endfor
 
-" airline/tabs
+" buffers/windows
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <C-w> :bprevious <BAR> bd #<CR>

@@ -13,7 +13,6 @@ go_tools() {
 }
 
 vim_plugins() {
-  echo "https://github.com/vim-airline/vim-airline"
   echo "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
   echo "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
   echo "https://github.com/prabirshrestha/asyncomplete.vim"
