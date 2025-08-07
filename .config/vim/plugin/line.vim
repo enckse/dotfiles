@@ -1,4 +1,4 @@
-function! TabbedBufferline()
+function! MyBufferline()
   let s = ''
   let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&buftype") == ""')
   for b in buffers
@@ -14,7 +14,7 @@ function! TabbedBufferline()
       let s .= '  '
     endif
 
-    let s .= (buffer_name != '' ? buffer_name : '[No Name]') . ' '
+    let s .= b . ': ' . (buffer_name != '' ? buffer_name : '[No Name]') . ' '
 
     if b == bufnr('%')
       let s .= ']'
@@ -32,5 +32,7 @@ function! TabbedBufferline()
   return s
 endfunction
 
+" Set the statusline to use our new function
+set laststatus=2
 set showtabline=2
-set tabline=%!TabbedBufferline()
+set tabline=%!MyBufferline()
