@@ -1,6 +1,9 @@
 #!/bin/sh -e
 dev_id() {
-  echo "$CONTAINER_IDENTIFIER"
+  IDENTIFIER="${TOOLS_IDENTIFIER:-}"
+  [ -n "$IDENTIFIER" ] && echo "$IDENTIFIER" && return
+  IDENTIFIER="${CONTAINER_IDENTIFIER:-}"
+  echo "$IDENTIFIER"
 }
 
 go_tools() {

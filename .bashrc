@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source "$HOME/.config/dotfiles/shell"
+[ -e "$HOME/.bash.vars" ] && source "$HOME/.bash.vars"
 
 ssh_agent
 load_comps
@@ -12,3 +13,4 @@ command -v git-uncommitted >/dev/null && PS1="\$(git uncommitted pwd 2>/dev/null
 
 unset USE_HOST
 shell_ready
+command -v git-uncommitted >/dev/null && git-uncommitted
