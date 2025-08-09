@@ -6,6 +6,7 @@ GITCLEAN_NORMAL=''
 GITDIRTY="uncommitted"
 GITCLEAN="$GITDIRTY"
 SPACER=""
+EMPTY_NONE=1
 
 _gitcmd() {
   HEADER=$(echo "$2" | cut -d " " -f 1)
@@ -52,6 +53,7 @@ if [ -n "$1" ]; then
       SPACER=" "
       GITDIRTY="⇆❌"
       GITCLEAN="⇆✅"
+      EMPTY_NONE=0
       ;;
     *)
       echo "unknown command: $1"
@@ -75,6 +77,6 @@ FOUND=0
     done
   done
   if [ "$FOUND" -eq 0 ]; then
-    printf " ${GITDIRTY_HIGHLIGHT}${GITCLEAN}${GITCLEAN_NORMAL}\n---"
+    [ "$EMPTY_NONE" -eq 0 ] && printf "$SPACER${GITDIRTY_HIGHLIGHT}${GITCLEAN}${GITCLEAN_NORMAL}\n---"
   fi
 } 2>/dev/null
