@@ -15,4 +15,4 @@ if [ ! -x "$BIN" ]; then
   echo " ∅ git"
   exit 0
 fi
-"$HOME/.local/bin/git-uncommitted"
+"$HOME/.local/bin/git-uncommitted" bar
