@@ -49,9 +49,11 @@ _vim_plugins() {
 }
 
 _rust_tools() {
+  ! command -v rustup > /dev/null && return
+  rustup update
   for TOOL in $(rust_tools); do
     echo "installing: $TOOL"
-    rustup add component "$TOOL"
+    rustup component add "$TOOL"
   done
 }
 
