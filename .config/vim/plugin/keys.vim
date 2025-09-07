@@ -15,6 +15,7 @@ noremap <C-l> <NOP>
 noremap <C-q> <NOP>
 noremap <C-j> <NOP>
 noremap <C-k> <NOP>
+inoremap <S-F3> <CR>
 
 " mouse handling
 noremap <Rightmouse> <NOP>
