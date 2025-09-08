@@ -152,7 +152,6 @@ fi
 
 MOUNTS=""
 MOUNTS="--mount type=bind,source=$HOME/.devcontainer,target=$USER_HOME/"
-MOUNTS="$MOUNTS --mount type=bind,source=$HOME/.local,target=$USER_HOME/.host"
 CWD="$USER_HOME"
 for DIR in $USER_MOUNTS; do
   MOUNTS="$MOUNTS --mount type=bind,source=$HOME/$DIR,target=$USER_HOME/$DIR"
