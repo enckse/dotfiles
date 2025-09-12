@@ -70,7 +70,11 @@ _brew_tools() {
   BREW_PKGS_TMP="$BREW_PKGS.tmp"
   brew list -1 --installed-on-request > "$BREW_PKGS_TMP"
   diff -u "$BREW_PKGS" "$BREW_PKGS_TMP"
-  cp "$HOME/Library/Application Support/VSCodium/User/settings.json" "$HOME/.local/state/vscodium.json"
+  for FILE in settings keybindings; do
+    FILEPATH="$HOME/Library/Application Support/VSCodium/User/$FILE.json"
+    [ ! -e "$FILEPATH" ] && continue
+    cp "$FILEPATH" "$HOME/.local/state/vscodium.$FILE.json"
+  done
 }
 
 _go_tools
