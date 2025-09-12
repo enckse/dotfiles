@@ -28,7 +28,7 @@ export SHELL_COMPS="$HOME/.local/share/completions"
 [ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
 
 export SECRET_ROOT="$HOME/.ttypty/secrets"
-export EDITOR=vim
+[ -z "$EDITOR" ] && export EDITOR=vim
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 [ -e "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"

@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 autoload -Uz compinit && compinit
+[ -d "/Applications/VSCodium.app" ] && export EDITOR="/Applications/VSCodium.app/Contents/Resources/app/bin/codium"
+[ -n "$EDITOR" ] && export USING_CODE=1 && alias code="$EDITOR"
 source "$HOME/.config/dotfiles/shell"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
@@ -12,12 +14,18 @@ if command -v devtools > /dev/null; then
   devtools
 fi
 
-for CMD in vim vi; do
-    alias $CMD="echo $CMD disabled"
-done
-quickfix() {
-    /usr/bin/vim --clean $@
-}
+if [ -z "$USING_CODE" ]; then
+  for CMD in vim vi; do
+      alias $CMD="echo $CMD disabled"
+  done
+  quickfix() {
+      /usr/bin/vim --clean $@
+  }
+else
+  alias vim="$EDITOR"
+  alias vi="$EDITOR"
+  export GIT_EDITOR="$EDITOR --wait"
+fi
 
 command -v devcontainer > /dev/null && (devcontainer orphans >/dev/null 2>&1 &)
 
