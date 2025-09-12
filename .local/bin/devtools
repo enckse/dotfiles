@@ -66,14 +66,15 @@ _npm_tools() {
 
 _brew_tools() {
   ! command -v brew > /dev/null && return
-  BREW_PKGS="$HOME/.local/state/brew.packages"
+  BREW_PKGS="$HOME/.local/stow/brew.packages"
   BREW_PKGS_TMP="$BREW_PKGS.tmp"
   brew list -1 --installed-on-request > "$BREW_PKGS_TMP"
   diff -u "$BREW_PKGS" "$BREW_PKGS_TMP"
+  rm -f "$BREW_PKGS_TMP"
   for FILE in settings keybindings; do
     FILEPATH="$HOME/Library/Application Support/VSCodium/User/$FILE.json"
     [ ! -e "$FILEPATH" ] && continue
-    cp "$FILEPATH" "$HOME/.local/state/vscodium.$FILE.json"
+    cp "$FILEPATH" "$HOME/.local/stow/vscodium.$FILE.json"
   done
 }
 
