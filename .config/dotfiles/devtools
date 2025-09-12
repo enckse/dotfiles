@@ -16,6 +16,7 @@ go_tools() {
 }
 
 vim_plugins() {
+  [ ! -e "$HOME/.config/vimrc" ] && return
   echo "https://github.com/vim-airline/vim-airline"
   echo "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
   echo "https://github.com/prabirshrestha/asyncomplete-lsp.vim"

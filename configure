@@ -5,23 +5,22 @@ dotfiles() {
   echo ".config/dotfiles/"
   echo ".local/bin/git-uncommitted"
   echo ".gitconfig"
+  command -v go && echo ".local/bin/go-lint"
+  command -v go && echo ".local/bin/go-mod-updates"
   case "$(uname)" in
     "Darwin")
       echo ".local/bin/is-screen-locked"
       echo ".local/bin/transcode-media"
-      echo ".local/bin/devcontainer"
       echo ".local/bin/clipmgr"
       echo ".config/swiftbar/"
+      echo ".ssh/"
+      echo ".local/bin/devtools"
+      echo ".config/git/"
       command -v kitty > /dev/null && echo ".config/kitty"
       ;;
     "Linux")
       command -v npm >/dev/null && echo ".npmrc"
-      echo ".ssh/"
-      echo ".local/bin/go-lint"
-      echo ".local/bin/go-mod-updates"
-      echo ".local/bin/devtools"
       echo ".config/vim/"
-      echo ".config/git/"
       ;;
   esac
 }

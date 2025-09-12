@@ -23,8 +23,8 @@ _go_tools() {
 
 _vim_plugins() {
   VIM_PLUGINS="$HOME/.config/vim/pack/plugin/start"
-  mkdir -p "$VIM_PLUGINS"
   for PLUGIN in $(vim_plugins); do
+    mkdir -p "$VIM_PLUGINS"
     NAME="$(basename "$PLUGIN")"
     DEST="$VIM_PLUGINS/$NAME"
     echo "configuring vim plugin: $NAME"
@@ -64,9 +64,18 @@ _npm_tools() {
   done
 }
 
+_brew_tools() {
+  ! command -v brew > /dev/null && return
+  BREW_PKGS="$HOME/.local/state/brew.packages"
+  BREW_PKGS_TMP="$BREW_PKGS.tmp"
+  brew list -1 --installed-on-request > "$BREW_PKGS_TMP"
+  diff -u "$BREW_PKGS" "$BREW_PKGS_TMP"
+}
+
 _go_tools
 _vim_plugins
 _rust_tools
 _npm_tools
+_brew_tools
 touch "$IDENTIFIER"
 exit 0
