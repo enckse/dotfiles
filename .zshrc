@@ -1,7 +1,9 @@
 #!/usr/bin/env zsh
+SIMPLE_TERM=1
+USING_CODE=0
 autoload -Uz compinit && compinit
 [ -d "/Applications/VSCodium.app" ] && export EDITOR="/Applications/VSCodium.app/Contents/Resources/app/bin/codium"
-[ -n "$EDITOR" ] && export USING_CODE=1 && alias code="$EDITOR"
+[ -n "$EDITOR" ] && SIMPLE_TERM=0 && USING_CODE=1 && alias code="$EDITOR"
 source "$HOME/.config/dotfiles/shell"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
@@ -10,22 +12,25 @@ ssh_agent
 load_comps
 
 if command -v devtools > /dev/null; then
-  export TOOLS_IDENTIFIER=$(date +%Y-%m-%d)
+  export TOOLS_IDENTIFIER=$(date +%Y-%U)
   devtools
 fi
 
-if [ -z "$USING_CODE" ]; then
-  for CMD in vim vi; do
-      alias $CMD="echo $CMD disabled"
-  done
-  quickfix() {
-      /usr/bin/vim --clean $@
-  }
+if [ "$SIMPLE_TERM" -eq 1 ]; then
+  if ! command -v brew > /dev/null; then
+    for CMD in vim vi; do
+        alias $CMD="echo $CMD disabled"
+    done
+    quickfix() {
+        /usr/bin/vim --clean $@
+    }
+  fi
 else
   alias vim="$EDITOR"
   alias vi="$EDITOR"
-  export GIT_EDITOR="$EDITOR --wait"
+  [ "$USING_CODE" -eq 1 ] && export GIT_EDITOR="$EDITOR --wait"
 fi
+unset SIMPLE_TERM USING_CODE
 
 command -v devcontainer > /dev/null && (devcontainer orphans >/dev/null 2>&1 &)
 
