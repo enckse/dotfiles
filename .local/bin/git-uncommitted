@@ -46,7 +46,9 @@ if [ -n "$1" ]; then
       RESULT="clean"
       COLOR="0;32"
       [ -n "$STATUS" ] && RESULT="dirty" && COLOR="0;31"
-      printf "\e[%sm(%s)\033[0m" "$COLOR" "$RESULT"
+      RESULT="($RESULT)"
+      [ -n "$NO_COLOR" ] && printf "%s" "$RESULT" && exit 0
+      printf "\e[%sm%s\033[0m" "$COLOR" "$RESULT"
       exit 0
       ;;
     "bar")
