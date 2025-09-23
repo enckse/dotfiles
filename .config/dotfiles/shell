@@ -36,6 +36,7 @@ command -v go > /dev/null && export GOPATH="$HOME/.cache/go"
 [ -d "$HOME/.local/npm/bin" ] && export PATH="$HOME/.local/npm/bin:$PATH"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+[ -e "$HOME/.swiftly/env.sh" ] && source "$HOME/.swiftly/env.sh"
 [ "$EDITOR" != vim ] && alias vim="$EDITOR"
 
 alias vi="\$EDITOR"
