@@ -9,6 +9,7 @@ dotfiles() {
   command -v go && echo ".local/bin/go-lint"
   command -v go && echo ".local/bin/go-mod-updates"
   command -v kitty > /dev/null && echo ".config/kitty"
+  NEED_DEV=0
   case "$(uname)" in
     "Darwin")
       command -v container > /dev/null && echo ".local/bin/devcontainer"
@@ -16,14 +17,19 @@ dotfiles() {
       echo ".local/bin/transcode-media"
       echo ".local/bin/clipmgr"
       echo ".config/swiftbar/"
+      command -v brew > /dev/null && NEED_DEV=1
+      command -v port > /dev/null && NEED_DEV=1
       ;;
     "Linux")
-      [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/"
-      echo ".ssh/"
-      echo ".config/git/"
-      echo ".local/bin/devtools"
+      NEED_DEV=1
       ;;
   esac
+  if [ "$NEED_DEV" -eq 1 ]; then
+    [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/"
+    echo ".ssh/"
+    echo ".config/git/"
+    echo ".local/bin/devtools"
+  fi
 }
 
 DIR=""

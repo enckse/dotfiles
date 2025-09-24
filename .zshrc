@@ -4,6 +4,7 @@ USING_CODE=0
 autoload -Uz compinit && compinit
 [ -d "/Applications/VSCodium.app" ] && export EDITOR="/Applications/VSCodium.app/Contents/Resources/app/bin/codium"
 [ -n "$EDITOR" ] && SIMPLE_TERM=0 && USING_CODE=1 && alias code="$EDITOR"
+[ -d "/opt/local" ] &&  PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 source "$HOME/.config/dotfiles/shell"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
@@ -17,7 +18,7 @@ if command -v devtools > /dev/null; then
 fi
 
 if [ "$SIMPLE_TERM" -eq 1 ]; then
-  if ! command -v brew > /dev/null; then
+  if ! command -v port > /dev/null && ! command -v brew > /dev/null; then
     for CMD in vim vi; do
         alias $CMD="echo $CMD disabled"
     done
@@ -42,6 +43,9 @@ if command -v brew > /dev/null; then
   done
   unset BIN LIBEXEC
 fi	
+if command -v port > /dev/null; then
+  command -v gmake > /dev/null && alias make=gmake
+fi
 
 autoload -U promptinit && promptinit
 precmd() {
