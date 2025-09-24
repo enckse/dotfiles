@@ -24,11 +24,12 @@ _gitstatus() {
   BASE=$(echo "$1" | sed "s#$HOME/##g")
   {
     _gitcmd "$1" "update-index -q --refresh"
-    _gitcmd "$1" "diff-index --name-only HEAD --"
-    _gitcmd "$1" "log --branches --not --remotes -n 1"
-    _gitcmd "$1" "ls-files --others --exclude-standard --directory --no-empty-directory"
-    _gitcmd "$1" "branch --show-current" | grep -E -v ' (master|main) \(branch\)$'
+    _gitcmd "$1" "diff-index --name-only HEAD --" &
+    _gitcmd "$1" "log --branches --not --remotes -n 1" &
+    _gitcmd "$1" "ls-files --others --exclude-standard --directory --no-empty-directory" &
+    _gitcmd "$1" "branch --show-current" | grep -E -v ' (master|main) \(branch\)$' &
   } | sed "s#^#$BASE#g"
+  wait
 }
 
 _configured() {
