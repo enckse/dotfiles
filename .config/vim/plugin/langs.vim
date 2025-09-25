@@ -1,6 +1,8 @@
 let g:buffer_comp_ignores = []
 let g:buffer_formatting = []
 
+let g:lsp_configurations = {}
+
 let g:lsp_fold_enabled = 0
 let g:lsp_completion_documentation_delay = 500
 let g:lsp_document_code_action_signs_enabled = 0
@@ -41,6 +43,23 @@ autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#s
     \ }))
 
 autocmd VimEnter * :doautocmd BufWinEnter
+
+function! SetupLSP(settings, allow, format)
+  if !executable(a:settings['name'])
+    function! EmptyLSP()
+    endfunction
+    return funcref('EmptyLSP')
+  endif
+  let g:lsp_configurations[a:settings['name']] = deepcopy(a:settings)
+  function! ConfigureLSP() closure
+    execute 'au User lsp_setup call lsp#register_server(g:lsp_configurations["' . a:settings['name'] . '"])'
+    let g:buffer_comp_ignores = g:buffer_comp_ignores + a:settings[a:allow]
+    if a:format
+      let g:buffer_formatting = g:buffer_formatting + a:settings[a:allow]
+    endif
+  endfunction
+  return funcref('ConfigureLSP')
+endfunction
 
 let s:langs = expand('~/.config/vim/languages')
 if isdirectory(s:langs)
