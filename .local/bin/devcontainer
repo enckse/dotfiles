@@ -2,7 +2,8 @@
 VERS="0.1.0"
 LIB="$HOME/.config/devcontainer"
 CACHE="$HOME/.local/state/devcontainer"
-mkdir -p "$CACHE"
+APKS="$CACHE/apks"
+mkdir -p "$CACHE" "$APKS"
 BUILDFILE="$CACHE/building"
 [ ! -d "$LIB" ] && echo "configs not found" && exit 1
 ENV="$HOME/.config/devcontainer/env.sh"
@@ -150,8 +151,7 @@ if [ "$REBUILD" -eq 1 ]; then
   _rmbuildfile
 fi
 
-MOUNTS=""
-MOUNTS="--mount type=bind,source=$HOME/.devcontainer,target=$USER_HOME/"
+MOUNTS="--mount type=bind,source=$HOME/.devcontainer,target=$USER_HOME/ --mount type=bind,source=$APKS,target=/etc/apk/cache"
 CWD="$USER_HOME"
 for DIR in $USER_MOUNTS; do
   MOUNTS="$MOUNTS --mount type=bind,source=$HOME/$DIR,target=$USER_HOME/$DIR"
