@@ -19,7 +19,7 @@ fi
 
 if [ "$SIMPLE_TERM" -eq 1 ]; then
   if ! command -v port > /dev/null && ! command -v brew > /dev/null; then
-    for CMD in vim vi; do
+    for CMD in vim vi git; do
         alias $CMD="echo $CMD disabled"
     done
     quickfix() {
