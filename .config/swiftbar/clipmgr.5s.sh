@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# <xbar.title>WAC Info</xbar.title>
+# <xbar.title>ClipMgr Info</xbar.title>
 # <xbar.version>v1.0</xbar.version>
-# <xbar.desc>Displays wac info</xbar.desc>
+# <xbar.desc>Displays clipmgr info</xbar.desc>
 #
 # Dependencies: none.
 

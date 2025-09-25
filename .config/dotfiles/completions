@@ -14,14 +14,6 @@ _gencomp() {
   fi
 }
 
-
-if command -v wac > /dev/null; then
-  _gencomp \
-    wac \
-    "$(wac version)" \
-    "completions"
-fi
-
 if command -v lb > /dev/null; then
   _gencomp \
     lb \
