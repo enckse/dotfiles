@@ -64,21 +64,9 @@ _npm_tools() {
   done
 }
 
-_macos_tools() {
-  STOW="$HOME/.local/stow/"
-  command -v brew > /dev/null && brew list -1 --installed-on-request > "$STOW/brew.packages"
-  command -v port > /dev/null && port installed -q | cut -d " " -f 3 > "$STOW/port.packages"
-  for FILE in settings keybindings; do
-    FILEPATH="$HOME/Library/Application Support/VSCodium/User/$FILE.json"
-    [ ! -e "$FILEPATH" ] && continue
-    cp "$FILEPATH" "$STOW/vscodium.$FILE.json"
-  done
-}
-
 _go_tools
 _vim_plugins
 _rust_tools
 _npm_tools
-_macos_tools
 touch "$IDENTIFIER"
 exit 0
