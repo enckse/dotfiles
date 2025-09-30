@@ -15,6 +15,7 @@ mkdir -p "$CACHE"
 find "$CACHE" -type f -mtime +1 -delete
 
 _go_tools() {
+  [ -z "$GOPATH" ] && return
   for BIN in $(go_tools); do
     echo "installing: $BIN"
     go install "$BIN@latest"
@@ -22,6 +23,7 @@ _go_tools() {
 }
 
 _vim_plugins() {
+  [ ! -e "$HOME/.config/vim/vimrc" ] && return
   VIM_PLUGINS="$HOME/.config/vim/pack/plugin/start"
   for PLUGIN in $(vim_plugins); do
     mkdir -p "$VIM_PLUGINS"
@@ -58,6 +60,7 @@ _rust_tools() {
 }
 
 _npm_tools() {
+  ! command -v npm >/dev/null && return
   for TOOL in $(npm_tools); do
     echo "installing: $TOOL"
     npm install -g "$TOOL"

@@ -7,8 +7,6 @@ dev_id() {
 }
 
 go_tools() {
-  [ -z "$GOPATH" ] && return
-  command -v brew > /dev/null && return
   echo "mvdan.cc/gofumpt"
   echo "golang.org/x/tools/gopls"
   echo "honnef.co/go/tools/cmd/staticcheck"
@@ -17,7 +15,6 @@ go_tools() {
 }
 
 vim_plugins() {
-  [ ! -e "$HOME/.config/vim/vimrc" ] && return
   echo "https://github.com/vim-airline/vim-airline"
   echo "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
   echo "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
@@ -28,12 +25,10 @@ vim_plugins() {
 }
 
 npm_tools() {
-  ! command -v npm >/dev/null && return
   echo "typescript"
   echo "typescript-language-server"
 }
 
 rust_tools() {
-  ! command -v rustup >/dev/null && return
   echo "rust-analyzer"
 }
