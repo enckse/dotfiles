@@ -1,10 +1,10 @@
-#!/bin/sh
-[ -z "$DEVTOOLS_IDENTIFIER" ] && return
+#!/bin/sh -e
+[ -z "$DEVTOOLS_IDENTIFIER" ] && echo "no identifier set" && exit 1
 CACHEDIR="$HOME/.cache/devtools"
 mkdir -p "$CACHEDIR"
 IDENTIFIER="$CACHEDIR/$(echo "$DEVTOOLS_IDENTIFIER" | sha256sum | cut -c 1-7)"
-[ -z "$1" ] && [ -e "$IDENTIFIER" ] && return
-[ -n "$1" ] && [ "$1" != "--force" ] && echo "unknown argument: $1" && return
+[ -z "$1" ] && [ -e "$IDENTIFIER" ] && exit 0
+[ -n "$1" ] && [ "$1" != "--force" ] && echo "unknown argument: $1" && exit 1
 find "$CACHEDIR" -type f -mtime +1 -delete
 if [ -n "$GOPATH" ]; then
   for TOOL in $GO_DEVTOOLS; do
