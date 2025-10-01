@@ -22,34 +22,6 @@ _go_tools() {
   done
 }
 
-_vim_plugins() {
-  [ ! -e "$HOME/.config/vim/vimrc" ] && return
-  VIM_PLUGINS="$HOME/.config/vim/pack/plugin/start"
-  for PLUGIN in $(vim_plugins); do
-    mkdir -p "$VIM_PLUGINS"
-    NAME="$(basename "$PLUGIN")"
-    DEST="$VIM_PLUGINS/$NAME"
-    echo "configuring vim plugin: $NAME"
-    ERRORED=0
-    if [ ! -d "$DEST" ]; then
-      echo "-> cloning"
-      if ! git clone --quiet "$PLUGIN" "$DEST"; then
-        ERRORED=1
-      fi
-    fi
-    if [ "$ERRORED" -eq 0 ]; then
-      echo "-> updating"
-      if ! git -C "$DEST" pull --quiet; then
-        ERRORED=1
-      fi
-    fi
-    if [ "$ERRORED" -eq 1 ]; then
-      echo "  ^^^ failed ^^^"
-      exit 1
-    fi
-  done
-}
-
 _rust_tools() {
   ! command -v rustup > /dev/null && return
   rustup update
@@ -68,7 +40,6 @@ _npm_tools() {
 }
 
 _go_tools
-_vim_plugins
 _rust_tools
 _npm_tools
 touch "$IDENTIFIER"

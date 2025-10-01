@@ -14,16 +14,6 @@ go_tools() {
   echo "github.com/mgechev/revive"
 }
 
-vim_plugins() {
-  echo "https://github.com/vim-airline/vim-airline"
-  echo "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
-  echo "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
-  echo "https://github.com/prabirshrestha/asyncomplete.vim"
-  echo "https://github.com/prabirshrestha/vim-lsp"
-  echo "https://github.com/bfrg/vim-qf-diagnostics"
-  command -v zig >/dev/null && echo "https://github.com/ziglang/zig.vim"
-}
-
 npm_tools() {
   echo "typescript"
   echo "typescript-language-server"
