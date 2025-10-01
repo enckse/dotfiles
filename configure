@@ -28,7 +28,6 @@ dotfiles() {
     [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/"
     echo ".ssh/"
     echo ".config/git/"
-    echo ".local/bin/devtools"
   fi
 }
 

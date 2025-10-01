@@ -31,12 +31,15 @@ export SECRET_ROOT="$HOME/.ttypty/secrets"
 [ -z "$EDITOR" ] && export EDITOR=vim
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
-[ -e "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-command -v go > /dev/null && export GOPATH="$HOME/.cache/go"
-[ -d "$HOME/.local/npm/bin" ] && export PATH="$HOME/.local/npm/bin:$PATH"
+command -v go > /dev/null && \
+  export GOPATH="$HOME/.cache/go" && \
+  export GO_DEVTOOLS="mvdan.cc/gofumpt \
+                      golang.org/x/tools/gopls \
+                      honnef.co/go/tools/cmd/staticcheck \
+                      github.com/enckse/lockbox/cmd/lb \
+                      github.com/mgechev/revive"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
-[ -e "$HOME/.swiftly/env.sh" ] && source "$HOME/.swiftly/env.sh"
 [ "$EDITOR" != vim ] && alias vim="$EDITOR"
 
 alias vi="\$EDITOR"
@@ -49,4 +52,26 @@ command -v rg > /dev/null && alias grep="rg"
 if command -v delta > /dev/null; then
   export GIT_PAGER=delta
   export DELTA_PAGER="less -R -c -X"
+fi
+
+if [ -n "$GO_DEVTOOLS" ]; then
+  if [ -n "$CONTAINER_IDENTIFIER" ] || [ -n "$TOOLS_IDENTIFIER" ]; then
+    devtools() {
+      IDENTIFIER="$TOOLS_IDENTIFIER$CONTAINER_IDENTIFIER"
+      CACHEDIR="$HOME/.cache/devtools"
+      mkdir -p "$CACHEDIR"
+      IDENTIFIER="$CACHEDIR/$(echo "$IDENTIFIER" | sha256sum | cut -c 1-7)"
+      [ -z "$1" ] && [ -e "$IDENTIFIER" ] && return
+      [ -n "$1" ] && [ "$1" != "--force" ] && echo "unknown argument: $1" && return
+      find "$CACHEDIR" -type f -mtime +1 -delete
+      if [ -n "$GOPATH" ]; then
+        for TOOL in $GO_DEVTOOLS; do
+          echo "installing: $TOOL"
+          go install "$TOOL@latest"
+        done
+      fi
+      touch "$IDENTIFIER"
+      unset CACHEDIR IDENTIFIER TOOL
+    }
+  fi
 fi
