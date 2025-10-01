@@ -54,24 +54,5 @@ if command -v delta > /dev/null; then
   export DELTA_PAGER="less -R -c -X"
 fi
 
-if [ -n "$GO_DEVTOOLS" ]; then
-  if [ -n "$CONTAINER_IDENTIFIER" ] || [ -n "$TOOLS_IDENTIFIER" ]; then
-    devtools() {
-      IDENTIFIER="$TOOLS_IDENTIFIER$CONTAINER_IDENTIFIER"
-      CACHEDIR="$HOME/.cache/devtools"
-      mkdir -p "$CACHEDIR"
-      IDENTIFIER="$CACHEDIR/$(echo "$IDENTIFIER" | sha256sum | cut -c 1-7)"
-      [ -z "$1" ] && [ -e "$IDENTIFIER" ] && return
-      [ -n "$1" ] && [ "$1" != "--force" ] && echo "unknown argument: $1" && return
-      find "$CACHEDIR" -type f -mtime +1 -delete
-      if [ -n "$GOPATH" ]; then
-        for TOOL in $GO_DEVTOOLS; do
-          echo "installing: $TOOL"
-          go install "$TOOL@latest"
-        done
-      fi
-      touch "$IDENTIFIER"
-      unset CACHEDIR IDENTIFIER TOOL
-    }
-  fi
-fi
+DEVTOOLS_IDENTIFIER="$TOOLS_IDENTIFIER$CONTAINER_IDENTIFIER"
+[ -n "$DEVTOOLS_IDENTIFIER" ] && export DEVTOOLS_IDENTIFIER
