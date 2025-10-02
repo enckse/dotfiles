@@ -1,12 +1,17 @@
 #!/bin/sh -e
-[ -z "$DEVTOOLS_IDENTIFIER" ] && echo "no identifier set" && exit 1
 CACHEDIR="$HOME/.cache/devtools"
+CONFIGS="$HOME/.config"
 mkdir -p "$CACHEDIR"
-IDENTIFIER="$CACHEDIR/$(echo "$DEVTOOLS_IDENTIFIER" | sha256sum | cut -c 1-7)"
-[ -z "$1" ] && [ -e "$IDENTIFIER" ] && exit 0
-[ -n "$1" ] && [ "$1" != "--force" ] && echo "unknown argument: $1" && exit 1
-find "$CACHEDIR" -type f -mtime +1 -delete
-for FILE in "$HOME"/.config/**/devtools; do 
+FORCE=0
+if [ -n "$1" ]; then
+  [ "$1" != "--force" ] && echo "unknown argument: $1" && exit 1
+  FORCE=1
+fi
+find "$CACHEDIR" -type f -mtime +7 -delete
+for FILE in "$CONFIGS"/**/devtools; do 
+  NAME=$(echo "$FILE" | sed "s#$CONFIGS/##g" | cut -d "/" -f 1)
+  CACHEFILE="$CACHEDIR/$NAME.$(date +%U)"
+  [ "$FORCE" -eq 0 ] && [ -e "$CACHEFILE" ] && touch "$CACHEFILE" && continue
   "$FILE"
+  touch "$CACHEFILE"
 done
-touch "$IDENTIFIER"
