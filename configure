@@ -9,7 +9,7 @@ dotfiles() {
   if command -v go > /dev/null; then
     echo ".local/bin/go-lint"
     echo ".local/bin/go-mod-updates"
-    echo ".config/go/tools.txt"
+    echo ".config/go/devtools"
   fi
   command -v kitty > /dev/null && echo ".config/kitty"
   NEED_DEV=0

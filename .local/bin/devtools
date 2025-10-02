@@ -6,23 +6,7 @@ IDENTIFIER="$CACHEDIR/$(echo "$DEVTOOLS_IDENTIFIER" | sha256sum | cut -c 1-7)"
 [ -z "$1" ] && [ -e "$IDENTIFIER" ] && exit 0
 [ -n "$1" ] && [ "$1" != "--force" ] && echo "unknown argument: $1" && exit 1
 find "$CACHEDIR" -type f -mtime +1 -delete
-TOOLS="$HOME/.config/go/tools.txt"
-if [ -e "$TOOLS" ] && [ -n "$GOPATH" ]; then
-  while IFS= read -r TOOL; do
-    echo "installing: $TOOL"
-    go install "$TOOL@latest"
-  done < "$TOOLS"
-fi
-TOOLS="$HOME/.config/vim/tools.txt"
-if [ -e "$TOOLS" ]; then
-  PLUGINS="$HOME/.config/vim/pack/plugin/start/"
-  mkdir -p "$PLUGINS"
-  while IFS= read -r TOOL; do
-    echo "setting up plugin: $TOOL"
-    BNAME=$(basename "$TOOL")
-    DIR="$PLUGINS$BNAME"
-    [ ! -d "$DIR" ] && git clone --quiet "$TOOL" "$DIR"
-    git -C "$DIR" pull --quiet
-  done < "$TOOLS"
-fi
+for FILE in "$HOME"/.config/**/devtools; do 
+  "$FILE"
+done
 touch "$IDENTIFIER"
