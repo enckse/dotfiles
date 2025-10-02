@@ -25,12 +25,13 @@ shell_ready() {
 }
 
 export SHELL_COMPS="$HOME/.local/share/completions"
-[ -e "$PKGV_STORE/env" ] && source "$PKGV_STORE/env"
-
 export SECRET_ROOT="$HOME/.ttypty/secrets"
 [ -z "$EDITOR" ] && export EDITOR=vim
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
+[ "$EDITOR" != vim ] && alias vim="$EDITOR"
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+
 command -v go > /dev/null && \
   export GOPATH="$HOME/.cache/go" && \
   export GO_DEVTOOLS="mvdan.cc/gofumpt \
@@ -39,8 +40,6 @@ command -v go > /dev/null && \
                       github.com/enckse/lockbox/cmd/lb \
                       github.com/mgechev/revive"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
-[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
-[ "$EDITOR" != vim ] && alias vim="$EDITOR"
 
 alias vi="\$EDITOR"
 alias less="less -R"
