@@ -1,0 +1,6 @@
+https://github.com/vim-airline/vim-airline
+https://github.com/prabirshrestha/asyncomplete-buffer.vim
+https://github.com/prabirshrestha/asyncomplete-lsp.vim
+https://github.com/prabirshrestha/asyncomplete.vim
+https://github.com/prabirshrestha/vim-lsp
+https://github.com/bfrg/vim-qf-diagnostics

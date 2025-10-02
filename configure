@@ -6,8 +6,11 @@ dotfiles() {
   echo ".local/bin/git-uncommitted"
   echo ".gitconfig"
   command -v npm >/dev/null && echo ".npmrc"
-  command -v go && echo ".local/bin/go-lint"
-  command -v go && echo ".local/bin/go-mod-updates"
+  if command -v go > /dev/null; then
+    echo ".local/bin/go-lint"
+    echo ".local/bin/go-mod-updates"
+    echo ".config/go/tools.txt"
+  fi
   command -v kitty > /dev/null && echo ".config/kitty"
   NEED_DEV=0
   case "$(uname)" in

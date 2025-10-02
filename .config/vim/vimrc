@@ -16,7 +16,6 @@ set viminfo+=n$HOME/.cache/vim/viminfo
 let &g:directory=$HOME . '/.cache/vim'
 call CleanVimDir(&g:directory, "-mtime +1")
 
-let g:workingdir=&g:directory
 let &g:undodir=&g:directory . '/undo/'
 let &g:backupdir=&g:directory . '/backup/'
 let &g:directory=&g:directory . '/swap/'
