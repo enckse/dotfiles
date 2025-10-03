@@ -164,8 +164,8 @@ for DIR in $USER_TMPFS; do
   TMPFS="$TMPFS --tmpfs $USER_HOME/$DIR"
 done
 
-CONTAINER_KEY="$NAME.$(uuidgen)"
-initialize_env "$CALLSIGN" "$CONTAINER_KEY"
+CONTAINER_ID="$NAME.$(uuidgen)"
+initialize_env "$CALLSIGN" "$CONTAINER_ID"
 echo
 exec container \
     run \
@@ -174,8 +174,7 @@ exec container \
     --name "$ID" \
     --cwd "$CWD" \
     --user $USER \
-    --env CONTAINER_IDENTIFIER="$NAME" \
-    --env CONTAINER_KEY="$CONTAINER_KEY" \
+    --env CONTAINER_ID="$CONTAINER_ID" \
     --env IS_CONTAINER="$(echo "$NAME" | cut -d "." -f 1)" \
     --env USER="$USER" \
     --env SHELL="$USER_SHELL" \
