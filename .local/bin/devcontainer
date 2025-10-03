@@ -165,7 +165,7 @@ for DIR in $USER_TMPFS; do
 done
 
 CONTAINER_KEY="$NAME.$(uuidgen)"
-initialize_env "$CONTAINER_KEY"
+initialize_env "$CALLSIGN" "$CONTAINER_KEY"
 echo
 exec container \
     run \
