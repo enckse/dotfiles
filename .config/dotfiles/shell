@@ -34,11 +34,6 @@ export GIT_EDITOR="$EDITOR"
 
 command -v go > /dev/null && \
   export GOPATH="$HOME/.cache/go" && \
-  export GO_DEVTOOLS="mvdan.cc/gofumpt \
-                      golang.org/x/tools/gopls \
-                      honnef.co/go/tools/cmd/staticcheck \
-                      github.com/enckse/lockbox/cmd/lb \
-                      github.com/mgechev/revive"
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 
 alias vi="\$EDITOR"
