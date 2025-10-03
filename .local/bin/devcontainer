@@ -141,7 +141,6 @@ if [ "$REBUILD" -eq 1 ]; then
   }
   trap '_rmbuildfile' INT TERM HUP EXIT
   container build \
-    --build-arg TERM="$TERM" \
     --build-arg USER_SHELL="$USER_SHELL" \
     --build-arg USER="$USER" \
     ${ARGS} \
@@ -174,6 +173,7 @@ exec container \
     --name "$ID" \
     --cwd "$CWD" \
     --user $USER \
+    --env TERM="$TERM" \
     --env CONTAINER_ID="$CONTAINER_ID" \
     --env IS_CONTAINER="$(echo "$NAME" | cut -d "." -f 1)" \
     --env USER="$USER" \
