@@ -102,8 +102,8 @@ _stopcontainers() {
 
 _stopall() {
   _stopcontainers
-  _getcontainers "images" "" "delete"
-  container images prune
+  _getcontainers "image" "" "delete"
+  container image prune
 }
 
 if ! container system status 2>&1 | grep -q '^apiserver is running$'; then
@@ -118,7 +118,7 @@ if [ "$CLEAN" -eq 1 ]; then
 fi
 
 if [ "$REBUILD" -eq 0 ]; then
-  if ! container images ls | grep -q "^$NAME"; then
+  if ! container image ls | grep -q "^$NAME"; then
     REBUILD=1
     NEW_BUILD=1
   fi
