@@ -95,5 +95,5 @@ CURTMP="$CUR.tmp"
       fi
     } | sed 's/\t/ /g' | grep 'refs/tags/' | grep -v '{}' | cut -d ' ' -f 2 | cut -d '/' -f 3- | sed "s#^#$NAME -> #g"
   done
-} > "$CURTMP"
-sort "$CURTMP" > "$CUR"
+} | sort > "$CURTMP"
+mv "$CURTMP" "$CUR"
