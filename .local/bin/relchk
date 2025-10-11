@@ -21,6 +21,7 @@ _diff() {
 case "$1" in
   "version")
     echo "v0.0.1"
+    exit 0
     ;;
   "$UPDATE")
     ;;
@@ -83,7 +84,7 @@ if [ -e "$CUR" ]; then
   MODTIME=$(stat -f "%Sm" -t "%Y-%m-%d" "$CUR")
   [ "$NOW" = "$MODTIME" ] && exit 0
 fi
-CURTMP="$CUR"
+CURTMP="$CUR.tmp"
 {
   grep -v '^ *#' "$HOME/.config/relchk/config" | while IFS= read -r CONFIG; do
     NAME=$(basename "$CONFIG")
