@@ -18,6 +18,12 @@ _diff() {
   diff -u "$CUR" "$PREV" 
 }
 
+_errormsg() {
+  echo
+  echo "relchk: $1"
+  echo
+}
+
 case "$1" in
   "version")
     echo "v0.0.1"
@@ -26,7 +32,11 @@ case "$1" in
   "$UPDATE")
     ;;
   "$MOTD" | "$COMMIT" | "bar")
-    [ ! -e "$CUR" ] && echo "no updates available" && exit 1
+    [ ! -e "$CUR" ] && _errormsg "no updates available" && exit 1
+    if find "$CUR" -type f -mtime +7 | grep -v '^$' > /dev/null; then
+      _errormsg "release updates outdated"
+      exit 1
+    fi
     if [ "$1" = "$MOTD" ]; then
       _diff | sed '1s/^/\nreleases\n---\n/'
     else 
