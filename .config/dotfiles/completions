@@ -34,3 +34,10 @@ if command -v devcontainer > /dev/null; then
     "$(devcontainer version)" \
     "completions"
 fi
+
+if command -v relchk > /dev/null; then
+  _gencomp \
+    relchk \
+    "$(relchk version)" \
+    "completions"
+fi

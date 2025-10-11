@@ -19,6 +19,7 @@ dotfiles() {
       echo ".local/bin/is-screen-locked"
       echo ".local/bin/transcode-media"
       echo ".local/bin/clipmgr"
+      echo ".local/bin/relchk"
       echo ".config/swiftbar/"
       command -v brew > /dev/null && NEED_DEV=1
       command -v port > /dev/null && NEED_DEV=1
