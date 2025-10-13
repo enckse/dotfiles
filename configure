@@ -5,7 +5,6 @@ dotfiles() {
   echo ".config/dotfiles/"
   echo ".local/bin/git-uncommitted"
   echo ".gitconfig"
-  command -v npm >/dev/null && echo ".npmrc"
   if command -v go > /dev/null; then
     echo ".local/bin/go-lint"
     echo ".local/bin/go-mod-updates"
@@ -23,8 +22,6 @@ dotfiles() {
         NAME=$(basename "$ITEM" | cut -d "." -f 1)
         command -v "$NAME" > /dev/null && echo "$SWIFTBAR/$(basename "$ITEM")"
       done
-      command -v brew > /dev/null && NEED_DEV=1
-      command -v port > /dev/null && NEED_DEV=1
       ;;
     "Linux")
       NEED_DEV=1

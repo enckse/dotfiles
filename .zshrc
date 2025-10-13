@@ -18,14 +18,12 @@ if command -v devtools > /dev/null; then
 fi
 
 if [ "$SIMPLE_TERM" -eq 1 ]; then
-  if ! command -v port > /dev/null && ! command -v brew > /dev/null; then
-    for CMD in vim vi git; do
-        alias $CMD="echo $CMD disabled"
-    done
-    quickfix() {
-        /usr/bin/vim --clean $@
-    }
-  fi
+  for CMD in vim vi git; do
+      alias $CMD="echo $CMD disabled"
+  done
+  quickfix() {
+      /usr/bin/vim --clean $@
+  }
 else
   alias vim="$EDITOR"
   alias vi="$EDITOR"
@@ -34,18 +32,6 @@ fi
 unset SIMPLE_TERM USING_CODE
 
 command -v devcontainer > /dev/null && (devcontainer orphans >/dev/null 2>&1 &)
-
-if command -v brew > /dev/null; then
-  eval "$(brew shellenv)"
-  for BIN in "make/libexec/gnubin" "curl/bin"; do
-    LIBEXEC="/opt/homebrew/opt/$BIN"
-    [ -d "$LIBEXEC" ] && PATH="$LIBEXEC:$PATH"
-  done
-  unset BIN LIBEXEC
-fi	
-if command -v port > /dev/null; then
-  command -v gmake > /dev/null && alias make=gmake
-fi
 
 autoload -U promptinit && promptinit
 precmd() {
