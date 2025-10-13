@@ -54,8 +54,8 @@ if [ -n "$1" ]; then
       ;;
     "bar")
       SPACER=" "
-      GITDIRTY="⇆⭕"
-      GITCLEAN="⇆⬤"
+      GITDIRTY="⭕"
+      GITCLEAN="⬤"
       EMPTY_NONE=0
       ;;
     *)
