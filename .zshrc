@@ -33,7 +33,6 @@ else
 fi
 unset SIMPLE_TERM USING_CODE
 
-command -v relchk > /dev/null && (relchk update >/dev/null 2>&1 &)
 command -v devcontainer > /dev/null && (devcontainer orphans >/dev/null 2>&1 &)
 
 if command -v brew > /dev/null; then
@@ -64,4 +63,3 @@ precmd() {
 
 shell_ready
 command -v git-uncommitted >/dev/null && git-uncommitted
-command -v relchk > /dev/null && relchk motd

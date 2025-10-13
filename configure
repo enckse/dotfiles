@@ -18,9 +18,11 @@ dotfiles() {
       command -v container > /dev/null && echo ".local/bin/devcontainer"
       echo ".local/bin/is-screen-locked"
       echo ".local/bin/transcode-media"
-      echo ".local/bin/clipmgr"
-      echo ".local/bin/relchk"
-      echo ".config/swiftbar/"
+      SWIFTBAR=".config/swiftbar"
+      for ITEM in "$SWIFTBAR/"*; do
+        NAME=$(basename "$ITEM" | cut -d "." -f 1)
+        command -v "$NAME" > /dev/null && echo "$SWIFTBAR/$(basename "$ITEM")"
+      done
       command -v brew > /dev/null && NEED_DEV=1
       command -v port > /dev/null && NEED_DEV=1
       ;;
