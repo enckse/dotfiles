@@ -2,3 +2,5 @@
   useConfigOnly = true
 [include]
   path = ~/.config/git/local.config
+[uncommitted]
+  paths = "Workspace .ttypty"
