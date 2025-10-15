@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 source "$HOME/.config/dotfiles/shell"
-[ -e "$HOME/.bash.vars" ] && source "$HOME/.bash.vars"
 
 ssh_agent
 load_comps
