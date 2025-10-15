@@ -11,6 +11,7 @@ dotfiles() {
     echo ".config/go/devtools"
   fi
   command -v kitty > /dev/null && echo ".config/kitty"
+  command -v uv > /dev/null && echo ".config/uv"
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
