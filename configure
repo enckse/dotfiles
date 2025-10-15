@@ -5,11 +5,7 @@ dotfiles() {
   echo ".config/dotfiles/"
   echo ".local/bin/git-uncommitted"
   echo ".gitconfig"
-  if command -v go > /dev/null; then
-    echo ".local/bin/go-lint"
-    echo ".local/bin/go-mod-updates"
-    echo ".config/go/devtools"
-  fi
+  command -v go > /dev/null && echo ".config/go/devtools"
   command -v kitty > /dev/null && echo ".config/kitty"
   command -v uv > /dev/null && echo ".config/uv"
   NEED_DEV=0
