@@ -31,6 +31,6 @@ fi
 if command -v devcontainer > /dev/null; then
   _gencomp \
     devcontainer \
-    "$(devcontainer version)" \
+    "$(devcontainer --version)" \
     "completions"
 fi
