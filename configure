@@ -9,7 +9,6 @@ dotfiles() {
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
-      command -v container > /dev/null && echo ".local/bin/devcontainer"
       command -v transcodem > /dev/null && echo ".config/transcodem"
       SWIFTBAR=".config/swiftbar"
       for ITEM in "$SWIFTBAR/"*; do
@@ -25,7 +24,6 @@ dotfiles() {
     [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/"
     echo ".ssh/"
     echo ".config/git/"
-    echo ".local/bin/devtools"
   fi
 }
 
