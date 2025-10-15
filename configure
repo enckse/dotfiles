@@ -3,7 +3,6 @@ dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
   echo ".${SHELL_NAME}rc"
   echo ".config/dotfiles/"
-  echo ".local/bin/git-uncommitted"
   echo ".gitconfig"
   command -v go > /dev/null && echo ".config/go/devtools"
   command -v kitty > /dev/null && echo ".config/kitty"
