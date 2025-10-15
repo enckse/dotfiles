@@ -11,7 +11,6 @@ dotfiles() {
   case "$(uname)" in
     "Darwin")
       command -v container > /dev/null && echo ".local/bin/devcontainer"
-      echo ".local/bin/is-screen-locked"
       echo ".local/bin/transcode-media"
       SWIFTBAR=".config/swiftbar"
       for ITEM in "$SWIFTBAR/"*; do
