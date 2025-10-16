@@ -4,12 +4,12 @@ dotfiles() {
   echo ".${SHELL_NAME}rc"
   echo ".config/dotfiles/"
   echo ".gitconfig"
-  command -v go > /dev/null && echo ".config/go/devtools"
+  command -v go > /dev/null && echo ".config/ttypty/go.devtools.sh"
   command -v kitty > /dev/null && echo ".config/kitty"
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
-      command -v transcodem > /dev/null && echo ".config/transcodem"
+      command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
       SWIFTBAR=".config/swiftbar"
       for ITEM in "$SWIFTBAR/"*; do
         NAME=$(basename "$ITEM" | cut -d "." -f 1)
@@ -21,7 +21,7 @@ dotfiles() {
       ;;
   esac
   if [ "$NEED_DEV" -eq 1 ]; then
-    [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/"
+    [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/" && echo ".config/ttypty/vim.devtools.sh"
     echo ".ssh/"
     echo ".config/git/"
   fi
