@@ -32,6 +32,7 @@ fi
 unset SIMPLE_TERM USING_CODE
 
 command -v devcontainer > /dev/null && (devcontainer orphans >/dev/null 2>&1 &)
+command -v GitUncommittedBarApp > /dev/null && ! pgrep GitUncommittedBarApp > /dev/null && (GitUncommittedBarApp >/dev/null 2>&1 &)
 
 autoload -U promptinit && promptinit
 precmd() {

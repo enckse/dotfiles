@@ -10,11 +10,6 @@ dotfiles() {
   case "$(uname)" in
     "Darwin")
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
-      SWIFTBAR=".config/swiftbar"
-      for ITEM in "$SWIFTBAR/"*; do
-        NAME=$(basename "$ITEM" | cut -d "." -f 1)
-        command -v "$NAME" > /dev/null && echo "$SWIFTBAR/$(basename "$ITEM")"
-      done
       ;;
     "Linux")
       NEED_DEV=1
