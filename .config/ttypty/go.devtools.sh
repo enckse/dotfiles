@@ -1,4 +1,4 @@
-#!/bin/sh -eu
+#!/bin/sh -e
 [ -z "$GOPATH" ] && exit 1
 echo "managing go tools"
 for TOOL in \
