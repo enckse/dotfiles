@@ -1,7 +1,7 @@
 #!/bin/sh
 load_comps() {
-  [ ! -e "$HOME/.config/dotfiles/completions" ] && return
-  . "$HOME/.config/dotfiles/completions"
+  [ ! -e "$HOME/.config/ttypty/completions" ] && return
+  . "$HOME/.config/ttypty/completions"
   for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
     . "$FILE"
   done
