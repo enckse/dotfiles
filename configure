@@ -4,7 +4,6 @@ dotfiles() {
   echo ".${SHELL_NAME}rc"
   echo ".config/dotfiles/"
   echo ".gitconfig"
-  command -v go > /dev/null && echo ".config/ttypty/go.devtools.sh"
   command -v kitty > /dev/null && echo ".config/kitty"
   NEED_DEV=0
   case "$(uname)" in
@@ -16,7 +15,7 @@ dotfiles() {
       ;;
   esac
   if [ "$NEED_DEV" -eq 1 ]; then
-    [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/" && echo ".config/ttypty/vim.devtools.sh"
+    [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/"
     echo ".ssh/"
     echo ".config/git/"
   fi
