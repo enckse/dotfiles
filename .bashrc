@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "$HOME/.config/dotfiles/shell"
+source "$HOME/.config/ttypty/shell"
 
 ssh_agent
 load_comps

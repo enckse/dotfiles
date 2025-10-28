@@ -2,7 +2,8 @@
 dotfiles() {
   SHELL_NAME="$(basename "$SHELL")"
   echo ".${SHELL_NAME}rc"
-  echo ".config/dotfiles/"
+  echo ".config/ttypty/shell"
+  echo ".config/ttypty/completions"
   echo ".gitconfig"
   command -v kitty > /dev/null && echo ".config/kitty"
   NEED_DEV=0

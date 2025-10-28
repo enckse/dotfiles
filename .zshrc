@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-source "$HOME/.config/dotfiles/shell"
+source "$HOME/.config/ttypty/shell"
 autoload -Uz compinit && compinit
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
