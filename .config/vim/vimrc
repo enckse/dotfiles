@@ -13,7 +13,7 @@ function SetupVimDir(path)
 endfunction
 
 set viminfo+=n$HOME/.cache/vim/viminfo
-let &g:directory=$HOME . '/.cache/vim'
+let &g:directory=$HOME . '/.local/state/vim'
 call CleanVimDir(&g:directory, "-mtime +1")
 
 let &g:undodir=&g:directory . '/undo/'

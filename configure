@@ -9,7 +9,9 @@ dotfiles() {
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
+      command -v devtools > /dev/null && echo ".config/ttypty/vim.devtools.sh" && echo ".config/ttypty/brew.devtools.sh"
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
+      [ -d "/opt/homebrew" ] && NEED_DEV=1
       ;;
     "Linux")
       NEED_DEV=1
