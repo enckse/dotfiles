@@ -3,6 +3,7 @@ source "$HOME/.config/ttypty/shell"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
 
+export XDG_CACHE_HOME="$HOME/.local/state"
 ssh_agent
 
 if [ -d /opt/homebrew ]; then

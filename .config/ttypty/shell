@@ -42,8 +42,6 @@ command -v go > /dev/null && \
   export GOPATH="$HOME/.cache/go" && \
 [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
 
-command -v uv > /dev/null && export UV_CACHE_DIR="$HOME/.local/state/uv"
-
 alias vi="\$EDITOR"
 alias less="less -R"
 if command -v bat > /dev/null; then
