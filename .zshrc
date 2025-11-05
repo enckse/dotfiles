@@ -44,8 +44,8 @@ precmd() {
     GIT_UNCOMMIT="$COLORING$GIT_UNCOMMIT"
   fi
   IS_VENV=""
-  [ -n "$VIRTUAL_ENV" ] && IS_VENV="venv:"
-  PS1="$IS_VENV$GIT_UNCOMMIT%{$(tput setaf 226)%}%n%{$(tput setaf 15)%}@%{$(tput setaf 200)%}%m %{$(tput setaf 45)%}%1~ %{$(tput sgr0)%}$ "
+  [ -n "$VIRTUAL_ENV" ] && IS_VENV="[venv]"
+  PS1="$GIT_UNCOMMIT%{$(tput setaf 226)%}%n%{$(tput setaf 15)%}@%{$(tput setaf 200)%}%m %{$(tput setaf 45)%}%1~ %{$(tput sgr0)%}$IS_VENV$ "
 }
 
 shell_ready
