@@ -1,3 +1,6 @@
+if filereadable($HOME . "/.config/vim/noterm")
+  finish
+endif
 set termwinkey=<C-t>
 set termwinsize=15x0
 func NewTerminal()
