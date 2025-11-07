@@ -9,16 +9,21 @@ dotfiles() {
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
-      command -v devtools > /dev/null && echo ".config/ttypty/vim.devtools.sh" && echo ".config/ttypty/brew.devtools.sh"
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
-      [ -d "/opt/homebrew" ] && NEED_DEV=1
+      if [ -d "/opt/homebrew" ]; then
+        NEED_DEV=1
+        command -v devtools > /dev/null && echo ".config/ttypty/brew.devtools.sh"
+      fi
       ;;
     "Linux")
       NEED_DEV=1
       ;;
   esac
   if [ "$NEED_DEV" -eq 1 ]; then
-    [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ] && echo ".config/vim/"
+    if [ -n "$EDITOR" ] && [ "$EDITOR" = "vim" ]; then
+      echo ".config/vim/"
+      command -v devtools > /dev/null && echo ".config/ttypty/vim.devtools.sh" 
+    fi
     echo ".ssh/"
     echo ".config/git/"
   fi
