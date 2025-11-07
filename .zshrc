@@ -12,13 +12,13 @@ if [ -d /opt/homebrew ]; then
   export HOMEBREW_REPOSITORY="/opt/homebrew";
   fpath[1,0]="/opt/homebrew/share/zsh/site-functions";
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-  eval "$(/usr/bin/env PATH_HELPER_ROOT="/opt/homebrew" /usr/libexec/path_helper -s)"
   [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
   export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
   for BIN in findutils coreutils diffutils make gnu-sed; do
     DIR="/opt/homebrew/opt/$BIN"
     [ -d "$DIR" ] && PATH="$DIR/libexec/gnubin:$PATH"
   done
+  export PATH="/opt/homebrew/bin:$PATH"
 else
   for CMD in vim vi git; do
     alias $CMD="echo $CMD disabled"
@@ -27,7 +27,6 @@ else
     /usr/bin/vim --clean $@
   }
 fi
-[ -d '/Applications/MacVim.app/Contents/bin' ] && export PATH="/Applications/MacVim.app/Contents/bin:$PATH"
 
 command -v container > /dev/null && alias alpine="container run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash"
 command -v devtools > /dev/null && devtools
