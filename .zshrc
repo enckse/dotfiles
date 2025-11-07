@@ -27,6 +27,7 @@ else
     /usr/bin/vim --clean $@
   }
 fi
+[ -d '/Applications/MacVim.app/Contents/bin' ] && export PATH="/Applications/MacVim.app/Contents/bin:$PATH"
 
 command -v container > /dev/null && alias alpine="container run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash"
 command -v devtools > /dev/null && devtools
