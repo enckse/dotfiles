@@ -24,6 +24,7 @@ dotfiles() {
       echo ".config/vim/"
       command -v devtools > /dev/null && echo ".config/ttypty/vim.devtools.sh" 
     fi
+    command -v uv > /dev/null && echo ".config/ttypty/uv.devtools.sh"
     echo ".ssh/"
     echo ".config/git/"
   fi
