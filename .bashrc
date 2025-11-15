@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 export XDG_CACHE_HOME="$HOME/.cache"
+export EDITOR=hx
 source "$HOME/.config/ttypty/shell"
 
 ssh_agent
