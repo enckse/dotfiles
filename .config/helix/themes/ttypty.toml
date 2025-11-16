@@ -1,5 +1,8 @@
 inherits = "monokai"
 
+"ui.cursor.primary.normal" = { fg = "black", bg = "white" }
+"ui.cursor.primary.insert" = { fg = "black", bg = "white" }
+"ui.cursor.primary.select" = { fg = "black", bg = "white" }
 "ui.bufferline" = {}
 "ui.bufferline.active" = { fg = "active_text", bg = "selection", modifiers = [
   "bold",
