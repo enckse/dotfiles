@@ -10,9 +10,12 @@ dotfiles() {
   case "$(uname)" in
     "Darwin")
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
-      if [ -d "/opt/homebrew" ]; then
+      if [ -d "/opt/homebrew" ] || [ -d "/opt/local" ]; then
         NEED_DEV=1
-        command -v devtools > /dev/null && echo ".config/ttypty/brew.devtools.sh"
+        if command -v devtools > /dev/null; then
+          command -v brew > /dev/null && echo ".config/ttypty/brew.devtools.sh"
+          command -v port > /dev/null && echo ".config/ttypty/port.devtools.sh"
+        fi
       fi
       ;;
     "Linux")
