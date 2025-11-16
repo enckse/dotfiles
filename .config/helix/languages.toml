@@ -8,3 +8,7 @@ command = "efm-langserver"
 [[language]]
 language-servers = [ "efm" ]
 name = "bash"
+
+[[language]]
+name = "python"
+language-servers = ["basedpyright", "ruff"]
