@@ -34,3 +34,10 @@ if command -v devcontainer > /dev/null; then
     "$(devcontainer --version)" \
     "completions"
 fi
+
+if command -v reltracker > /dev/null; then
+  _gencomp \
+    reltracker \
+    "$(reltracker --version)" \
+    "completions"
+fi
