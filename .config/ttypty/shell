@@ -22,7 +22,11 @@ ssh_agent() {
 }
 
 shell_ready() {
-  unset -f load_comps ssh_agent shell_ready startup_app
+  unset -f load_comps ssh_agent shell_ready startup_app post_setup
+}
+
+post_setup() {
+  [ -e "$HOME/.$(basename $SHELL).is_setup" ] && . "$HOME/.$(basename $SHELL).is_setup"
 }
 
 startup_app() {

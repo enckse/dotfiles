@@ -38,5 +38,6 @@ precmd() {
   PS1="$GIT_UNCOMMIT%{$(tput setaf 226)%}%n%{$(tput setaf 15)%}@%{$(tput setaf 200)%}%m %{$(tput setaf 45)%}%1~ %{$(tput sgr0)%}$IS_VENV$ "
 }
 
+post_setup
 shell_ready
 command -v git-uncommitted >/dev/null && git-uncommitted
