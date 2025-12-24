@@ -6,6 +6,7 @@ dotfiles() {
   echo ".config/ttypty/completions"
   echo ".gitconfig"
   command -v kitty > /dev/null && echo ".config/kitty"
+  command -v mayhem > /dev/null && echo ".config/mayhem/settings.toml"
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
@@ -35,7 +36,6 @@ dotfiles() {
     command -v efm-langserver > /dev/null && echo ".config/efm-langserver"
     command -v uv > /dev/null && echo ".config/ttypty/uv.devtools.sh"
     command -v go > /dev/null && echo ".config/ttypty/go.devtools.sh"
-    command -v mayhem > /dev/null && echo ".config/mayhem/settings.toml"
     echo ".ssh/"
     echo ".config/git/"
   fi
