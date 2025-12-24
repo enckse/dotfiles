@@ -1,2 +1,5 @@
 [data]
 directory="~/.ttypty/tasks"
+
+[convert]
+json=true
