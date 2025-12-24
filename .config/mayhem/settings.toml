@@ -1,5 +1,9 @@
 [data]
 directory="~/.ttypty/tasks"
 
+[backups]
+directory="backups"
+days=3
+
 [convert]
 json=true
