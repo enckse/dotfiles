@@ -7,5 +7,4 @@ duration="36h"
 format="20060102T1504"
 
 [json]
-exit=true
 sync=true
