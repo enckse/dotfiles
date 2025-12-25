@@ -3,7 +3,7 @@ directory="~/.ttypty/tasks"
 
 [backups]
 directory="backups"
-days=2
+duration="36h"
 
 [json]
 exit=true
