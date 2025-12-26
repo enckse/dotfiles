@@ -1,6 +1,9 @@
 [data]
 directory="~/.ttypty/tasks"
 
+[display]
+finished.since="720h"
+
 [backups]
 directory="backups"
 duration="36h"
