@@ -1,5 +1,6 @@
 [data]
 directory="~/.ttypty/tasks"
+pretty=true
 
 [display]
 finished.since="720h"
@@ -8,6 +9,3 @@ finished.since="720h"
 directory="backups"
 duration="36h"
 format="20060102T1504"
-
-[json]
-sync=true
