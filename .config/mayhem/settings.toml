@@ -1,6 +1,7 @@
 [data]
 directory="~/.ttypty/tasks"
 pretty=true
+lock=true
 
 [display]
 finished.since="720h"
