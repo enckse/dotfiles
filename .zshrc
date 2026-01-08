@@ -3,9 +3,11 @@ export XDG_CACHE_HOME="$HOME/Library/Caches"
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line
 
-if [ -d /opt/local ]; then
-  export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-  [ -d "/opt/local/libexec/gnubin" ] && export PATH="/opt/local/libexec/gnubin:$PATH"
+if command -v brew > /dev/null; then
+  eval "$(brew shellenv)"
+  for item in gnu-sed make findutils; do
+    [ -d "/opt/homebrew/opt/$item/libexec/gnubin" ] && PATH="/opt/homebrew/opt/$item/libexec/gnubin:$PATH"
+  done
 else
   for CMD in vim vi git; do
     alias $CMD="echo $CMD disabled"
