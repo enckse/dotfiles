@@ -5,7 +5,6 @@ for TOOL in \
   mvdan.cc/gofumpt \
   golang.org/x/tools/gopls \
   honnef.co/go/tools/cmd/staticcheck \
-  github.com/enckse/lockbox/cmd/lb \
   github.com/mgechev/revive \
   ; do
     echo "-> $TOOL"
