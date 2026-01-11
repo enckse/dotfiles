@@ -41,3 +41,10 @@ if command -v reltracker > /dev/null; then
     "$(reltracker --version)" \
     "completions"
 fi
+
+if command -v wacc > /dev/null; then
+  _gencomp \
+    wacc \
+    "$(wacc version)" \
+    "completions"
+fi
