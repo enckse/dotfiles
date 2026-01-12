@@ -5,6 +5,7 @@ dotfiles() {
   echo ".config/ttypty/shell"
   echo ".config/ttypty/completions"
   echo ".gitconfig"
+  echo ".config/ttypty/world"
   command -v kitty > /dev/null && echo ".config/kitty"
   command -v mayhem > /dev/null && echo ".config/mayhem/settings.toml"
   NEED_DEV=0
@@ -12,6 +13,7 @@ dotfiles() {
     "Darwin")
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
       command -v reltracker > /dev/null && echo ".config/ttypty/releases.env"
+      command -v statussys > /dev/null && echo ".config/ttypty/statussys"
       if [ -d "/opt/homebrew" ] || [ -d "/opt/local" ]; then
         NEED_DEV=1
         if command -v devtools > /dev/null; then
