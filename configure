@@ -57,3 +57,20 @@ for SET in $(dotfiles | sort -u); do
     $CMD "$PWD/$FILE" "$HOME/$FILE"
   done < <(find "$SET" -type f -print0)
 done
+
+{
+  echo "# generated: $(date)"
+  echo "# do NOT edit"
+  case "$(uname)" in
+    "Darwin")
+      echo "is-screen-locked"
+      echo "reltracker"
+      echo "StatusBarApp"
+      echo "statussys"
+      echo "transcodem"
+      ;;
+  esac
+  echo "devtools"
+  echo "git-uncommitted"
+  command -v go > /dev/null && echo "go-lint" && echo "go-mod-updates"
+} | sort > "$HOME/.config/ttypty/utils.manifest"
