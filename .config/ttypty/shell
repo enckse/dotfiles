@@ -36,7 +36,6 @@ startup_app() {
 }
 
 export SHELL_COMPS="$HOME/.local/share/completions"
-export SECRET_ROOT="$HOME/.ttypty/secrets"
 [ -z "$EDITOR" ] && export EDITOR=vim
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
