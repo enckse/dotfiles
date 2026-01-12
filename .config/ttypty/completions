@@ -14,25 +14,11 @@ _gencomp() {
   fi
 }
 
-if command -v lb > /dev/null; then
-  _gencomp \
-    lb \
-    "$(lb version)" \
-    "completions"
-fi
-
 if command -v container > /dev/null; then
   _gencomp \
     container \
     "$(container --version)" \
     "--generate-completion-script"
-fi
-
-if command -v devcontainer > /dev/null; then
-  _gencomp \
-    devcontainer \
-    "$(devcontainer --version)" \
-    "completions"
 fi
 
 if command -v reltracker > /dev/null; then

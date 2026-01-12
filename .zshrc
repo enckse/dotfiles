@@ -8,13 +8,6 @@ if command -v brew > /dev/null; then
   for item in gnu-sed make findutils; do
     [ -d "/opt/homebrew/opt/$item/libexec/gnubin" ] && PATH="/opt/homebrew/opt/$item/libexec/gnubin:$PATH"
   done
-else
-  for CMD in vim vi git; do
-    alias $CMD="echo $CMD disabled"
-  done
-  quickfix() {
-    /usr/bin/vim --clean $@
-  }
 fi
 
 source "$HOME/.config/ttypty/shell"
@@ -22,7 +15,7 @@ ssh_agent
 startup_app "StatusBarApp" 1 ""
 startup_app "wacc" 1 "locker"
 
-command -v container > /dev/null && ! command -v devcontainer > /dev/null && alias alpine="container run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash"
+command -v container > /dev/null && alias alpine="container run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash"
 command -v devtools > /dev/null && devtools
 autoload -Uz compinit && compinit
 load_comps
