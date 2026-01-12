@@ -14,6 +14,13 @@ _gencomp() {
   fi
 }
 
+if command -v lb > /dev/null; then
+  _gencomp \
+    lb \
+    "$(lb version)" \
+    "completions"
+fi
+
 if command -v container > /dev/null; then
   _gencomp \
     container \

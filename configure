@@ -8,6 +8,7 @@ dotfiles() {
   echo ".config/ttypty/world"
   command -v kitty > /dev/null && echo ".config/kitty"
   command -v mayhem > /dev/null && echo ".config/mayhem/settings.toml"
+  command -v lb > /dev/null && echo ".config/lockbox/config.toml"
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")

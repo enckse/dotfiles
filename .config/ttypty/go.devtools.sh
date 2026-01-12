@@ -6,6 +6,7 @@ for TOOL in \
   golang.org/x/tools/gopls \
   honnef.co/go/tools/cmd/staticcheck \
   github.com/mgechev/revive \
+  github.com/enckse/lockbox/cmd/lb \
   ; do
     echo "-> $TOOL"
     go install "$TOOL@latest"
