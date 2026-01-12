@@ -1,7 +1,9 @@
+include = [
+  { file = "$HOME/.config/lockbox/local.toml", required = true},
+]
 store = "$SECRET_ROOT/passwords.kdbx"
 
 [credentials]
-password = ["wacc", "pass"]
 key_file = "$SECRET_ROOT/key.file"
 
 [json]

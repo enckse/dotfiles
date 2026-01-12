@@ -13,7 +13,7 @@ fi
 source "$HOME/.config/ttypty/shell"
 ssh_agent
 startup_app "StatusBarApp" 1 ""
-startup_app "wacc" 1 "locker"
+startup_app "memory-cache-command" 1 ""
 
 command -v container > /dev/null && alias alpine="container run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash"
 command -v devtools > /dev/null && devtools
