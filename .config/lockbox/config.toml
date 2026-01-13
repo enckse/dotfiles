@@ -5,6 +5,3 @@ store = "$SECRET_ROOT/passwords.kdbx"
 
 [credentials]
 key_file = "$SECRET_ROOT/key.file"
-
-[json]
-hash_length = 7
