@@ -12,6 +12,7 @@ dotfiles() {
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
+      command -v podman > /dev/null && echo ".config/containers/"
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
       command -v reltracker > /dev/null && echo ".config/ttypty/releases.env"
       command -v statussys > /dev/null && echo ".config/ttypty/statussys"
