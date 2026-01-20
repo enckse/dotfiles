@@ -16,7 +16,7 @@ startup_app "StatusBarApp" 1 ""
 startup_app "memory-cache-command" 1 ""
 
 for ENGINE in container podman; do
-  command -v "$ENGINE" > /dev/null && alias alpine="$ENGINE run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash" && break
+  command -v "$ENGINE" > /dev/null && export CONTAINER_ENGINE="$ENGINE" && alias alpine="$ENGINE run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash" && break
 done
 unset ENGINE
 
