@@ -8,6 +8,12 @@ if command -v brew > /dev/null; then
   for item in gnu-sed make findutils; do
     [ -d "/opt/homebrew/opt/$item/libexec/gnubin" ] && PATH="/opt/homebrew/opt/$item/libexec/gnubin:$PATH"
   done
+else
+  for CMD in vim git; do
+    alias "$CMD"="echo no $CMD"
+  done
+  unset CMD
+  alias quickfix="vim"
 fi
 
 source "$HOME/.config/ttypty/shell"

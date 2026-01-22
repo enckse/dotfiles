@@ -16,6 +16,7 @@ dotfiles() {
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
       command -v reltracker > /dev/null && echo ".config/ttypty/releases.env"
       command -v statussys > /dev/null && echo ".config/ttypty/statussys"
+      command -v devcontainer > /dev/null && echo ".config/devcontainer"
       if [ -d "/opt/homebrew" ] || [ -d "/opt/local" ]; then
         NEED_DEV=1
         if command -v devtools > /dev/null; then
@@ -65,14 +66,15 @@ done
   echo "# do NOT edit"
   case "$(uname)" in
     "Darwin")
-      echo "is-screen-locked"
       echo "reltracker"
       echo "StatusBarApp"
       echo "statussys"
       echo "transcodem"
       ;;
+    "Linux")
+      echo "devtools"
+      ;;
   esac
-  echo "devtools"
   echo "git-uncommitted"
   command -v go > /dev/null && echo "go-lint" && echo "go-mod-updates"
 } | sort > "$HOME/.config/ttypty/utils.manifest"

@@ -1,0 +1,14 @@
+FROM scratch
+
+ARG USER
+ARG USER_SHELL
+ARG APKS
+
+ADD minirootfs.tar.gz /
+ADD etc.tar.gz /
+RUN apk update && apk upgrade
+RUN apk add $APKS
+RUN echo "permit nopass :wheel" > /etc/doas.d/doas.conf
+RUN adduser -D ${USER} -H -s ${USER_SHELL} && addgroup ${USER} wheel
+RUN ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+CMD ["/bin/sh"]
