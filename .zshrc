@@ -13,7 +13,7 @@ else
     alias "$CMD"="echo no $CMD"
   done
   unset CMD
-  alias quickfix="vim"
+  alias quickfix="/usr/bin/vim"
 fi
 
 source "$HOME/.config/ttypty/shell"
