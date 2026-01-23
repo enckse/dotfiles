@@ -64,15 +64,14 @@ done
 {
   echo "# generated: $(date)"
   echo "# do NOT edit"
+  ls "$HOME/.config/ttypty" | grep -q "devtools"  && echo "devtools"
   case "$(uname)" in
     "Darwin")
       echo "reltracker"
       echo "StatusBarApp"
       echo "statussys"
       echo "transcodem"
-      ;;
-    "Linux")
-      echo "devtools"
+      echo "is-screen-locked"
       ;;
   esac
   echo "git-uncommitted"
