@@ -9,3 +9,4 @@ confirm-close-surface = false
 theme = deep
 font-thicken = true
 split-divider-color = "white"
+font-feature = -calt
