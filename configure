@@ -7,6 +7,7 @@ dotfiles() {
   echo ".gitconfig"
   echo ".config/ttypty/world"
   command -v kitty > /dev/null && echo ".config/kitty"
+  command -v ghostty > /dev/null && echo ".config/ghostty"
   command -v mayhem > /dev/null && echo ".config/mayhem/settings.toml"
   command -v lb > /dev/null && echo ".config/lockbox/config.toml"
   NEED_DEV=0
