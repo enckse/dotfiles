@@ -10,3 +10,5 @@ theme = deep
 font-thicken = true
 split-divider-color = "white"
 font-feature = -calt
+working-directory = "home"
+window-inherit-working-directory = false
