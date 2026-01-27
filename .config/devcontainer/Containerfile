@@ -1,14 +1,43 @@
 FROM scratch
 
-ARG USER
-ARG USER_SHELL
-ARG APKS
+ARG USER_NAME
 
 ADD minirootfs.tar.gz /
-ADD etc.tar.gz /
-RUN apk update && apk upgrade
-RUN apk add $APKS
+RUN apk update && apk upgrade && apk add --no-cache \
+    abuild \
+    age \
+    alpine-baselayout \
+    alpine-conf \
+    alpine-keys \
+    alpine-release \
+    apk-tools \
+    bash \
+    bash-completion \
+    bat \
+    busybox \
+    curl \
+    delta \
+    doas \
+    docs \
+    git \
+    go \
+    kitty-terminfo \
+    libc-utils \
+    make \
+    openssh \
+    openssl \
+    ripgrep \
+    shellcheck \
+    tzdata \
+    unzip \
+    vim
+
 RUN echo "permit nopass :wheel" > /etc/doas.d/doas.conf
-RUN adduser -D ${USER} -H -s ${USER_SHELL} && addgroup ${USER} wheel
+RUN printf "" > /etc/motd
+RUN adduser -D $USER_NAME -H -s /bin/bash && addgroup $USER_NAME wheel
+RUN passwd -u $USER_NAME
 RUN ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
-CMD ["/bin/sh"]
+RUN ssh-keygen -A
+
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]

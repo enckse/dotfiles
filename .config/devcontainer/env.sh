@@ -1,13 +1,15 @@
 #!/bin/sh
-[ ! -d "$DEVCONTAINER_CACHE" ] && echo "no cache found/set" && exit 1
-APKS="$DEVCONTAINER_CACHE/apks"
-mkdir -p "$APKS"
+export DEVCONTAINER_USER_NAME="enck"
+export DEVCONTAINER_MOUNTS="Workspace Downloads .ttypty .ssh"
+export DEVCONTAINER_HOME="/home/$DEVCONTAINER_USER_NAME"
+export DEVCONTAINER_ARGS="--memory=4G"
 
-KEY="$(uuidgen)"
-export DEVCONTAINER_USER_HOME="/home/enck"
-export DEVCONTAINER_USER_SHELL="/bin/bash"
-export DEVCONTAINER_USER_MOUNTS="Workspace Downloads .ttypty .ssh"
-export DEVCONTAINER_MOUNTS="--mount type=bind,source=$DEVCONTAINER_CACHE/home,target=$DEVCONTAINER_USER_HOME/ --mount type=bind,source=$APKS,target=/etc/apk/cache"
-export DEVCONTAINER_ENVS="--env CONTAINER_UUID=$KEY"
-export DEVCONTAINER_USER_APKS="$(cat "$HOME/.config/ttypty/world" | tr '\n' ' ')"
-export DEVCONTAINER_RUN_ARGS="--memory=4G"
+ssh_devcontainer() {
+  TO="$DEVCONTAINER_HOME"
+  for DIR in $(echo $DEVCONTAINER_MOUNTS | tr ' ' '\n'); do
+    if echo "$PWD" | grep -q "/$DIR"; then
+      TO="$(echo "$PWD" | sed "s#$HOME/#$DEVCONTAINER_HOME/#g")"
+    fi
+  done
+  ssh -t devcontainer -- "cd '$TO'; exec bash --login"
+}

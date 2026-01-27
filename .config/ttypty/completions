@@ -41,3 +41,10 @@ if command -v wacc > /dev/null; then
     "$(wacc version)" \
     "completions"
 fi
+
+if command -v devcontainer > /dev/null; then
+  _gencomp \
+    devcontainer \
+    "$(devcontainer --version)" \
+    "completions"
+fi

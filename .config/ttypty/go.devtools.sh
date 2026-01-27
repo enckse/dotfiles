@@ -7,6 +7,7 @@ for TOOL in \
   honnef.co/go/tools/cmd/staticcheck \
   github.com/mgechev/revive \
   github.com/enckse/lockbox/cmd/lb \
+  github.com/theimpostor/osc \
   ; do
     echo "-> $TOOL"
     go install "$TOOL@latest"

@@ -21,10 +21,14 @@ ssh_agent
 startup_app "StatusBarApp" 1 ""
 startup_app "memory-cache-command" 1 ""
 
-for ENGINE in container podman; do
-  command -v "$ENGINE" > /dev/null && export CONTAINER_ENGINE="$ENGINE" && alias alpine="$ENGINE run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash" && break
-done
-unset ENGINE
+if command -v devcontainer > /dev/null; then
+  [ -e "$HOME/.config/devcontainer/env.sh" ] && . "$HOME/.config/devcontainer/env.sh"
+else
+  for ENGINE in container podman; do
+    command -v "$ENGINE" > /dev/null && export CONTAINER_ENGINE="$ENGINE" && alias alpine="$ENGINE run -it --rm --mount type=bind,source='$HOME/Downloads',target=/opt alpine /bin/ash" && break
+  done
+  unset ENGINE
+fi
 
 command -v devtools > /dev/null && devtools
 autoload -Uz compinit && compinit

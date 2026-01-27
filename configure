@@ -5,7 +5,6 @@ dotfiles() {
   echo ".config/ttypty/shell"
   echo ".config/ttypty/completions"
   echo ".gitconfig"
-  echo ".config/ttypty/world"
   command -v kitty > /dev/null && echo ".config/kitty"
   command -v ghostty > /dev/null && echo ".config/ghostty"
   command -v mayhem > /dev/null && echo ".config/mayhem/settings.toml"
@@ -73,6 +72,7 @@ done
       echo "statussys"
       echo "transcodem"
       echo "is-screen-locked"
+      echo "devcontainer"
       ;;
   esac
   echo "git-uncommitted"
