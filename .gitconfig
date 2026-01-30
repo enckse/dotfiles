@@ -1,6 +1,6 @@
 [user]
   useConfigOnly = true
 [include]
-  path = ~/.config/git/local.config
+  path = ~/.config/git/user.config
 [uncommitted]
   paths = "Workspace .ttypty"
