@@ -1,14 +1,15 @@
 #!/bin/sh -e
 [ -z "$GOPATH" ] && exit 1
 echo "managing go tools"
-for TOOL in \
-  mvdan.cc/gofumpt \
-  golang.org/x/tools/gopls \
-  honnef.co/go/tools/cmd/staticcheck \
-  github.com/mgechev/revive \
-  github.com/enckse/lockbox/cmd/lb \
-  github.com/theimpostor/osc \
-  ; do
-    echo "-> $TOOL"
-    go install "$TOOL@latest"
-done
+_gotool() {
+  echo "-> $1"
+  go install "$1@latest"
+}
+_gotool "mvdan.cc/gofumpt"
+_gotool "golang.org/x/tools/gopls"
+_gotool "honnef.co/go/tools/cmd/staticcheck"
+_gotool "github.com/mgechev/revive"
+if [ -z "$NO_LB" ]; then
+  _gotool "github.com/enckse/lockbox/cmd/lb"
+  _gotool "github.com/theimpostor/osc"
+fi
