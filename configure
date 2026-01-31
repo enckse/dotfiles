@@ -6,24 +6,14 @@ dotfiles() {
   echo ".config/ttypty/completions"
   echo ".gitconfig"
   command -v kitty > /dev/null && echo ".config/kitty"
-  command -v ghostty > /dev/null && echo ".config/ghostty"
-  command -v mayhem > /dev/null && echo ".config/mayhem/settings.toml"
   command -v lb > /dev/null && echo ".config/lockbox/config.toml"
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
-      command -v podman > /dev/null && echo ".config/containers/"
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
       command -v reltracker > /dev/null && echo ".config/ttypty/releases.env"
       command -v statussys > /dev/null && echo ".config/ttypty/statussys"
       command -v devcontainer > /dev/null && echo ".config/devcontainer"
-      if [ -d "/opt/homebrew" ] || [ -d "/opt/local" ]; then
-        NEED_DEV=1
-        if command -v devtools > /dev/null; then
-          command -v brew > /dev/null && echo ".config/ttypty/brew.devtools.sh"
-          command -v port > /dev/null && echo ".config/ttypty/port.devtools.sh"
-        fi
-      fi
       ;;
     "Linux")
       NEED_DEV=1
@@ -35,12 +25,7 @@ dotfiles() {
         echo ".config/vim/"
         command -v devtools > /dev/null && echo ".config/ttypty/vim.devtools.sh" 
         ;;
-      "hx")
-        echo ".config/helix"
-        ;;
     esac
-    command -v efm-langserver > /dev/null && echo ".config/efm-langserver"
-    command -v uv > /dev/null && echo ".config/ttypty/uv.devtools.sh"
     command -v go > /dev/null && echo ".config/ttypty/go.devtools.sh"
     echo ".ssh/"
     echo ".config/git/"
