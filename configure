@@ -12,7 +12,6 @@ dotfiles() {
     "Darwin")
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
       command -v reltracker > /dev/null && echo ".config/ttypty/releases.env"
-      command -v statussys > /dev/null && echo ".config/ttypty/statussys"
       command -v devcontainer > /dev/null && echo ".config/devcontainer"
       ;;
     "Linux")
