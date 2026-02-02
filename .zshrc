@@ -18,8 +18,6 @@ fi
 
 source "$HOME/.config/ttypty/shell"
 ssh_agent
-startup_app "StatusBarApp" 1 ""
-startup_app "memory-cache-command" 1 ""
 
 if command -v devcontainer > /dev/null; then
   [ -e "$HOME/.config/devcontainer/env.sh" ] && . "$HOME/.config/devcontainer/env.sh"

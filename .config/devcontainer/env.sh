@@ -6,7 +6,7 @@ export DEVCONTAINER_ARGS="--memory=4G"
 
 ssh_devcontainer() {
   devcontainer start
-  IP=$(container ls --format json | jq ".[] | select(.configuration.id == \"devcontainer\")" | jq -r '.networks.[0].address' | cut -d "/" -f 1)
+  IP=$(container ls --format json | jq ".[] | select(.configuration.id == \"devcontainer\")" | jq -r '.networks.[0].ipv4Address' | cut -d "/" -f 1)
   [ -z "$IP" ] && echo "no ip?" && return
   TO="$DEVCONTAINER_HOME"
   for DIR in $(echo $DEVCONTAINER_MOUNTS | tr ' ' '\n'); do

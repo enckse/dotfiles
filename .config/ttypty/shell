@@ -22,17 +22,11 @@ ssh_agent() {
 }
 
 shell_ready() {
-  unset -f load_comps ssh_agent shell_ready startup_app post_setup
+  unset -f load_comps ssh_agent shell_ready post_setup
 }
 
 post_setup() {
   [ -e "$HOME/.$(basename $SHELL).is_setup" ] && . "$HOME/.$(basename $SHELL).is_setup"
-}
-
-startup_app() {
-  ! command -v "$1" > /dev/null && return
-  [ "$2" = 1 ] && pgrep "$1" >/dev/null && return
-  ("$1" "$3" >/dev/null 2>&1 &)
 }
 
 export SHELL_COMPS="$HOME/.local/share/completions"

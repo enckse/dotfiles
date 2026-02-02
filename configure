@@ -13,6 +13,7 @@ dotfiles() {
       command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
       command -v reltracker > /dev/null && echo ".config/ttypty/releases.env"
       command -v devcontainer > /dev/null && echo ".config/devcontainer"
+      [ -d "/Applications/SwiftBar.app" ] && echo ".config/swiftbar"
       ;;
     "Linux")
       NEED_DEV=1
@@ -52,8 +53,6 @@ done
   case "$(uname)" in
     "Darwin")
       echo "reltracker"
-      echo "StatusBarApp"
-      echo "statussys"
       echo "transcodem"
       echo "is-screen-locked"
       echo "devcontainer"
