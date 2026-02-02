@@ -53,7 +53,6 @@ done
   case "$(uname)" in
     "Darwin")
       echo "reltracker"
-      echo "transcodem"
       echo "is-screen-locked"
       echo "devcontainer"
       ;;
