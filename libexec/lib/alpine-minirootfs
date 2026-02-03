@@ -1,0 +1,29 @@
+#!/bin/sh -e
+WORKDIR="$HOME/Workspace/minirootfs"
+APORTS_SRC="https://gitlab.alpinelinux.org/alpine/aports/-/archive/master/aports-master.tar.gz?ref_type=heads"
+TAG="edge"
+REPOS="/etc/apk/repositories"
+WORLD="/etc/apk/world"
+
+[ ! -e "/etc/alpine-release" ] && echo "must be run from alpine" && exit 1
+! grep -q "$TAG" "$REPOS" && echo "$TAG tag not found in repositories..." && exit 1
+
+mkdir -p "$WORKDIR"
+APORTS_TAR="$WORKDIR/aports.tar.gz"
+[ ! -s "$APORTS_TAR" ] && echo "downloading aports source bundle" && curl --silent "$APORTS_SRC" --output "$APORTS_TAR"
+APORTS_FILES="$WORKDIR/aports"
+[ ! -d "$APORTS_FILES" ] && echo "unpacking aports" && mkdir -p "$APORTS_FILES" && tar xf "$APORTS_TAR" --strip-components=1 -C "$APORTS_FILES"
+for APK in abuild alpine-conf; do
+  grep -q "^$APK\$" "$WORLD" && continue
+  echo "installing: $APK" && doas apk add "$APK"
+done
+WORLD=$(cat "$WORLD" | sort -u | tr '\n' ' ' | sed 's/^ //g;s/ $//g')
+SCRIPTS="$APORTS_FILES/scripts"
+sed -i "s#rootfs_apks=.*#rootfs_apks=\"$WORLD\"#" "$SCRIPTS/mkimg.minirootfs.sh"
+
+exec sh "$SCRIPTS/mkimage.sh" \
+  --tag "$TAG" \
+  --outdir "$WORKDIR/" \
+  --repository "$(cat "$REPOS" | head -n 1)" \
+  --repositories-file "$REPOS" \
+  --profile "minirootfs"
