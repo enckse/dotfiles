@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# 1. Get the absolute path of where you are right now
+CACHE="$HOME/.local/share/opencode"
+mkdir -p "$CACHE"
 TARGET_DIR=$(pwd)
 REAL_HOME=$HOME
 
-# 2. Run bwrap under your CURRENT user
 bwrap \
     --ro-bind / / \
     --proc /proc \
@@ -13,6 +13,7 @@ bwrap \
     --tmpfs "$REAL_HOME" \
     --bind "$TARGET_DIR" "$TARGET_DIR" \
     --bind "$REAL_HOME/.opencode" "$REAL_HOME/.opencode" \
+    --bind "$CACHE" "$CACHE" \
     --chdir "$TARGET_DIR" \
     --setenv TERM "$TERM" \
     --setenv PATH "/usr/bin:/bin:$REAL_HOME/.opencode/bin" \
