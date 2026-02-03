@@ -10,8 +10,6 @@ dotfiles() {
   NEED_DEV=0
   case "$(uname)" in
     "Darwin")
-      command -v transcodem > /dev/null && echo ".config/ttypty/transcodem.env"
-      command -v reltracker > /dev/null && echo ".config/ttypty/releases.env"
       command -v devcontainer > /dev/null && echo ".config/devcontainer"
       [ -d "/Applications/SwiftBar.app" ] && echo ".config/swiftbar"
       ;;
@@ -52,7 +50,6 @@ done
   ls "$HOME/.config/ttypty" | grep -q "devtools"  && echo "devtools"
   case "$(uname)" in
     "Darwin")
-      echo "reltracker"
       echo "is-screen-locked"
       echo "devcontainer"
       ;;

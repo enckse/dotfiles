@@ -11,7 +11,7 @@ LOCKER="$HOME/.local/bin/is-screen-locked"
 ! "$LOCKER" && exit 0
 
 ERRORED=0
-for CMD in git-uncommitted reltracker; do
+for CMD in git-uncommitted; do
   SUB="check"
   [ "$CMD" = "git-uncommitted" ] && SUB="list"
   BIN="$HOME/.local/bin/$CMD"
