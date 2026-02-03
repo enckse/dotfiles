@@ -51,5 +51,6 @@ if command -v delta > /dev/null; then
   export GIT_PAGER=delta
   export DELTA_PAGER="less -R -c -X"
 fi
+[ -d "$HOME/.opencode" ] && alias oc="$HOME/.ttypty/dotfiles/libexec/lib/oc"
 command -v git-uncommitted > /dev/null && export GIT_UNCOMMITTED="$(git-uncommitted paths)"
 [ -e "$HOME/.$(basename $SHELL).vars" ] && . "$HOME/.$(basename $SHELL).vars"
