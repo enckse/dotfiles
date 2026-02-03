@@ -53,13 +53,4 @@ libexec() {
   chmod 755 "$TO"
 }
 
-
-ls "$HOME/.config/ttypty" | grep -q "devtools" && libexec "devtools"
-case "$(uname)" in
-  "Darwin")
-    libexec "is-screen-locked"
-    libexec "devcontainer"
-    ;;
-esac
-libexec "git-uncommitted"
-command -v go > /dev/null && libexec "go-lint" && libexec "go-mod-updates"
+./libexec/lib/generate
