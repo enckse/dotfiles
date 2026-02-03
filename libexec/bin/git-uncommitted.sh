@@ -1,0 +1,97 @@
+#!/bin/sh
+GITDIRTY_ISSUE=""
+GITDIRTY_HIGHLIGHT=""
+GITDIRTY_NORMAL=''
+GITCLEAN_NORMAL=''
+GITDIRTY="uncommitted"
+GITCLEAN="$GITDIRTY"
+SPACER=""
+HEADER=1
+
+_gitcmd() {
+  HEADER=$(echo "$2" | cut -d " " -f 1)
+  RESULT=$(/usr/bin/git -C "$1" ${2})
+  if [ "$HEADER" = "branch" ]; then
+    RESULT=$(echo "$RESULT" | grep -E -v '(master|main)')
+  fi
+  if [ -z "$RESULT" ]; then
+    return
+  fi
+  echo " ($HEADER)"
+}
+
+_gitstatus() {
+  BASE=$(echo "$1" | sed "s#$HOME/##g")
+  {
+    _gitcmd "$1" "update-index -q --refresh"
+    _gitcmd "$1" "diff-index --name-only HEAD --" &
+    _gitcmd "$1" "log --branches --not --remotes -n 1" &
+    _gitcmd "$1" "ls-files --others --exclude-standard --directory --no-empty-directory" &
+    _gitcmd "$1" "branch --show-current" | grep -E -v ' (master|main) \(branch\)$' &
+  } | sed "s#^#$BASE#g"
+  wait
+}
+
+_config() {
+  git $1 config "uncommitted.$2" 2>/dev/null
+}
+
+_configured() {
+  _config "-C $1" "$2"
+}
+
+_paths() {
+  _config "" "paths"
+}
+
+if [ -z "$GIT_UNCOMMITTED" ]; then
+  GIT_UNCOMMITTED=$(_paths)
+fi
+[ -z "$GIT_UNCOMMITTED" ] && echo "no configured paths" >&2 && exit 1
+
+if [ -n "$1" ]; then
+  case "$1" in
+    "pwd")
+      TREE=$(git -C "$PWD" rev-parse --is-inside-work-tree 2>/dev/null)
+      [ "$TREE" != "true" ] && exit 0
+      ENABLED=$(_configured "$PWD" "prompt")
+      [ "$ENABLED" = "false" ] && exit 0
+      STATUS=$(_gitstatus "$PWD" "prompt")
+      RESULT="clean"
+      COLOR="0;32"
+      [ -n "$STATUS" ] && RESULT="dirty" && COLOR="0;31"
+      RESULT="($RESULT)"
+      [ -n "$NO_COLOR" ] && printf "%s" "$RESULT" && exit 0
+      printf "\e[%sm%s\033[0m" "$COLOR" "$RESULT"
+      exit 0
+      ;;
+    "paths")
+      _paths
+      exit 0
+      ;;
+    "list")
+      HEADER=0
+      ;;
+    *)
+      echo "unknown command: $1"
+      exit 1
+      ;;
+  esac
+fi
+FOUND=0
+
+{
+  for DIR in $GIT_UNCOMMITTED; do
+    for SUB in $(ls "$HOME/$DIR"); do
+      REPO="$HOME/$DIR/$SUB"
+      [ ! -d "$REPO/.git" ] && continue
+      SCAN=$(_configured "$REPO" "scan")
+      [ -z "$SCAN" ] && SCAN="true"
+      [ "$SCAN" != "true" ] && continue
+      STATUS=$(_gitstatus "$REPO" "scan" | grep -v '^$')
+      [ -z "$STATUS" ] && continue
+      [ "$FOUND" -eq 0 ] && [ "$HEADER" -eq 1 ] && printf "$SPACER${GITDIRTY_ISSUE}${GITDIRTY}${GITDIRTY_NORMAL}\n---\n" && FOUND=1
+      echo "$STATUS"
+    done
+  done
+} 2>/dev/null
