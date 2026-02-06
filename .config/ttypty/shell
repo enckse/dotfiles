@@ -1,8 +1,6 @@
 #!/bin/sh
 [ -e "$HOME/.vars.env" ] && . "$HOME/.vars.env"
 load_comps() {
-  [ ! -e "$HOME/.config/ttypty/completions" ] && return
-  . "$HOME/.config/ttypty/completions"
   for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
     . "$FILE"
   done
