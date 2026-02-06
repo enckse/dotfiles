@@ -1,5 +1,4 @@
 MAKE    := make --no-print-directory _link
-LIBEXEC := ./libexec/lib/generate
 
 .PHONY: all
 
@@ -12,9 +11,10 @@ all:
 	@$(MAKE) OBJECT=.config/kitty/
 	@$(MAKE) OBJECT=.config/ttypty/
 	@$(MAKE) OBJECT=.ssh/allowed_signers
-	@$(LIBEXEC) devtools
-	@$(LIBEXEC) git-uncommitted
-	@command -v go > /dev/null && $(LIBEXEC) go-lint && $(LIBEXEC) go-mod-updates || exit 0
+	@$(MAKE) OBJECT=.local/bin/devtools
+	@$(MAKE) OBJECT=.local/bin/git-uncommitted
+	@test -d $(HOME)/.opencode && $(MAKE) OBJECT=.local/bin/oc || exit 0
+	@command -v go > /dev/null && $(MAKE) OBJECT=.local/bin/go-lint && $(MAKE) OBJECT=.local/bin/go-mod-updates || exit 0
 
 _link:
 	@find $(PWD)/$(OBJECT) -type d | sed 's#$(PWD)#$(HOME)#g' | xargs -I {} mkdir -p "{}"
