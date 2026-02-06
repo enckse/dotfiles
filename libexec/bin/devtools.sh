@@ -1,17 +1,68 @@
 #!/bin/sh -e
-CACHEDIR="$HOME/.local/state/devtools"
-CONFIGS="$HOME/.config/ttypty/"
-mkdir -p "$CACHEDIR"
+CACHE="$HOME/.local/state/devtools"
+mkdir -p "$CACHE"
+find "$CACHE" -type f -mtime +7 -delete
 FORCE=0
-if [ -n "$1" ]; then
-  [ "$1" != "force" ] && echo "unknown argument: $1" && exit 1
-  FORCE=1
+[ -n "$1" ] && [ "$1" = "force" ] && FORCE=1
+
+_handle() {
+  NAME="$1.$(basename "$2")"
+  DEST="$CACHE/$NAME"
+  [ "$FORCE" -eq 1 ] && rm -f "$DEST"
+  [ -e "$DEST" ] && return
+  echo "$DEST"
+}
+
+_gotool() {
+  DEST="$(_handle "go" "$1")"
+  [ -z "$DEST" ] && return
+  echo "go installing: $1"
+  go install "$1@latest"
+  touch "$DEST"
+}
+
+if [ -n "$GOPATH" ]; then
+  _gotool "mvdan.cc/gofumpt"
+  _gotool "golang.org/x/tools/gopls"
+  _gotool "honnef.co/go/tools/cmd/staticcheck"
+  _gotool "github.com/mgechev/revive"
+  if [ -z "$NO_LB" ]; then
+    _gotool "github.com/enckse/lockbox/cmd/lb"
+    _gotool "github.com/theimpostor/osc"
+  fi
 fi
-find "$CACHEDIR" -type f -mtime +7 -delete
-for FILE in "$CONFIGS"*devtools.sh; do 
-  NAME=$(basename "$FILE" | cut -d "." -f 1)
-  CACHEFILE="$CACHEDIR/$NAME.$(date +%U)"
-  [ "$FORCE" -eq 0 ] && [ -e "$CACHEFILE" ] && touch "$CACHEFILE" && continue
-  "$FILE"
-  touch "$CACHEFILE"
-done
+  
+_vim_plugins() {
+  echo "https://github.com/vim-airline/vim-airline"
+  case "$EDITOR" in
+    "vim")
+      echo "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
+      echo "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
+      echo "https://github.com/prabirshrestha/asyncomplete.vim"
+      echo "https://github.com/prabirshrestha/vim-lsp"
+      echo "https://github.com/bfrg/vim-qf-diagnostics"
+      ;;
+    "nvim")
+      echo "https://github.com/hrsh7th/nvim-cmp"
+      echo "https://github.com/hrsh7th/cmp-nvim-lsp"
+      echo "https://github.com/mhartington/formatter.nvim"
+      echo "https://github.com/mfussenegger/nvim-lint"
+      echo "https://github.com/L3MON4D3/LuaSnip"
+      echo "https://github.com/hrsh7th/cmp-buffer"
+      ;;
+  esac
+}
+
+if [ -n "$EDITOR" ]; then
+  PLUGINS="$HOME/.config/$EDITOR/pack/plugin/start"
+  mkdir -p "$PLUGINS"
+  for TOOL in $(_vim_plugins); do
+    DEST="$(_handle "vim" "$TOOL")"
+    [ -z "$DEST" ] && continue
+    DIR="$PLUGINS/$(basename "$TOOL")"
+    echo "vim updating: $TOOL"
+    [ ! -d "$DIR" ] && git clone --quiet "$TOOL" "$DIR"
+    git -C "$DIR" pull --quiet
+    touch "$DEST"
+  done
+fi

@@ -31,7 +31,10 @@ post_setup() {
 
 export SHELL_COMPS="$HOME/.local/share/completions"
 export SECRET_ROOT="$HOME/.ttypty/secrets"
-[ -z "$EDITOR" ] && export EDITOR=vim
+if [ -z "$EDITOR" ]; then
+  export EDITOR=vim
+  command -v nvim > /dev/null && export EDITOR=nvim
+fi
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 [ "$EDITOR" != vim ] && alias vim="$EDITOR"

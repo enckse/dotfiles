@@ -20,31 +20,3 @@ if command -v lb > /dev/null; then
     "$(lb version)" \
     "completions"
 fi
-
-if command -v container > /dev/null; then
-  _gencomp \
-    container \
-    "$(container --version)" \
-    "--generate-completion-script"
-fi
-
-if command -v reltracker > /dev/null; then
-  _gencomp \
-    reltracker \
-    "$(reltracker --version)" \
-    "completions"
-fi
-
-if command -v wacc > /dev/null; then
-  _gencomp \
-    wacc \
-    "$(wacc version)" \
-    "completions"
-fi
-
-if command -v devcontainer > /dev/null; then
-  _gencomp \
-    devcontainer \
-    "$(devcontainer --version)" \
-    "completions"
-fi
