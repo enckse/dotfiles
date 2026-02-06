@@ -1,6 +1,7 @@
 #!/bin/sh
 [ -e "$HOME/.vars.env" ] && . "$HOME/.vars.env"
 load_comps() {
+  command -v lb > /dev/null && LB_COMP="$SHELL_COMPS/lb.sh" && [ ! -e "$LB_COMP" ] && lb completions > "$LB_COMP"
   for FILE in $(find "$SHELL_COMPS" -type f -name "*.sh"); do
     . "$FILE"
   done
