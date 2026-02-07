@@ -5,11 +5,11 @@ MAKE    := make --no-print-directory _link
 all:
 	@$(MAKE) OBJECT=.bashrc
 	@$(MAKE) OBJECT=.gitconfig
+	@$(MAKE) OBJECT=.shellrc
 	@$(MAKE) OBJECT=.config/git/
 	@$(MAKE) OBJECT=.config/lockbox/
 	@$(MAKE) OBJECT=.config/nvim/
 	@$(MAKE) OBJECT=.config/kitty/
-	@$(MAKE) OBJECT=.config/ttypty/
 	@$(MAKE) OBJECT=.ssh/allowed_signers
 	@$(MAKE) OBJECT=.local/bin/devtools
 	@$(MAKE) OBJECT=.local/bin/git-uncommitted

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 export XDG_CACHE_HOME="$HOME/.cache"
-source "$HOME/.config/ttypty/shell"
+source "$HOME/.shellrc"
 
 ssh_agent
 load_comps
