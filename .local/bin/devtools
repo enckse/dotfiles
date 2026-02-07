@@ -21,7 +21,7 @@ _gotool() {
   touch "$DEST"
 }
 
-if [ -n "$GOPATH" ]; then
+if [ -n "$GOPATH" ] && [ -z "$GO_NO_TOOLS" ]; then
   _gotool "mvdan.cc/gofumpt"
   _gotool "golang.org/x/tools/gopls"
   _gotool "honnef.co/go/tools/cmd/staticcheck"
@@ -53,7 +53,7 @@ _vim_plugins() {
   esac
 }
 
-if [ -n "$EDITOR" ]; then
+if [ -n "$EDITOR" ] && [ -z "$EDITOR_NO_TOOLS" ]; then
   PLUGINS="$HOME/.config/$EDITOR/pack/plugin/start"
   mkdir -p "$PLUGINS"
   for TOOL in $(_vim_plugins); do
