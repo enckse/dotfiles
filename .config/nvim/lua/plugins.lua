@@ -10,7 +10,7 @@ local formatting = {
 
 local has_formatter = false
 local add_formatter = function(lang, tool)
-	if vim.fn.executable(tool) then
+	if vim.fn.executable(tool) == 1 then
 		has_formatter = true
 		local filetypes = require("formatter.filetypes." .. lang)
 		return filetypes[tool]
