@@ -6,7 +6,9 @@ mkdir -p "$ALPINE"
 
 IS_UPDATE="--update"
 IS_DEVCONTAINER="dev"
+IS_OC="oc"
 IS_BASE="base"
+BIND_TTYPTY=0
 if [ "$1" = "completions" ]; then
   cat << EOF
 # bw completion
@@ -39,16 +41,20 @@ ALPINE="$ALPINE/$1"
 APKS=""
 case "$1" in
   "$IS_DEVCONTAINER")
-  APKS="neovim go ripgrep delta bat bash bash-completion make openssh ca-certificates git shellcheck" 
+  APKS="neovim go delta bat make openssh ca-certificates git shellcheck" 
+  BIND_TTYPTY=1
   ;;
   "$IS_BASE")
+  ;;
+  "$IS_OC")
+  APKS="libstdc++"
   ;;
   *)
   echo "unknown profile"
   exit 1
   ;;
 esac
-APKS="alpine-base docs $APKS"
+APKS="alpine-base ripgrep docs curl bash bash-completion $APKS"
 
 "$0" "completions" > "$SHELL_COMPS/bw.sh"
 
@@ -77,6 +83,9 @@ fi
 BINDS=""
 CHDIR=""
 for DIR in ".ttypty" "Workspace" "Downloads"; do
+  if [ "$DIR" = ".ttypty" ]; then
+    [ "$BIND_TTYPTY" -eq 0 ] && continue
+  fi
   BINDS="$BINDS --bind $REAL_HOME/$DIR $REAL_HOME/$DIR"
   if echo "$PWD" | grep -q "/$DIR"; then
     CHDIR="--chdir $TARGET_DIR"
