@@ -1,0 +1,34 @@
+#!/bin/sh -e
+PROFILE="$1"
+CFG="$HOME/.config/ttypty/profile"
+[ -z "$PROFILE" ] && [ -e "$CFG" ] && PROFILE=$(cat "$CFG")
+[ -z "$PROFILE" ] && echo "profile required" && exit 1
+
+_deploy() {
+  echo "deploying: $1"
+  [ -n "$2" ] && mkdir -p "$HOME/$(dirname $1)"
+  ln -sf "$PWD/$1" "$HOME/$1"
+}
+
+_deploy ".bashrc"
+_deploy ".vars.env"
+_deploy ".gitconfig"
+_deploy ".config/ttypty/shell" 1
+_deploy ".config/lockbox/config.toml" 1
+_deploy ".local/bin/git-uncommitted" 1
+
+case "$PROFILE" in
+  "dev")
+    _deploy ".ssh/allowed_signers" 1
+    _deploy ".local/bin/devtools" 1
+    for file in $(find .config/git/ -type f) $(find .config/nvim/ -type f); do
+      _deploy "$file" 1
+    done
+	command -v go > /dev/null && _deploy ".local/bin/go-lint" 1 
+	command -v go > /dev/null && _deploy ".local/bin/go-mod-updates" 1 
+    ! test -e "$HOME/.profile" && echo "source $HOME/.bashrc" > "$HOME/.profile"
+  ;;
+  "host")
+    _deploy ".local/bin/bw" 1
+  ;;
+esac

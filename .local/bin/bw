@@ -1,0 +1,100 @@
+#!/bin/bash
+ALPINE="$HOME/.alpine"
+mkdir -p "$ALPINE"
+
+[ -z "$1" ] && echo "name required" && exit 1
+
+IS_UPDATE="--update"
+IS_DEVCONTAINER="dev"
+IS_BASE="base"
+if [ "$1" = "completions" ]; then
+  cat << EOF
+# bw completion
+
+_bw() {
+  local cur opts
+  cur=\${COMP_WORDS[COMP_CWORD]}
+  if [ "\$COMP_CWORD" -eq 1 ]; then
+    opts="$IS_BASE $IS_DEVCONTAINER"
+    COMPREPLY=( \$(compgen -W "\$opts" -- "\$cur") )
+  else
+    if [ "\$COMP_CWORD" -eq 2 ]; then
+      opts="$IS_UPDATE"
+      COMPREPLY=( \$(compgen -W "\$opts" -- "\$cur") )
+    fi 
+  fi
+}
+
+complete -F _bw -o bashdefault bw
+EOF
+  exit 0
+fi
+
+CMD="$2"
+
+TARGET_DIR=$(pwd)
+REAL_HOME="$HOME"
+ALPINE="$ALPINE/$1"
+
+APKS=""
+case "$1" in
+  "$IS_DEVCONTAINER")
+  APKS="neovim go ripgrep delta bat bash bash-completion make openssh ca-certificates git shellcheck" 
+  ;;
+  "$IS_BASE")
+  ;;
+  *)
+  echo "unknown profile"
+  exit 1
+  ;;
+esac
+APKS="alpine-base docs $APKS"
+
+"$0" "completions" > "$SHELL_COMPS/bw.sh"
+
+_apks() {
+  apk \
+    -X "https://dl-cdn.alpinelinux.org/alpine/edge/main" \
+    -X "https://dl-cdn.alpinelinux.org/alpine/edge/community" \
+    -p "$ALPINE" --cache-dir "$REAL_HOME/.cache/apks" \
+    $@
+}
+
+CREATED=0
+if [ ! -d "$ALPINE" ]; then
+  _apks --usermode --allow-untrusted --initdb add $APKS
+  cat /etc/passwd | grep enck >> "$ALPINE/etc/passwd"
+  cat /etc/group | grep enck >> "$ALPINE/etc/group"
+  CREATED=1
+fi
+
+if [ "$CREATED" -eq 0 ] && [ "$CMD" = "$IS_UPDATE" ]; then
+  _apks update
+  _apks upgrade
+  _apks add "$APKS"
+fi
+
+BINDS=""
+CHDIR=""
+for DIR in ".ttypty" "Workspace" "Downloads"; do
+  BINDS="$BINDS --bind $REAL_HOME/$DIR $REAL_HOME/$DIR"
+  if echo "$PWD" | grep -q "/$DIR"; then
+    CHDIR="--chdir $TARGET_DIR"
+  fi
+done
+
+echo "$1" > "$ALPINE/etc/hostname"
+cp /etc/resolv.conf "$ALPINE/etc/"
+bwrap \
+    --bind "$ALPINE" / \
+    --proc /proc \
+    --dev /dev \
+    --tmpfs /tmp \
+    --setenv CONTAINER_NAME "$1" \
+    $BINDS \
+    $CHDIR \
+    --setenv TERM "$TERM" \
+    --unshare-all \
+    --share-net \
+    --die-with-parent \
+    /bin/bash --login
