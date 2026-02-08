@@ -1,5 +1,6 @@
 include = [
   { file = "$HOME/.config/lockbox/local.toml", required = true},
+  { file = "$HOME/.config/lockbox/overrides.toml", required = false},
 ]
 store = "$SECRET_ROOT/passwords.kdbx"
 
