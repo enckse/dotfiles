@@ -30,6 +30,7 @@ case "$PROFILE" in
   ;;
   "host")
     _deploy ".local/bin/bw" 1
+    _deploy ".local/bin/hosttools" 1
     _deploy ".config/kitty/kitty.conf" 1
   ;;
 esac
