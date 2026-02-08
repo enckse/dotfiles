@@ -81,14 +81,14 @@ if [ "$CREATED" -eq 0 ] && [ "$CMD" = "$IS_UPDATE" ]; then
 fi
 
 BINDS=""
-CHDIR=""
+CHDIR="$REAL_HOME"
 for DIR in ".ttypty" "Workspace" "Downloads"; do
   if [ "$DIR" = ".ttypty" ]; then
     [ "$BIND_TTYPTY" -eq 0 ] && continue
   fi
   BINDS="$BINDS --bind $REAL_HOME/$DIR $REAL_HOME/$DIR"
   if echo "$PWD" | grep -q "/$DIR"; then
-    CHDIR="--chdir $TARGET_DIR"
+    CHDIR="$TARGET_DIR"
   fi
 done
 
@@ -101,7 +101,7 @@ bwrap \
     --tmpfs /tmp \
     --setenv CONTAINER_NAME "$1" \
     $BINDS \
-    $CHDIR \
+    --chdir $CHDIR \
     --setenv TERM "$TERM" \
     --unshare-all \
     --share-net \
