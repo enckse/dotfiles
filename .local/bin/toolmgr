@@ -90,6 +90,7 @@ if [ "$IS_DEV" -eq 1 ]; then
     done
   fi
 fi
+[ "$IS_DEV" -eq 1 ] && [ -n "$NO_HOST_TOOLS" ] && exit 0
 
 WORKDIR=$(mktemp -d -t "hosttools_XXXXXX")
 
