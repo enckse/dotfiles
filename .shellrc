@@ -39,8 +39,10 @@ export GIT_EDITOR="$EDITOR"
 [ "$EDITOR" != vim ] && alias vim="$EDITOR"
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 
-[ -n "$XDG_CACHE_HOME" ] && export GOPATH="$XDG_CACHE_HOME/go"
-[ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
+if command -v go >/dev/null; then
+  [ -n "$XDG_CACHE_HOME" ] && export GOPATH="$XDG_CACHE_HOME/go"
+  [ -d "$GOPATH" ] && export PATH="$GOPATH/bin:$PATH"
+fi
 
 alias vi="\$EDITOR"
 alias less="less -R"

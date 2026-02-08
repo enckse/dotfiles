@@ -27,8 +27,8 @@ if [ -n "$GOPATH" ] && [ -z "$GO_NO_TOOLS" ]; then
   _gotool "honnef.co/go/tools/cmd/staticcheck"
   _gotool "github.com/mgechev/revive"
   if [ -z "$NO_LB" ]; then
+    _gotool "filippo.io/age/cmd/..."
     _gotool "github.com/enckse/lockbox/cmd/lb"
-    _gotool "github.com/theimpostor/osc"
   fi
 fi
   
