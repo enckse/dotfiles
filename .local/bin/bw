@@ -54,7 +54,7 @@ case "$1" in
   exit 1
   ;;
 esac
-APKS="alpine-base ripgrep docs curl bash bash-completion $APKS"
+APKS="alpine-base ripgrep docs curl bash bash-completion file rsync $APKS"
 
 "$0" "completions" > "$SHELL_COMPS/bw.sh"
 

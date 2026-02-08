@@ -71,7 +71,6 @@ if [ "$IS_DEV" -eq 1 ]; then
     _gotool "honnef.co/go/tools/cmd/staticcheck"
     _gotool "github.com/mgechev/revive"
     if [ -z "$NO_LB" ]; then
-      _gotool "filippo.io/age/cmd/..."
       _gotool "github.com/enckse/lockbox/cmd/lb"
       _gotool "github.com/theimpostor/osc"
     fi
@@ -90,10 +89,8 @@ if [ "$IS_DEV" -eq 1 ]; then
       touch "$DEST"
     done
   fi
-  exit 0
 fi
 
-# begin host profile tooling
 WORKDIR=$(mktemp -d -t "hosttools_XXXXXX")
 
 cleanup() {
@@ -123,6 +120,8 @@ _update() {
   rsync -avc --delete-after "$DIR/" "$LIBEXEC"
 }
 
-_update kitty " $KITTY_VERSION " "$KITTY_URL" 
 _update age "^v$AGE_VERSION\$" "$AGE_URL"
-_update apk " $APK_VERSION," "$APK_URL"
+if [ "$IS_HOST" -eq 1 ]; then
+  _update kitty " $KITTY_VERSION " "$KITTY_URL" 
+  _update apk " $APK_VERSION," "$APK_URL"
+fi
