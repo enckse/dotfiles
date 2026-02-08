@@ -4,7 +4,7 @@ source "$HOME/.config/ttypty/shell"
 
 ssh_agent
 load_comps
-command -v devtools >/dev/null && devtools
+command -v toolmgr >/dev/null && toolmgr
 
 USE_HOST="\h"
 [ -n "$CONTAINER_NAME" ] && USE_HOST="$CONTAINER_NAME"

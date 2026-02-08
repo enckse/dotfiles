@@ -1,0 +1,128 @@
+#!/bin/sh -e
+KITTY_VERSION="0.45.0"
+KITTY_URL="https://github.com/kovidgoyal/kitty/releases/download/v$KITTY_VERSION/kitty-$KITTY_VERSION-x86_64.txz"
+AGE_VERSION="1.3.1"
+AGE_URL="https://github.com/FiloSottile/age/releases/download/v$AGE_VERSION/age-v$AGE_VERSION-linux-amd64.tar.gz"
+APK_VERSION="3.0.4"
+APK_URL="https://gitlab.alpinelinux.org/api/v4/projects/5/packages/generic/v$APK_VERSION/x86_64/apk.static"
+CACHE="$HOME/.local/state/toolmgr"
+
+PROFILE="$HOME/.config/ttypty/profile"
+[ ! -e "$PROFILE" ] && echo "$PROFILE not set" && exit 1
+PROFILE="$(cat "$PROFILE")"
+IS_HOST=0
+IS_DEV=0
+case "$PROFILE" in
+  "dev")
+    IS_DEV=1
+    ;;
+  "host")
+    IS_HOST=1
+    ;;
+esac
+[ "$IS_HOST" -eq 0 ] && [ "$IS_DEV" -eq 0 ] && echo "unknown profile: $PROFILE" && exit 1
+
+_handle() {
+  NAME="$1.$(basename "$2")"
+  DEST="$CACHE/$NAME"
+  [ "$FORCE" -eq 1 ] && rm -f "$DEST"
+  [ -e "$DEST" ] && return
+  echo "$DEST"
+}
+
+_gotool() {
+  DEST="$(_handle "go" "$1")"
+  [ -z "$DEST" ] && return
+  echo "go installing: $1"
+  go install "$1@latest"
+  touch "$DEST"
+}
+
+_vim_plugins() {
+  echo "https://github.com/vim-airline/vim-airline"
+  case "$EDITOR" in
+    "vim")
+      echo "https://github.com/prabirshrestha/asyncomplete-buffer.vim"
+      echo "https://github.com/prabirshrestha/asyncomplete-lsp.vim"
+      echo "https://github.com/prabirshrestha/asyncomplete.vim"
+      echo "https://github.com/prabirshrestha/vim-lsp"
+      echo "https://github.com/bfrg/vim-qf-diagnostics"
+      ;;
+    "nvim")
+      echo "https://github.com/hrsh7th/nvim-cmp"
+      echo "https://github.com/hrsh7th/cmp-nvim-lsp"
+      echo "https://github.com/mhartington/formatter.nvim"
+      echo "https://github.com/mfussenegger/nvim-lint"
+      echo "https://github.com/L3MON4D3/LuaSnip"
+      echo "https://github.com/hrsh7th/cmp-buffer"
+      ;;
+  esac
+}
+
+if [ "$IS_DEV" -eq 1 ]; then
+  mkdir -p "$CACHE"
+  find "$CACHE" -type f -mtime +7 -delete
+  FORCE=0
+  [ -n "$1" ] && [ "$1" = "force" ] && FORCE=1
+
+  if [ -n "$GOPATH" ] && [ -z "$GO_NO_TOOLS" ]; then
+    _gotool "mvdan.cc/gofumpt"
+    _gotool "golang.org/x/tools/gopls"
+    _gotool "honnef.co/go/tools/cmd/staticcheck"
+    _gotool "github.com/mgechev/revive"
+    if [ -z "$NO_LB" ]; then
+      _gotool "filippo.io/age/cmd/..."
+      _gotool "github.com/enckse/lockbox/cmd/lb"
+      _gotool "github.com/theimpostor/osc"
+    fi
+  fi
+  
+  if [ -n "$EDITOR" ] && [ -z "$EDITOR_NO_TOOLS" ]; then
+    PLUGINS="$HOME/.config/$EDITOR/pack/plugin/start"
+    mkdir -p "$PLUGINS"
+    for TOOL in $(_vim_plugins); do
+      DEST="$(_handle "vim" "$TOOL")"
+      [ -z "$DEST" ] && continue
+      DIR="$PLUGINS/$(basename "$TOOL")"
+      echo "vim updating: $TOOL"
+      [ ! -d "$DIR" ] && git clone --quiet "$TOOL" "$DIR"
+      git -C "$DIR" pull --quiet
+      touch "$DEST"
+    done
+  fi
+  exit 0
+fi
+
+# begin host profile tooling
+WORKDIR=$(mktemp -d -t "hosttools_XXXXXX")
+
+cleanup() {
+  rm -rf "$WORKDIR"
+}
+
+trap cleanup EXIT INT TERM
+
+_update() {
+  if command -v $1 >/dev/null; then
+    if $1 --version | grep -q "$2"; then
+      return
+    fi  
+  fi
+  echo "updating: $1"
+  TAR="$(basename "$3")"
+  curl  -L "$3" > "$WORKDIR/$TAR"
+  DIR="$WORKDIR/$1"
+  mkdir -p "$DIR"
+  if file "$WORKDIR/$TAR" | grep -q "compressed data"; then
+    (cd "$DIR" && tar xf "../$TAR")
+  else
+    install -Dm755 "$WORKDIR/$TAR" "$DIR/"
+  fi 
+  LIBEXEC="$HOME/.local/libexec/$1/"
+  mkdir -p "$LIBEXEC"
+  rsync -avc --delete-after "$DIR/" "$LIBEXEC"
+}
+
+_update kitty " $KITTY_VERSION " "$KITTY_URL" 
+_update age "^v$AGE_VERSION\$" "$AGE_URL"
+_update apk " $APK_VERSION," "$APK_URL"

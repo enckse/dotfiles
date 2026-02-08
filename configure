@@ -16,11 +16,11 @@ _deploy ".gitconfig"
 _deploy ".config/ttypty/shell" 1
 _deploy ".config/lockbox/config.toml" 1
 _deploy ".local/bin/git-uncommitted" 1
+_deploy ".local/bin/toolmgr" 1
 
 case "$PROFILE" in
   "dev")
     _deploy ".ssh/allowed_signers" 1
-    _deploy ".local/bin/devtools" 1
     for file in $(find .config/git/ -type f) $(find .config/nvim/ -type f); do
       _deploy "$file" 1
     done
