@@ -31,7 +31,7 @@ case "$PROFILE" in
     ! test -e "$HOME/.profile" && echo "source $HOME/.bashrc" > "$HOME/.profile"
   ;;
   "host")
-    _deploy ".local/bin/bw" 1
+    _deploy ".local/bin/bwa" 1
     _deploy ".config/kitty/kitty.conf" 1
     _deploy ".config/toolmgr/host.toml" 1
   ;;

@@ -1,4 +1,5 @@
 #!/bin/bash
+EXE=bwa
 ALPINE="$HOME/.alpine"
 mkdir -p "$ALPINE"
 
@@ -10,9 +11,9 @@ IS_OC="oc"
 IS_BASE="base"
 if [ "$1" = "completions" ]; then
   cat << EOF
-# bw completion
+# $EXE completion
 
-_bw() {
+_$EXE() {
   local cur opts
   cur=\${COMP_WORDS[COMP_CWORD]}
   if [ "\$COMP_CWORD" -eq 1 ]; then
@@ -26,7 +27,7 @@ _bw() {
   fi
 }
 
-complete -F _bw -o bashdefault bw
+complete -F _$EXE -o bashdefault $EXE 
 EOF
   exit 0
 fi
@@ -56,7 +57,7 @@ case "$1" in
 esac
 APKS="alpine-base ripgrep docs curl bash bash-completion file rsync $APKS"
 
-"$0" "completions" > "$SHELL_COMPS/bw.sh"
+"$0" "completions" > "$SHELL_COMPS/bwa.sh"
 
 _apks() {
   apk \
