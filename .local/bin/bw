@@ -69,8 +69,8 @@ _apks() {
 CREATED=0
 if [ ! -d "$ALPINE" ]; then
   _apks --usermode --allow-untrusted --initdb add $APKS
-  cat /etc/passwd | grep enck >> "$ALPINE/etc/passwd"
-  cat /etc/group | grep enck >> "$ALPINE/etc/group"
+  cat /etc/passwd | grep "$USER" >> "$ALPINE/etc/passwd"
+  cat /etc/group | grep "$USER" >> "$ALPINE/etc/group"
   CREATED=1
 fi
 
