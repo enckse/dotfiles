@@ -21,14 +21,16 @@ _deploy ".config/toolmgr/common.toml" 1
 case "$PROFILE" in
   "dev")
     _deploy ".ssh/allowed_signers" 1
-    for file in $(find .config/git/ -type f) $(find .config/nvim/ -type f); do
+    for file in $(find .config/git/ -type f); do
       _deploy "$file" 1
     done
-	command -v go > /dev/null && _deploy ".local/bin/go-lint" 1 
-	command -v go > /dev/null && _deploy ".local/bin/go-mod-updates" 1 
+    EDITOR_CFG="$HOME/.ttypty/editor"
+    [ ! -e "$HOME/.config/$EDITOR" ] && [ -d "$EDITOR_CFG" ] && echo "linking: .config/editor" && ln -sf "$EDITOR_CFG" "$HOME/.config/$EDITOR"
+    [ -e "$EDITOR_CFG/toolmgr.toml" ] && echo "linking: .config/editor/toolmgr" && ln -sf "$EDITOR_CFG/toolmgr.toml" "$HOME/.config/toolmgr/$EDITOR.toml"
+    command -v go > /dev/null && _deploy ".local/bin/go-lint" 1 
+    command -v go > /dev/null && _deploy ".local/bin/go-mod-updates" 1 
     command -v go > /dev/null && _deploy ".config/toolmgr/go.toml" 1
-    [ "$EDITOR" = "nvim" ] && _deploy ".config/toolmgr/nvim.toml" 1
-    ! test -e "$HOME/.profile" && echo "source $HOME/.bashrc" > "$HOME/.profile"
+    ! test -e "$HOME/.profile" && echo "file: .profile" && echo "source $HOME/.bashrc" > "$HOME/.profile"
   ;;
   "host")
     _deploy ".local/bin/bwa" 1

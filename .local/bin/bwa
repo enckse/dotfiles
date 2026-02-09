@@ -15,7 +15,7 @@ _$EXE() {
   local cur opts
   cur=\${COMP_WORDS[COMP_CWORD]}
   if [ "\$COMP_CWORD" -eq 1 ]; then
-    opts="$(ls $CONFIGS | tr '\n' ' ')"
+    opts="\$(ls $CONFIGS | tr '\n' ' ')"
     COMPREPLY=( \$(compgen -W "\$opts" -- "\$cur") )
   else
     if [ "\$COMP_CWORD" -eq 2 ]; then
@@ -35,17 +35,18 @@ CMD="$2"
 TARGET_DIR=$(pwd)
 REAL_HOME="$HOME"
 ALPINE="$ALPINE/$1"
+REPOSITORIES="https://dl-cdn.alpinelinux.org/alpine/edge/main https://dl-cdn.alpinelinux.org/alpine/edge/community"
 
 source "$CONFIGS/$1"
 DIR_BINDS="Downloads Workspace $DIR_BINDS"
-APKS="alpine-base ripgrep docs curl bash bash-completion file rsync $APKS"
+APKS="alpine-base ripgrep docs curl bash bash-completion $APKS"
 
 "$0" "completions" > "$SHELL_COMPS/bwa.sh"
 
 _apks() {
+  REPOS=$(echo "$REPOSITORIES" | tr ' ' '\n' | sed 's/^/-X /g')
   apk \
-    -X "https://dl-cdn.alpinelinux.org/alpine/edge/main" \
-    -X "https://dl-cdn.alpinelinux.org/alpine/edge/community" \
+    $REPOS \
     -p "$ALPINE" --cache-dir "$REAL_HOME/.cache/apks" \
     $@
 }
@@ -53,8 +54,10 @@ _apks() {
 CREATED=0
 if [ ! -d "$ALPINE" ]; then
   _apks --usermode --allow-untrusted --initdb add $APKS
-  cat /etc/passwd | grep "$USER" >> "$ALPINE/etc/passwd"
-  cat /etc/group | grep "$USER" >> "$ALPINE/etc/group"
+  grep "^$USER:" /etc/passwd >> "$ALPINE/etc/passwd"
+  grep "^$USER:" /etc/group >> "$ALPINE/etc/group"
+  echo "$REPOSITORIES" | tr ' ' '\n' >> "$ALPINE/etc/apk/repositories"
+  mkdir -p "$ALPINE/etc/apk/cache"
   CREATED=1
 fi
 
@@ -75,7 +78,7 @@ done
 
 echo "$1" > "$ALPINE/etc/hostname"
 cp /etc/resolv.conf "$ALPINE/etc/"
-bwrap \
+exec bwrap \
     --bind "$ALPINE" / \
     --proc /proc \
     --dev /dev \
