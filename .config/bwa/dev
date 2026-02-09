@@ -1,0 +1,2 @@
+export APKS="neovim go delta bat make openssh ca-certificates git shellcheck" 
+export DIR_BINDS="$DIR_BINDS .ttypty"

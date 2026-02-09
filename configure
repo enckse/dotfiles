@@ -34,5 +34,8 @@ case "$PROFILE" in
     _deploy ".local/bin/bwa" 1
     _deploy ".config/kitty/kitty.conf" 1
     _deploy ".config/toolmgr/host.toml" 1
+    for file in $(find .config/bwa/ -type f); do
+      _deploy "$file" 1
+    done
   ;;
 esac
