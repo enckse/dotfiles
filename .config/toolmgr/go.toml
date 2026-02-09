@@ -1,0 +1,25 @@
+mode = "go"
+
+[[tools]]
+version = "latest"
+url = "mvdan.cc/gofumpt"
+
+[[tools]]
+version = "latest"
+url = "golang.org/x/tools/gopls"
+
+[[tools]]
+version = "latest"
+url = "honnef.co/go/tools/cmd/staticcheck"
+
+[[tools]]
+version = "latest"
+url = "github.com/mgechev/revive"
+
+[[tools]]
+version = "latest"
+url = "github.com/enckse/lockbox/cmd/lb"
+
+[[tools]]
+version = "latest"
+url = "github.com/theimpostor/osc"

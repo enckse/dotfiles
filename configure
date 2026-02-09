@@ -16,7 +16,7 @@ _deploy ".gitconfig"
 _deploy ".config/ttypty/shell" 1
 _deploy ".config/lockbox/config.toml" 1
 _deploy ".local/bin/git-uncommitted" 1
-_deploy ".local/bin/toolmgr" 1
+_deploy ".config/toolmgr/common.toml" 1
 
 case "$PROFILE" in
   "dev")
@@ -26,11 +26,13 @@ case "$PROFILE" in
     done
 	command -v go > /dev/null && _deploy ".local/bin/go-lint" 1 
 	command -v go > /dev/null && _deploy ".local/bin/go-mod-updates" 1 
+    command -v go > /dev/null && _deploy ".config/toolmgr/go.toml" 1
+    [ "$EDITOR" = "nvim" ] && _deploy ".config/toolmgr/nvim.toml" 1
     ! test -e "$HOME/.profile" && echo "source $HOME/.bashrc" > "$HOME/.profile"
   ;;
   "host")
     _deploy ".local/bin/bw" 1
-    _deploy ".local/bin/hosttools" 1
     _deploy ".config/kitty/kitty.conf" 1
+    _deploy ".config/toolmgr/host.toml" 1
   ;;
 esac

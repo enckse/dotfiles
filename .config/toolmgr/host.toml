@@ -1,0 +1,11 @@
+mode = "download"
+
+[[tools]]
+version = "0.45.0"
+url = "https://github.com/kovidgoyal/kitty/releases/download/v{{ $.Version }}/kitty-{{ $.Version }}-x86_64.txz"
+arguments = ["kitty", "tar", "--version", " {{ $.Version }} "]
+
+[[tools]]
+version = "3.0.4"
+url = "https://gitlab.alpinelinux.org/api/v4/projects/5/packages/generic/v{{ $.Version }}/x86_64/apk.static"
+arguments = ["apk", "binary", "--version", " {{ $.Version }},"]
