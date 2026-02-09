@@ -8,7 +8,6 @@ IS_UPDATE="--update"
 IS_DEVCONTAINER="dev"
 IS_OC="oc"
 IS_BASE="base"
-BIND_TTYPTY=0
 if [ "$1" = "completions" ]; then
   cat << EOF
 # bw completion
@@ -39,10 +38,11 @@ REAL_HOME="$HOME"
 ALPINE="$ALPINE/$1"
 
 APKS=""
+DIR_BINDS="Downloads Workspace"
 case "$1" in
   "$IS_DEVCONTAINER")
   APKS="neovim go delta bat make openssh ca-certificates git shellcheck" 
-  BIND_TTYPTY=1
+  DIR_BINDS="$DIR_BINDS .ttypty"
   ;;
   "$IS_BASE")
   ;;
@@ -82,10 +82,7 @@ fi
 
 BINDS=""
 CHDIR="$REAL_HOME"
-for DIR in ".ttypty" "Workspace" "Downloads"; do
-  if [ "$DIR" = ".ttypty" ]; then
-    [ "$BIND_TTYPTY" -eq 0 ] && continue
-  fi
+for DIR in $(echo "$DIR_BINDS" | tr ' ' '\n'); do
   BINDS="$BINDS --bind $REAL_HOME/$DIR $REAL_HOME/$DIR"
   if echo "$PWD" | grep -q "/$DIR"; then
     CHDIR="$TARGET_DIR"
