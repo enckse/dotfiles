@@ -36,6 +36,7 @@ TARGET_DIR=$(pwd)
 REAL_HOME="$HOME"
 ALPINE="$ALPINE/$1"
 REPOSITORIES="https://dl-cdn.alpinelinux.org/alpine/edge/main https://dl-cdn.alpinelinux.org/alpine/edge/community"
+BWRAP_OPTS=""
 
 source "$CONFIGS/$1"
 DIR_BINDS="Downloads Workspace $DIR_BINDS"
@@ -82,6 +83,7 @@ exec bwrap \
     --bind "$ALPINE" / \
     --proc /proc \
     --dev /dev \
+    $BWRAP_OPTS \
     --tmpfs /tmp \
     --setenv CONTAINER_NAME "$1" \
     $BINDS \

@@ -1,2 +1,3 @@
-export APKS="vim go delta bat make openssh ca-certificates git shellcheck" 
+export APKS="age vim go delta bat make openssh ca-certificates git shellcheck" 
 export DIR_BINDS="$DIR_BINDS .ttypty"
+export BWRAP_OPTS="--bind /run/user/$UID /run/user/$UID"

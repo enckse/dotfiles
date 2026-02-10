@@ -16,7 +16,6 @@ _deploy ".gitconfig"
 _deploy ".config/ttypty/shell" 1
 _deploy ".config/lockbox/config.toml" 1
 _deploy ".local/bin/git-uncommitted" 1
-_deploy ".config/toolmgr/common.toml" 1
 
 case "$PROFILE" in
   "dev")
