@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+[ -e "/etc/bashrc" ] && source /etc/bashrc
+
 export XDG_CACHE_HOME="$HOME/.cache"
 source "$HOME/.config/ttypty/shell"
 
