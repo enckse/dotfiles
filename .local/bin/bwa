@@ -38,6 +38,7 @@ ALPINE="$ALPINE/$1"
 REPOSITORIES="https://dl-cdn.alpinelinux.org/alpine/edge/main https://dl-cdn.alpinelinux.org/alpine/edge/community"
 BWRAP_OPTS=""
 
+[ ! -e "$CONFIG/$1" ] && echo "no config for $1" && exit 1
 source "$CONFIGS/$1"
 DIR_BINDS="Downloads Workspace $DIR_BINDS"
 APKS="alpine-base ripgrep docs curl bash bash-completion $APKS"
