@@ -4,6 +4,8 @@ CONFIGS="$HOME/.config/$EXE/"
 ALPINE="$HOME/.alpine"
 mkdir -p "$ALPINE"
 
+! command -v apk > /dev/null && echo "no apk?" && exit 1
+
 [ -z "$1" ] && echo "name required" && exit 1
 
 IS_UPDATE="--update"
