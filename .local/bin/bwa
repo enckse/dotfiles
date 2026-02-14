@@ -2,7 +2,8 @@
 EXE=bwa
 CONFIGS="$HOME/.config/$EXE/"
 ALPINE="$HOME/.alpine"
-mkdir -p "$ALPINE"
+CACHE_DIR="$HOME/.cache/apks"
+mkdir -p "$ALPINE" "$CACHE_DIR"
 
 ! command -v apk > /dev/null && echo "no apk?" && exit 1
 
@@ -60,7 +61,7 @@ _apks() {
   REPOS=$(echo "$REPOSITORIES" | tr ' ' '\n' | sed 's/^/-X /g')
   apk \
     $REPOS \
-    -p "$ALPINE" --cache-dir "$REAL_HOME/.cache/apks" \
+    -p "$ALPINE" --cache-dir "$CACHE_DIR" \
     $@
 }
 
