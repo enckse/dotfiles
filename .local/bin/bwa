@@ -35,6 +35,15 @@ fi
 CMD="$2"
 
 TARGET_DIR=$(pwd)
+if echo "$REAL_HOME" | grep -q '^/var'; then
+  if echo "$TARGET_DIR" | grep -v -q '^/var'; then
+    TARGET_DIR=$(echo "$TARGET_DIR" | sed "s#^#/var#g")
+  fi
+else
+  if echo "$TARGET_DIR" | grep -q '^/var'; then
+    TARGET_DIR=$(echo "$TARGET_DIR" | sed "s#^/var##g")
+  fi
+fi
 REAL_HOME="$HOME"
 ALPINE="$ALPINE/$1"
 REPOSITORIES="https://dl-cdn.alpinelinux.org/alpine/edge/main https://dl-cdn.alpinelinux.org/alpine/edge/community"
