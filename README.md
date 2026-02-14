@@ -2,5 +2,3 @@ dotfiles
 ===
 
 Personal dotfiles
-
-<!--BundleURL-->
