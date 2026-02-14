@@ -35,10 +35,7 @@ case "$PROFILE" in
   "host")
     _deploy ".local/bin/bwa" 1
     _deploy ".config/kitty/kitty.conf" 1
-    _deploy ".config/waybar/config.jsonc" 1
-    _deploy ".config/niri/config.kdl" 1
     _deploy ".config/toolmgr/host.toml" 1
-    _deploy ".config/systemd/user/swayidle.service" 1
     for file in $(find .config/bwa/ -type f); do
       _deploy "$file" 1
     done
