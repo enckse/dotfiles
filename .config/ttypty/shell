@@ -51,6 +51,8 @@ alias less="less -R"
 if command -v bat > /dev/null; then
   alias cat=bat
   export BAT_OPTS="-pp --theme 'Monokai Extended'"
+  export LESSOPEN="| bat %s --color=always"
+  export LESS="-R"
 fi
 command -v rg > /dev/null && alias grep="rg"
 if command -v delta > /dev/null; then
