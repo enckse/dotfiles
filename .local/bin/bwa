@@ -89,7 +89,11 @@ exec bwrap \
     --dev /dev \
     $BWRAP_OPTS \
     --tmpfs /tmp \
+    --clearenv \
     --setenv CONTAINER_NAME "$1" \
+    --setenv HOME "$REAL_HOME" \
+    --setenv USER "$USER" \
+    --setenv UID "$UID" \
     $BINDS \
     --chdir $CHDIR \
     --setenv TERM "$TERM" \
